@@ -2,6 +2,7 @@ ROS Setup
 --- -----
 - Install ROS: http://www.ros.org/wiki/electric/Installation/Ubuntu
 - Install rviz: http://www.ros.org/wiki/rviz/UserGuide
+- "sudo apt-get install ros-electric-openni-kinect"
 - openni_camera: http://www.ros.org/wiki/openni_camera
 
 
