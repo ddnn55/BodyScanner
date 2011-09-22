@@ -2,12 +2,13 @@ ROS Setup
 --- -----
 - Install ROS: http://www.ros.org/wiki/electric/Installation/Ubuntu
 - Install rviz: http://www.ros.org/wiki/rviz/UserGuide
-- "sudo apt-get install ros-electric-openni-kinect"
+> sudo apt-get install ros-electric-openni-kinect
 
 ROS Usage
 --- -----
 - openni_camera: http://www.ros.org/wiki/openni_camera
 - http://www.ros.org/wiki/rosbag
+> rosrun pcl_ros bag_to_pcd <bagfile> <topic> <output_directory> 
 
 
 Kinect Scanner
