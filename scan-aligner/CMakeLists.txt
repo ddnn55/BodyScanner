@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-project(scan-aligner)
+project(iterative_closest_point)
 
 find_package(PCL 1.1 REQUIRED)
 
