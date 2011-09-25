@@ -34,8 +34,11 @@ viewerPsycho (pcl::visualization::PCLVisualizer& viewer)
 int 
 main (int argc, char** argv)
 {
-    if(argc < 2)
+    if(argc != 2)
+    {
         std::cout << "Usage: cloud_viewer <pcd file>" << std::endl;
+        exit(0);
+    }
 
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::io::loadPCDFile (argv[1], *cloud);
