@@ -27,9 +27,9 @@ This will build all the subprojects.
 Data
 ----
 
-Expand the mark1_pcd.tar.bz2 archive into the BodyScanner/data/mark1_pcd folder.
+Expand the mark1_pcd.tar.bz2 archive into the BodyScanner/recordings/mark1_pcd folder.
 This folder is ignored by git, so it will not be committed.
 
 When our programs are run, they will be called from their directories inside BodyScanner/build/subprojectXYZ/
-So when loading a PCD file, go up two directories, like this: "../../data/mark1_pcd/1316652689.744386960.pcd"
+So when loading a PCD file, go up two directories, like this: "../../recordings/mark1_pcd/1316652689.744386960.pcd"
 
