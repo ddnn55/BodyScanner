@@ -11,8 +11,8 @@ ROS Usage
 > rosrun pcl_ros bag_to_pcd <bagfile> <topic> <output_directory> 
 
 
-Kinect Scanner
------- -------
+BodyScanner
+-----------
 
 To build, type the following in this directory:
 
@@ -22,4 +22,14 @@ cmake ..
 make
 
 This will build all the subprojects.
+
+
+Data
+----
+
+Expand the mark1_pcd.tar.bz2 archive into the BodyScanner/data/mark1_pcd folder.
+This folder is ignored by git, so it will not be committed.
+
+When our programs are run, they will be called from their directories inside BodyScanner/build/subprojectXYZ/
+So when loading a PCD file, go up two directories, like this: "../../data/mark1_pcd/1316652689.744386960.pcd"
 
