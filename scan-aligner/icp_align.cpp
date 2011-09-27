@@ -82,7 +82,7 @@ int iterative_closest_point( string input , string target)
   
   pcl::IterativeClosestPoint<pcl::PointXYZ , pcl::PointXYZ> icp;// create an object of icp
 //  icp.setMaxCorrespondenceDistance(100);
-//  icp.setMaximumIterations(2);
+  //icp.setMaximumIterations(3);
   icp.setInputCloud(cloud_in); // set input cloud
   icp.setInputTarget(cloud_out); // set target cloud
   pcl::PointCloud<pcl::PointXYZ> Final;
