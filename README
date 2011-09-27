@@ -33,3 +33,26 @@ This folder is ignored by git, so it will not be committed.
 When our programs are run, they will be called from their directories inside BodyScanner/build/subprojectXYZ/
 So when loading a PCD file, go up two directories, like this: "../../recordings/mark1_pcd/1316652689.744386960.pcd"
 
+
+Surface Reconstructor
+------- -------------
+
+To build a triangle mesh from a scan,
+type the following in the build/surface-reconstructor directory
+
+make
+./surface-reconstructor -s ../../recordings/mark1_pcd/1316652689.744386960.pcd # read and smooth point cloud
+./surface-reconstructor -r # reconstruct the surface
+./vtk2obj.py scan.vtk scan.obj # convert into a format that meshlab recognizes (and re-orient faces)
+
+To view the scan.obj that was created, install meshlab:
+
+sudo apt-get install meshlab
+
+And run it:
+
+meshlab scan.obj &
+
+
+
+

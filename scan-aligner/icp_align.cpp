@@ -9,15 +9,15 @@ int iterative_closest_point( string input , string target)
 {
    size_t j = 0;
    int count_valid = 0;
-   pcl::PointCloud<pcl::PointXYZ>::Ptr temp1 (new pcl::PointCloud<pcl::PointXYZ>);
-   pcl::PointCloud<pcl::PointXYZ>::Ptr temp2 (new pcl::PointCloud<pcl::PointXYZ>);
-   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZ>);
-   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out (new pcl::PointCloud<pcl::PointXYZ>);
+   pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp1 (new pcl::PointCloud<pcl::PointXYZRGB>);
+   pcl::PointCloud<pcl::PointXYZRGB>::Ptr temp2 (new pcl::PointCloud<pcl::PointXYZRGB>);
+   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZRGB>);
+   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_out (new pcl::PointCloud<pcl::PointXYZRGB>);
    
       
    // read data points from both files
    
-   if(pcl::io::loadPCDFile<pcl::PointXYZ> (input , *temp1) == -1)
+   if(pcl::io::loadPCDFile<pcl::PointXYZRGB> (input , *temp1) == -1)
   {
      PCL_ERROR ("Couldn't read file test_pcd.pcd\n");
      return (-1);
@@ -52,7 +52,7 @@ int iterative_closest_point( string input , string target)
          
   }*/
    
-   if(pcl::io::loadPCDFile<pcl::PointXYZ> (target , *temp2) == -1)
+   if(pcl::io::loadPCDFile<pcl::PointXYZRGB> (target , *temp2) == -1)
   {
      PCL_ERROR ("Couldn't read file test_pcd.pcd\n");
      return (-1);
@@ -80,12 +80,12 @@ int iterative_closest_point( string input , string target)
   
  // std::cout << " target point size = " << cloud_out->points.size() << std::endl;
   
-  pcl::IterativeClosestPoint<pcl::PointXYZ , pcl::PointXYZ> icp;// create an object of icp
+  pcl::IterativeClosestPoint<pcl::PointXYZRGB , pcl::PointXYZRGB> icp;// create an object of icp
 //  icp.setMaxCorrespondenceDistance(100);
   //icp.setMaximumIterations(3);
   icp.setInputCloud(cloud_in); // set input cloud
   icp.setInputTarget(cloud_out); // set target cloud
-  pcl::PointCloud<pcl::PointXYZ> Final;
+  pcl::PointCloud<pcl::PointXYZRGB> Final;
   std::cout<<" Alignment started" << std::endl;
   icp.align(Final); // start alignment and store result in Final
   std::cout<<" Alignment completed" << std::endl;
@@ -94,6 +94,7 @@ int iterative_closest_point( string input , string target)
 
   std::cout<< " has converged " << icp.hasConverged() << " fitness score " << icp.getFitnessScore() << std::endl;
   std::cout<< icp.getFinalTransformation() << std::endl;
+//  std::cout<< " final has points = " << Final.points.size()<< std::endl;
   
   return(0);
   
