@@ -19,7 +19,9 @@ int iterative_closest_point( string input , string target)
    
    if(pcl::io::loadPCDFile<pcl::PointXYZRGB> (input , *temp1) == -1)
   {
-     PCL_ERROR ("Couldn't read file test_pcd.pcd\n");
+    std::stringstream x;
+     x <<"Couldn't read file " << input << ".pcd\n";
+     PCL_ERROR (x.str().c_str());
      return (-1);
   }
 //  *cloud_in = *temp1;
@@ -103,8 +105,11 @@ int iterative_closest_point( string input , string target)
 
 int main (int argc , char** argv)
 {
-  
-  iterative_closest_point("../../recordings/mark1_pcd/1316652680.041655601.pcd" , "../../recordings/mark1_pcd/1316652682.570062041.pcd");
+  if(argc < 3) {
+    printf("usage: icp_align left.pcd right.pcd\n");
+    exit(1);
+  }
+  iterative_closest_point(argv[1], argv[2]);
   return (0);
 
 }
