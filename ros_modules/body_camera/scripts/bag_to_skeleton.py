@@ -35,7 +35,18 @@ bag.close()
 
 moments = OrderedDict(sorted(moments.items(), key=lambda t: t[0]))
 for stamp in moments:
-  print str(stamp.secs) + "." + str(stamp.nsecs) + ": "
-  print moments[stamp]
-
-print str(len(moments)) + " moments"
+  print str(stamp.secs) + "." + str(stamp.nsecs) + ": # seconds"
+  for joint_name in moments[stamp]:
+    translation = moments[stamp][joint_name].translation
+    rotation = moments[stamp][joint_name].rotation
+    print "  " + joint_name + ":"
+    print "    translation:"
+    print "      - x -- " + str(translation.x)
+    print "      - y -- " + str(translation.y)
+    print "      - z -- " + str(translation.z)
+    #print "    rotation: # tf provides this rotation. i think it is crap ROS adds on that openni does not actually generate"
+    #print "      - x -- " + str(rotation.x)
+    #print "      - y -- " + str(rotation.y)
+    #print "      - z -- " + str(rotation.z)
+    #print "      - w -- " + str(rotation.w)
+  print " "
