@@ -1,0 +1,12 @@
+\subsubsection usage Usage
+\verbatim
+<node name="OpenNI" pkg="body_camera" type="OpenNI">
+  <param name="image_mode" type="int" value="2" />
+  <param name="debayering" type="int" value="0" />
+  <param name="depth_mode" type="int" value="2" />
+  <param name="depth_registration" type="bool" value="False" />
+  <param name="depth_time_offset" type="double" value="0.0" />
+  <param name="image_time_offset" type="double" value="0.0" />
+</node>
+\endverbatim
+

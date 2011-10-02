@@ -1,0 +1,11 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~image_mode" : \b [int] Image output mode for the color/grayscale image min: 1, default: 2, max: 9
+- \b "~debayering" : \b [int] Bayer to RGB algorithm min: 0, default: 0, max: 2
+- \b "~depth_mode" : \b [int] depth output mode min: 2, default: 2, max: 9
+- \b "~depth_registration" : \b [bool] Depth data registration min: False, default: False, max: True
+- \b "~depth_time_offset" : \b [double] depth image time offset in seconds min: -1.0, default: 0.0, max: 1.0
+- \b "~image_time_offset" : \b [double] image time offset in seconds min: -1.0, default: 0.0, max: 1.0
+
