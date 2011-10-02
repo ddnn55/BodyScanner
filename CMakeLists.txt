@@ -8,6 +8,7 @@ foreach(subdir
           data-recorder
           scan-aligner
           surface-reconstructor
+          geodesic
        )
 
   add_subdirectory(${subdir})
