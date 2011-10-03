@@ -1,0 +1,27 @@
+43c43
+< #include "openni_camera/openni_driver.h"
+---
+> #include "body_camera/openni_driver.h"
+46c46
+< #include <openni_camera/OpenNIConfig.h>
+---
+> #include <body_camera/OpenNIConfig.h>
+54c54
+< namespace openni_camera
+---
+> namespace body_camera
+66a67,69
+>       typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image, sensor_msgs::Image> ThreeImageSyncPolicy;
+>       typedef message_filters::Synchronizer<ThreeImageSyncPolicy> ThreeImageSynchronizer;
+> 
+100a104
+>       ros::Publisher pub_human_point_cloud_rgb_;
+107a112,114
+>       // Approximate synchronization for XYZRGB human point clouds.
+>       boost::shared_ptr<ThreeImageSynchronizer> depth_rgb_user_sync_;
+> 
+116a124
+>       void publishXYZRGBHumanPointCloud (const sensor_msgs::ImageConstPtr& depth_msg, const sensor_msgs::ImageConstPtr& rgb_msg, const sensor_msgs::ImageConstPtr& user_msg) const;
+183a192,193
+> 
+>   // TODO OpenNINodelet::isUserStreamRequired() const

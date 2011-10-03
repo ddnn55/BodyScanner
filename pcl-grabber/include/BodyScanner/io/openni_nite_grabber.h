@@ -9,7 +9,10 @@ namespace BodyScanner
 	class OpenNIAndNITEGrabber : public pcl::OpenNIGrabber
 	{
 
+
+
 	};
 
 
 };
+
