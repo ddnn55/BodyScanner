@@ -54,5 +54,19 @@ And run it:
 meshlab scan.obj &
 
 
+Installing libDAI
+---------- ------
 
+Sebastian's correspondence code requires libDAI for solving a factor graph using Loopy Belief Propagation 
 
+Do this anywhere (not inside the project):
+
+git clone git://gitorious.org/libdai/libdai.git -b cmake_buildsystem libdai
+cd libdai
+mkdir build; cd build
+cmake ..
+make && make install
+
+sudo apt-get install g++ make doxygen graphviz libboost-dev libboost-graph-dev libboost-program-options-dev libboost-test-dev libgmp3-dev cimg-dev
+
+I haven't actually run this yet, but...

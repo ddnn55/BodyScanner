@@ -1,0 +1,10 @@
+
+If you want to run this tiny demo,
+you can find the dragon mesh at:
+http://luffel.org/2011/body-scanner/dragon16k.obj
+
+Put that into this directory and run:
+python MakeMesh.py
+
+It generates dragon16k.fbx, which you can run in QuickTime Player
+(I used version 7, not the most recent version, because it was being finicky)

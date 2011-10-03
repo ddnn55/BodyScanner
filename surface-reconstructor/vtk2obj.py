@@ -100,8 +100,6 @@ class Orient(object):
 
 O = computeO(V)
 Orient(V,O).run()
-#O = computeO(V)
-#Orient(V,O).run()
 
 for c in range(0, len(V), 3):
     fout.write('f %i %i %i\n'%(V[c+2],V[c+1],V[c+0]))
