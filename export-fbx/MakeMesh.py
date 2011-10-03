@@ -131,28 +131,28 @@ def LinkMeshToSkeleton(pSdkManager, pMesh, T, V, pSkeletonRoot):
     lLimbNode1 = pSkeletonRoot.GetChild(0)
     lLimbNode2 = lLimbNode1.GetChild(0)
     
-    # Bottom section of cylinder is clustered to skeleton root.
+    # Root
     lClusterToRoot = KFbxCluster.Create(pSdkManager, "")
     lClusterToRoot.SetLink(pSkeletonRoot)
     lClusterToRoot.SetLinkMode(KFbxCluster.eNORMALIZE)
     for i,(x,y,z) in enumerate(V):
         lClusterToRoot.AddControlPointIndex(i, constrain(1-(x+30)/60, 0, 1))
         
-    # Center section of cylinder is clustered to skeleton limb node.
+    # First joint
     lClusterToLimbNode1 = KFbxCluster.Create(pSdkManager, "")
     lClusterToLimbNode1.SetLink(lLimbNode1)
     lClusterToLimbNode1.SetLinkMode(KFbxCluster.eNORMALIZE)
     for i,(x,y,z) in enumerate(V):
         lClusterToLimbNode1.AddControlPointIndex(i, constrain(1-(x-20)/60, 0, 1))
         
-    # Top section of cylinder is clustered to skeleton limb.
+    # Second "joint"
     lClusterToLimbNode2 = KFbxCluster.Create(pSdkManager, "")
     lClusterToLimbNode2.SetLink(lLimbNode2)
     lClusterToLimbNode2.SetLinkMode(KFbxCluster.eNORMALIZE)
     for i,(x,y,z) in enumerate(V):
         lClusterToLimbNode2.AddControlPointIndex(i, constrain(1-(x-60)/60, 0, 1))
         
-    # Now we have the Patch and the skeleton correctly positioned,
+    # Now we have the mesh and the skeleton correctly positioned,
     # set the Transform and TransformLink matrix accordingly.
     lXMatrix = KFbxXMatrix()
     lScene = pMesh.GetScene()
@@ -174,7 +174,7 @@ def LinkMeshToSkeleton(pSdkManager, pMesh, T, V, pSkeletonRoot):
         lXMatrix = lScene.GetEvaluator().GetNodeGlobalTransform(lLimbNode2)
     lClusterToLimbNode2.SetTransformLinkMatrix(lXMatrix)
     
-    # Add the clusters to the patch by creating a skin and adding those clusters to that skin.
+    # Add the clusters to the mesh by creating a skin and adding those clusters to that skin.
     # After add that skin.
     lSkin = KFbxSkin.Create(pSdkManager, "")
     lSkin.AddCluster(lClusterToRoot)
@@ -203,7 +203,7 @@ def StoreBindPose(pSdkManager, pScene, pMesh, pSkeletonRoot):
 
     # In this example, since there is only one model deformed, we don't need walk through the scene
 
-    # Now list the all the link involve in the patch deformation
+    # Now list the all the link involve in the mesh deformation
     lClusteredFbxNodes = []
     if pMesh and pMesh.GetNodeAttribute():
         lSkinCount = 0
@@ -225,12 +225,12 @@ def StoreBindPose(pSdkManager, pScene, pMesh, pSkeletonRoot):
                     lClusterNode = lSkin.GetCluster(j).GetLink()
                     AddNodeRecursively(lClusteredFbxNodes, lClusterNode)
                     
-            # Add the patch to the pose
+            # Add the mesh to the pose
             lClusteredFbxNodes += [pMesh]
             
     # Now create a bind pose with the link list
     if len(lClusteredFbxNodes):
-        # A pose must be named. Arbitrarily use the name of the patch node.
+        # A pose must be named. Arbitrarily use the name of the mesh node.
         lPose = KFbxPose.Create(pSdkManager, pMesh.GetName())
         lPose.SetIsBindPose(True)
 
