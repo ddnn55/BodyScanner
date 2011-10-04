@@ -5,7 +5,7 @@
 
 xn::Context* BodyScanner::OpenNIDriverNITE::getOpenNIContext()
 {
-	return NULL;
+	return & this->context_;
 }
 
 
