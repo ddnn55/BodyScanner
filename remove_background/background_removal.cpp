@@ -4,6 +4,7 @@
 #include <pcl/filters/conditional_removal.h>
 #include "pcl/io/pcd_io.h"
 #include <string.h>
+using std::string;
 
 int
  main (int argc, char** argv)
@@ -93,13 +94,11 @@ int
        output.points[i].z = cloud_filtered->points[i].z;
     }
     std::cout<< " written to file" << std::endl;
-    char* out = (char*) malloc(sizeof(char)*strlen(argv[3]));
-    char* in = (char*) malloc(sizeof(char*));
-    strcpy(out,argv[3]);
-    strcpy(in,"../filtered_files/");
-    pcl::io::savePCDFileASCII (strcat(in,out) , output);
+    string in = "../../recordings/filtered_files/" ;
+    in += argv[3];
+    pcl::io::savePCDFileASCII (in.c_str(), output);
     std::cout<< " saved to file" << std::endl;
-    free(out);
+        
   }
   else{
     std::cerr << "please specify command line arg '-r' or '-c'" << std::endl;
@@ -111,11 +110,11 @@ int
                         << cloud->points[i].y << " "
                         << cloud->points[i].z << std::endl;*/
   // display pointcloud after filtering
-  std::cerr << "Cloud after filtering: " << std::endl;
+/*  std::cerr << "Cloud after filtering: " << std::endl;
   for (size_t i = 0; i < cloud_filtered->points.size (); ++i)
     std::cerr << "    " << cloud_filtered->points[i].x << " "
                         << cloud_filtered->points[i].y << " "
-                        << cloud_filtered->points[i].z << std::endl;
+                        << cloud_filtered->points[i].z << std::endl;*/
   return (0);
 }
 
