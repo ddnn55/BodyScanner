@@ -1,4 +1,19 @@
-diff /usr/local/include/pcl-1.2/pcl/io/openni_camera/openni_device.h ~/Desktop/BodyScanner/ros_modules/body_camera/include/body_camera/openni_device.h
+#pragma once
+
+#include <pcl/io/openni_camera/openni_driver.h>
+
+namespace BodyScanner
+{
+	class OpenNIDriverNITE : public openni_wrapper::OpenNIDriver
+	{
+		public:
+			xn::Context* getOpenNIContext();
+	};
+};
+
+
+
+/*diff /usr/local/include/pcl-1.2/pcl/io/openni_camera/openni_device.h ~/Desktop/BodyScanner/ros_modules/body_camera/include/body_camera/openni_device.h
 38,40d37
 < #include <pcl/pcl_config.h>
 < #ifdef HAVE_OPENNI
@@ -19,7 +34,7 @@ diff /usr/local/include/pcl-1.2/pcl/io/openni_camera/openni_device.h ~/Desktop/B
 182a179
 >   void UserDataThreadFunction () throw (OpenNIException);
 208a206,207
->   /** \brief User generator object. **/
+>   /** \brief User generator object. ** /
 >   xn::UserGenerator user_generator_;
 214a214
 >   XnCallbackHandle user_callback_handle_;
@@ -31,3 +46,5 @@ diff /usr/local/include/pcl-1.2/pcl/io/openni_camera/openni_device.h ~/Desktop/B
 >   boost::thread user_thread_;
 292d294
 < #endif // HAVE_OPENNI
+
+*/

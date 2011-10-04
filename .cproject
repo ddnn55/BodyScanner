@@ -24,16 +24,18 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.504119792" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
 <option id="gnu.cpp.compiler.exe.debug.option.optimization.level.1783207152" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1885860453" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-<option id="gnu.cpp.compiler.option.include.paths.847022065" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<option id="gnu.cpp.compiler.option.include.paths.847022065" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="/usr/local/include/pcl-1.2"/>
+<listOptionValue builtIn="false" value="/usr/include/openni"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1026528139" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.430249618" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">
 <option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1811107189" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 <option id="gnu.c.compiler.exe.debug.option.debugging.level.1017576981" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-<option id="gnu.c.compiler.option.include.paths.90549806" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<option id="gnu.c.compiler.option.include.paths.90549806" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="/usr/local/include/pcl-1.2"/>
+<listOptionValue builtIn="false" value="/usr/include/openni"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1366388820" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
@@ -47,6 +49,7 @@
 <tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.815383360" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
 <option id="gnu.both.asm.option.include.paths.942733365" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="/usr/local/include/pcl-1.2"/>
+<listOptionValue builtIn="false" value="/usr/include/openni"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.739966969" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>

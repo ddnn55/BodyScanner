@@ -1,6 +1,6 @@
 #include <pcl/visualization/cloud_viewer.h>
 
-#include <BodyScanner/io/openni_nite_grabber.h>
+#include <BodyScanner/io/openni_human_grabber.h>
 
  class SimpleOpenNIViewer
  {
@@ -15,7 +15,7 @@
 
      void run ()
      {
-       BodyScanner::OpenNIAndNITEGrabber* interface = new BodyScanner::OpenNIAndNITEGrabber();
+       BodyScanner::OpenNIHumanGrabber* interface = new BodyScanner::OpenNIHumanGrabber();
 
        boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&)> f =
          boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);

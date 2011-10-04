@@ -1,3 +1,27 @@
+#include <BodyScanner/io/openni_camera/openni_driver_nite.h>
+
+
+
+
+xn::Context* BodyScanner::OpenNIDriverNITE::getOpenNIContext()
+{
+	return NULL;
+}
+
+
+
+
+
+
+
+#if 0
+
+
+
+
+
+
+
 diff ~/Downloads/pcl-1.2/io/src/openni_camera/openni_device.cpp ~/Desktop/BodyScanner/ros_modules/body_camera/src/openni_device.cpp 
 37,43c37,40
 < #include <pcl/pcl_config.h>
@@ -252,3 +276,6 @@ diff ~/Downloads/pcl-1.2/io/src/openni_camera/openni_device.cpp ~/Desktop/BodySc
 < #endif
 1005d1045
 < #endif //OPENNI
+
+
+#endif

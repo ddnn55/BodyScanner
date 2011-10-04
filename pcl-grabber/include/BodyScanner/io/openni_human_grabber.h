@@ -6,10 +6,10 @@ namespace BodyScanner
 {
 
 
-	class OpenNIAndNITEGrabber : public pcl::OpenNIGrabber
+	class OpenNIHumanGrabber : public pcl::OpenNIGrabber
 	{
-
-
+	public:
+		OpenNIHumanGrabber();
 
 	};
 

@@ -4,9 +4,9 @@ project(BodyScanner)
 
 find_package(PCL 1.2 REQUIRED)
 
-include_directories(${PCL_INCLUDE_DIRS} "include")
+include_directories(${PCL_INCLUDE_DIRS} "include" /usr/include/openni)
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-add_executable (BodyScanner BodyScanner.cpp)
+add_executable (BodyScanner BodyScanner.cpp src/io/openni_human_grabber.cpp src/io/openni_camera/openni_driver_nite.cpp)
 target_link_libraries (BodyScanner ${PCL_LIBRARIES})
