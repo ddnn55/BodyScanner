@@ -64,6 +64,9 @@ namespace body_camera
       typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image> SyncPolicy;
       typedef message_filters::Synchronizer<SyncPolicy> Synchronizer;
 
+      typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, sensor_msgs::Image, sensor_msgs::Image> ThreeImageSyncPolicy;
+      typedef message_filters::Synchronizer<ThreeImageSyncPolicy> ThreeImageSynchronizer;
+
       /** \brief Nodelet initialization routine. */
       virtual void onInit ();
       void setupDevice (ros::NodeHandle& param_nh);
@@ -98,12 +101,16 @@ namespace body_camera
       ros::Publisher pub_disparity_;
       ros::Publisher pub_point_cloud_;
       ros::Publisher pub_point_cloud_rgb_;
+      ros::Publisher pub_human_point_cloud_rgb_;
 
       /** \brief ROS subscribers. */
       ros::Subscriber sub_mask_indices_;
 
       // Approximate synchronization for XYZRGB point clouds.
       boost::shared_ptr<Synchronizer> depth_rgb_sync_;
+
+      // Approximate synchronization for XYZRGB human point clouds.
+      boost::shared_ptr<ThreeImageSynchronizer> depth_rgb_user_sync_;
 
       // publish methods
       void publishRgbImage (const openni_wrapper::Image& image, ros::Time time) const;
@@ -114,6 +121,7 @@ namespace body_camera
       void publishDisparity (const openni_wrapper::DepthImage& depth, ros::Time time) const;
       void publishXYZPointCloud (const openni_wrapper::DepthImage& depth, ros::Time time) const;
       void publishXYZRGBPointCloud (const sensor_msgs::ImageConstPtr& depth_msg, const sensor_msgs::ImageConstPtr& rgb_msg) const;
+      void publishXYZRGBHumanPointCloud (const sensor_msgs::ImageConstPtr& depth_msg, const sensor_msgs::ImageConstPtr& rgb_msg, const sensor_msgs::ImageConstPtr& user_msg) const;
 
       /** \brief Store provided indices for later use in masking the point cloud */
       void maskIndicesCb(const pcl::PointIndicesConstPtr& indices);
@@ -181,6 +189,8 @@ namespace body_camera
             pub_point_cloud_.getNumSubscribers()     > 0 ||
             pub_point_cloud_rgb_.getNumSubscribers() > 0 );
   }
+
+  // TODO OpenNINodelet::isUserStreamRequired() const
 
 }
 

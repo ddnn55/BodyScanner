@@ -127,6 +127,7 @@ public:
 
   bool hasImageStream () const throw ();
   bool hasDepthStream () const throw ();
+  bool hasUserStream () const throw ();
   bool hasIRStream () const throw ();
 
   virtual bool isImageStreamRunning () const throw (OpenNIException);
@@ -167,6 +168,7 @@ protected:
   OpenNIDevice (xn::Context& context, const xn::NodeInfo& device_node, const xn::NodeInfo& depth_node, const xn::NodeInfo& ir_node) throw (OpenNIException);
   OpenNIDevice (xn::Context& context) throw (OpenNIException);
   static void __stdcall NewDepthDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
+  static void __stdcall NewUserDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
   static void __stdcall NewImageDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
   static void __stdcall NewIRDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
 
@@ -174,6 +176,7 @@ protected:
   // and retrieving image data without WaitAndUpdateData leads to incomplete images!!!
   void ImageDataThreadFunction () throw (OpenNIException);
   void DepthDataThreadFunction () throw (OpenNIException);
+  void UserDataThreadFunction () throw (OpenNIException);
   void IRDataThreadFunction () throw (OpenNIException);
 
   virtual bool isImageResizeSupported (unsigned input_width, unsigned input_height, unsigned output_width, unsigned output_height) const  throw () = 0;
@@ -200,12 +203,15 @@ protected:
   
   /** \brief Depth generator object. */
   xn::DepthGenerator depth_generator_;
+  /** \brief User generator object. */
+  xn::UserGenerator user_generator_;
   /** \brief Image generator object. */
   xn::ImageGenerator image_generator_;
   /** \brief IR generator object. */
   xn::IRGenerator ir_generator_;
 
   XnCallbackHandle depth_callback_handle_;
+  XnCallbackHandle user_callback_handle_;
   XnCallbackHandle image_callback_handle_;
   XnCallbackHandle ir_callback_handle_;
 
@@ -228,12 +234,15 @@ protected:
   bool quit_;
   mutable boost::mutex image_mutex_;
   mutable boost::mutex depth_mutex_;
+  mutable boost::mutex user_mutex_;
   mutable boost::mutex ir_mutex_;
   boost::condition_variable image_condition_;
   boost::condition_variable depth_condition_;
+  boost::condition_variable user_condition_;
   boost::condition_variable ir_condition_;
   boost::thread image_thread_;
   boost::thread depth_thread_;
+  boost::thread user_thread_;
   boost::thread ir_thread_;
 };
 

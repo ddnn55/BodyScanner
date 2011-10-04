@@ -60,6 +60,10 @@ OpenNIDevice::OpenNIDevice (xn::Context& context, const xn::NodeInfo& device_nod
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("creating depth generator failed. Reason: %s", xnGetStatusString (status));
 
+  //status = context_.CreateProductionTree (const_cast<xn::NodeInfo&>(user_node));
+  //if (status != XN_STATUS_OK)
+  //  THROW_OPENNI_EXCEPTION ("creating user generator failed. Reason: %s", xnGetStatusString (status));
+
   status = context_.CreateProductionTree (const_cast<xn::NodeInfo&>(image_node));
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("creating image generator failed. Reason: %s", xnGetStatusString (status));
@@ -72,6 +76,10 @@ OpenNIDevice::OpenNIDevice (xn::Context& context, const xn::NodeInfo& device_nod
   status = depth_node.GetInstance (depth_generator_);
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("creating depth generator instance failed. Reason: %s", xnGetStatusString (status));
+
+  //status = user_node.GetInstance (user_generator_);
+  //if (status != XN_STATUS_OK)
+  //  THROW_OPENNI_EXCEPTION ("creating user generator instance failed. Reason: %s", xnGetStatusString (status));
 
   status = image_node.GetInstance (image_generator_);
   if (status != XN_STATUS_OK)
@@ -98,6 +106,10 @@ OpenNIDevice::OpenNIDevice (xn::Context& context, const xn::NodeInfo& device_nod
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("creating depth generator failed. Reason: %s", xnGetStatusString (status));
 
+  //status = context_.CreateProductionTree (const_cast<xn::NodeInfo&>(user_node));
+  //if (status != XN_STATUS_OK)
+  //  THROW_OPENNI_EXCEPTION ("creating user generator failed. Reason: %s", xnGetStatusString (status));
+
   status = context_.CreateProductionTree (const_cast<xn::NodeInfo&>(ir_node));
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("creating IR generator failed. Reason: %s", xnGetStatusString (status));
@@ -106,6 +118,10 @@ OpenNIDevice::OpenNIDevice (xn::Context& context, const xn::NodeInfo& device_nod
   status = depth_node.GetInstance (depth_generator_);
   if (status != XN_STATUS_OK)
     THROW_OPENNI_EXCEPTION ("creating depth generator instance failed. Reason: %s", xnGetStatusString (status));
+
+  //status = user_node.GetInstance (user_generator_);
+  //if (status != XN_STATUS_OK)
+  //  THROW_OPENNI_EXCEPTION ("creating user generator instance failed. Reason: %s", xnGetStatusString (status));
 
   status = ir_node.GetInstance (ir_generator_);
   if (status != XN_STATUS_OK)
@@ -125,7 +141,7 @@ OpenNIDevice::OpenNIDevice (xn::Context& context) throw (OpenNIException)
 {
 }
 
-OpenNIDevice::~OpenNIDevice () throw ()
+OpenNIDevice::~OpenNIDevice () throw () // FIXME add user stuff here
 {
   // stop streams
   if (image_generator_.IsValid() && image_generator_.IsGenerating ())
@@ -134,19 +150,26 @@ OpenNIDevice::~OpenNIDevice () throw ()
   if (depth_generator_.IsValid () && depth_generator_.IsGenerating ())
     depth_generator_.StopGenerating ();
 
+  if (user_generator_.IsValid () && user_generator_.IsGenerating ())
+    user_generator_.StopGenerating ();
+
   if (ir_generator_.IsValid () && ir_generator_.IsGenerating ())
     ir_generator_.StopGenerating ();
 
   // lock before changing running flag
   image_mutex_.lock ();
   depth_mutex_.lock ();
+  user_mutex_.lock ();
   ir_mutex_.lock ();
   quit_ = true;
 
   depth_condition_.notify_all ();
+  user_condition_.notify_all ();
   image_condition_.notify_all ();
   ir_condition_.notify_all ();
+
   ir_mutex_.unlock ();
+  user_mutex_.unlock ();
   depth_mutex_.unlock ();
   image_mutex_.unlock ();
 
@@ -156,6 +179,9 @@ OpenNIDevice::~OpenNIDevice () throw ()
   if (hasDepthStream ())
     depth_thread_.join ();
 
+  if (hasUserStream ())
+    user_thread_.join ();
+
   if (hasIRStream ())
     ir_thread_.join ();
 }
@@ -163,12 +189,45 @@ OpenNIDevice::~OpenNIDevice () throw ()
 void OpenNIDevice::Init () throw (OpenNIException)
 {
   XnDouble pixel_size;
+  XnStatus status;
+
+
+  status = context_.FindExistingNode(XN_NODE_TYPE_USER, user_generator_);
+  if (status != XN_STATUS_OK)
+  {
+    status = user_generator_.Create(context_);
+    if (status != XN_STATUS_OK)
+      THROW_OPENNI_EXCEPTION ("Couldn't create user generator. Reason: %s", xnGetStatusString (status));
+  }
+
+  if(hasUserStream ())
+  {
+
+	user_generator_.RegisterToNewDataAvailable ((xn::StateChangedHandler)NewUserDataAvailable, this, user_callback_handle_);
+
+	//if (!user_generator_.IsCapabilitySupported(XN_CAPABILITY_SKELETON)) {
+	//	ROS_INFO("Supplied user generator doesn't support skeleton");
+	//
+	//}
+
+	//XnCallbackHandle hUserCallbacks;
+	//user_generator_.RegisterUserCallbacks(User_NewUser, User_LostUser, NULL, user_callback_handle_);
+
+	status = user_generator_.StartGenerating();
+	if (status != XN_STATUS_OK)
+	        THROW_OPENNI_EXCEPTION ("UserGenerator StartGenerating() failed. Reason: %s", xnGetStatusString (status));
+
+    lock_guard<mutex> user_lock (user_mutex_);
+	user_thread_ = boost::thread (&OpenNIDevice::UserDataThreadFunction, this);
+
+  }
+
 
   // set Depth resolution here only once... since no other mode for kinect is available -> deactivating setDepthResolution method!
   if (hasDepthStream ())
   {
     unique_lock<mutex> depth_lock (depth_mutex_);
-    XnStatus status = depth_generator_.GetRealProperty ("ZPPS", pixel_size);
+    status = depth_generator_.GetRealProperty ("ZPPS", pixel_size);
     if (status != XN_STATUS_OK)
       THROW_OPENNI_EXCEPTION ("reading the pixel size of IR camera failed. Reason: %s", xnGetStatusString (status));
 
@@ -344,6 +403,12 @@ bool OpenNIDevice::hasDepthStream () const throw ()
   lock_guard<mutex> lock (depth_mutex_);
   return depth_generator_.IsValid ();
   //return (available_depth_modes_.size() != 0);
+}
+
+bool OpenNIDevice::hasUserStream () const throw ()
+{
+  lock_guard<mutex> lock (user_mutex_);
+  return user_generator_.IsValid ();
 }
 
 bool OpenNIDevice::hasIRStream () const throw ()
@@ -545,6 +610,43 @@ void OpenNIDevice::DepthDataThreadFunction () throw (OpenNIException)
   }
 }
 
+void OpenNIDevice::UserDataThreadFunction () throw (OpenNIException)
+{
+  while (true)
+  {
+    // lock before checking running flag
+    unique_lock<mutex> user_lock (user_mutex_);
+    if (quit_)
+      return;
+    user_condition_.wait (user_lock);
+    if (quit_)
+      return;
+
+    user_generator_.WaitAndUpdateData ();
+    boost::shared_ptr<xn::SceneMetaData> user_pixels_scene_data (new xn::SceneMetaData);
+
+    XnUserID users[15];
+    XnUInt16 users_count = 15;
+    user_generator_.GetUsers(users, users_count);
+
+    if(users_count > 0) // TODO handle multiple users
+    {
+      user_generator_.GetUserPixels (users[0], *user_pixels_scene_data);
+      printf("got user pixels and stuff\n");
+    }
+    user_lock.unlock ();
+
+    printf("user data thread\n");
+    //boost::shared_ptr<UserMask> user_mask ( new DepthImage (user_pixels_scene_data, baseline_, getDepthFocalLength (), shadow_value_, no_sample_value_) );
+
+    //for (map< OpenNIDevice::CallbackHandle, ActualUserCallbackFunction >::iterator callbackIt = user_callback_.begin ();
+    //     callbackIt != user_callback_.end (); ++callbackIt)
+    //{
+    //  callbackIt->second.operator()(user_mask);
+    //}
+  }
+}
+
 void OpenNIDevice::IRDataThreadFunction () throw (OpenNIException)
 {
   while (true)
@@ -576,6 +678,12 @@ void __stdcall OpenNIDevice::NewDepthDataAvailable (xn::ProductionNode& node, vo
 {
   OpenNIDevice* device = reinterpret_cast<OpenNIDevice*>(cookie);
   device->depth_condition_.notify_all ();
+}
+
+void __stdcall OpenNIDevice::NewUserDataAvailable (xn::ProductionNode& node, void* cookie) throw ()
+{
+  OpenNIDevice* device = reinterpret_cast<OpenNIDevice*>(cookie);
+  device->user_condition_.notify_all ();
 }
 
 void __stdcall OpenNIDevice::NewImageDataAvailable (xn::ProductionNode& node, void* cookie) throw ()

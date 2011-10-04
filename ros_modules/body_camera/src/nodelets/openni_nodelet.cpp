@@ -128,6 +128,7 @@ void OpenNINodelet::onInit ()
   pub_depth_info_ = comm_nh.advertise<sensor_msgs::CameraInfo > ("depth/camera_info", 5, subscriberChanged2, subscriberChanged2);
   pub_point_cloud_ = comm_nh.advertise<pcl::PointCloud<pcl::PointXYZ> > ("depth/points", 5, subscriberChanged2, subscriberChanged2);
   pub_point_cloud_rgb_ = comm_nh.advertise<pcl::PointCloud<pcl::PointXYZRGB> > ("rgb/points", 5, subscriberChanged2, subscriberChanged2);
+  pub_human_point_cloud_rgb_ = comm_nh.advertise<pcl::PointCloud<pcl::PointXYZRGB> > ("human/points", 5, subscriberChanged2, subscriberChanged2);
 
   if (use_indices_)
     sub_mask_indices_ = comm_nh.subscribe("depth/indices", 5, &OpenNINodelet::maskIndicesCb, this);
@@ -135,6 +136,10 @@ void OpenNINodelet::onInit ()
   SyncPolicy sync_policy (4); // queue size
   depth_rgb_sync_.reset (new Synchronizer (sync_policy));
   depth_rgb_sync_->registerCallback (boost::bind (&OpenNINodelet::publishXYZRGBPointCloud, this, _1, _2));
+
+  ThreeImageSyncPolicy three_image_sync_policy (4);
+  depth_rgb_user_sync_.reset (new ThreeImageSynchronizer (three_image_sync_policy));
+  depth_rgb_user_sync_->registerCallback (boost::bind (&OpenNINodelet::publishXYZRGBHumanPointCloud, this, _1, _2, _3));
 
   // initialize dynamic reconfigure
   reconfigure_server_.reset (new ReconfigureServer (reconfigure_mutex_, param_nh));
@@ -295,7 +300,7 @@ void OpenNINodelet::imageCallback (boost::shared_ptr<openni_wrapper::Image> imag
   if (pub_image_raw_.getNumSubscribers () > 0)
     publishRgbImageRaw (*image, time);
 
-  if (pub_rgb_image_.getNumSubscribers () > 0 || pub_point_cloud_rgb_.getNumSubscribers () > 0 )
+  if (pub_rgb_image_.getNumSubscribers () > 0 || pub_point_cloud_rgb_.getNumSubscribers () > 0 || pub_human_point_cloud_rgb_.getNumSubscribers() > 0)
     publishRgbImage (*image, time);
 
   if (pub_gray_image_.getNumSubscribers () > 0)
@@ -319,7 +324,7 @@ void OpenNINodelet::depthCallback (boost::shared_ptr<openni_wrapper::DepthImage>
     publishDepthImageRaw (*depth_image, time);
 
   // Depth image
-  if (pub_depth_image_.getNumSubscribers () > 0 || (pub_point_cloud_rgb_.getNumSubscribers () > 0 ))
+  if (pub_depth_image_.getNumSubscribers () > 0 || (pub_point_cloud_rgb_.getNumSubscribers () > 0 ) || (pub_human_point_cloud_rgb_.getNumSubscribers () > 0 ))
     publishDepthImage (*depth_image, time);
 
   // Disparity image
@@ -364,7 +369,7 @@ void OpenNINodelet::subscriberChangedEvent ()
 
   // if PointcloudXYZRGB is subscribed, we have to assure that depth stream is registered and
   // image stream size is at least as big as the depth image size
-  if (pub_point_cloud_rgb_.getNumSubscribers() > 0)
+  if (pub_point_cloud_rgb_.getNumSubscribers() > 0 || pub_human_point_cloud_rgb_.getNumSubscribers() > 0)
   {
     Config config = config_;
 
@@ -407,6 +412,9 @@ void OpenNINodelet::publishRgbImage (const Image& image, ros::Time time) const
   
   if (pub_point_cloud_rgb_.getNumSubscribers () > 0)
     depth_rgb_sync_->add < 1 > (rgb_msg);
+
+  if (pub_human_point_cloud_rgb_.getNumSubscribers () > 0)
+    depth_rgb_user_sync_->add < 1 > (rgb_msg);
 }
 
 void OpenNINodelet::publishRgbImageRaw (const Image& image, ros::Time time) const
@@ -467,6 +475,9 @@ void OpenNINodelet::publishDepthImage (const DepthImage& depth, ros::Time time) 
 
   if (pub_point_cloud_rgb_.getNumSubscribers () > 0)
     depth_rgb_sync_->add < 0 > (depth_msg);
+
+  if (pub_human_point_cloud_rgb_.getNumSubscribers () > 0)
+    depth_rgb_user_sync_->add < 0 > (depth_msg);
 }
 
 void OpenNINodelet::publishDepthImageRaw (const DepthImage& depth, ros::Time time) const
@@ -709,7 +720,7 @@ void OpenNINodelet::publishXYZRGBPointCloud (const sensor_msgs::ImageConstPtr& d
       }
     }
   }
-  else
+  else // do_masking == true
   {
     int u, v;
     unsigned int nMask = mask_indices_.size();
@@ -753,7 +764,153 @@ void OpenNINodelet::publishXYZRGBPointCloud (const sensor_msgs::ImageConstPtr& d
   }
 
   pub_point_cloud_rgb_.publish (cloud_msg);
+
+  printf("pubbed normal pointcloud\n");
+
 }
+
+void OpenNINodelet::publishXYZRGBHumanPointCloud (const sensor_msgs::ImageConstPtr& depth_msg, const sensor_msgs::ImageConstPtr& rgb_msg, const sensor_msgs::ImageConstPtr& user_msg) const
+{
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_msg (new pcl::PointCloud<pcl::PointXYZRGB>() );
+  cloud_msg->header.stamp     = depth_msg->header.stamp;
+  cloud_msg->header.frame_id  = rgb_frame_id_;
+  cloud_msg->is_dense         = false;
+
+  bool do_masking = (use_indices_ and (mask_indices_.size() != 0));
+
+  float centerX, centerY;
+  float constant;
+  unsigned color_step, color_skip;
+
+  if (not do_masking)
+  {
+    cloud_msg->height = depth_msg->height;
+    cloud_msg->width = depth_msg->width;
+    centerX = (cloud_msg->width >> 1) - 0.5f;
+    centerY = (cloud_msg->height >> 1) - 0.5f;
+    constant = 1.0f / device_->getImageFocalLength(cloud_msg->width);
+    color_step = 3 * rgb_msg->width / cloud_msg->width;
+    color_skip = 3 * (rgb_msg->height / cloud_msg->height - 1) * rgb_msg->width;
+
+  }
+  else
+  {
+    cloud_msg->width = mask_indices_.size();
+    cloud_msg->height = 1;
+    centerX = (depth_msg->width >> 1) - 0.5f;
+    centerY = (depth_msg->height >> 1) - 0.5f;
+    constant = 1.0f / device_->getImageFocalLength(depth_msg->width);
+    color_step = 3 * rgb_msg->width / depth_msg->width;
+    color_skip = 3 * (rgb_msg->height / depth_msg->height - 1) * rgb_msg->width;
+ }
+
+  static bool info_sent = false;
+  if (not info_sent)
+  {
+    //NODELET_INFO("color_step = %d, color_skip = %d", color_step, color_skip);
+    info_sent = true;
+  }
+
+  // do not publish if rgb image is smaller than color image -> seg fault
+  if (rgb_msg->height < depth_msg->height || rgb_msg->width < depth_msg->width)
+  {
+    // we dont want to flood the terminal with warnings
+    static unsigned warned = 0;
+    if (warned % 100 == 0)
+      NODELET_WARN("rgb image smaller than depth image... skipping point cloud for this frame rgb:%dx%d vs. depth:%3dx%d"
+              , rgb_msg->width, rgb_msg->height, depth_msg->width, depth_msg->height );
+    ++warned;
+    return;
+  }
+  cloud_msg->points.resize (cloud_msg->height * cloud_msg->width);
+
+  const float* depth_buffer = reinterpret_cast<const float*>(&depth_msg->data[0]);
+  const uint8_t* rgb_buffer = &rgb_msg->data[0];
+
+  // depth_msg already has the desired dimensions, but rgb_msg may be higher res.
+  int color_idx = 0, depth_idx = 0;
+  pcl::PointCloud<pcl::PointXYZRGB>::iterator pt_iter = cloud_msg->begin ();
+  if (not do_masking)
+  {
+    for (int v = 0; v < (int)cloud_msg->height; ++v, color_idx += color_skip)
+    {
+      for (int u = 0; u < (int)cloud_msg->width; ++u, color_idx += color_step, ++depth_idx, ++pt_iter)
+      {
+        pcl::PointXYZRGB& pt = *pt_iter;
+        float Z = depth_buffer[depth_idx];
+
+        // Check for invalid measurements
+        if (std::isnan (Z))
+        {
+          pt.x = pt.y = pt.z = Z;
+        }
+        else
+        {
+          // Fill in XYZ
+          pt.x = (u - centerX) * Z * constant;
+          pt.y = (v - centerY) * Z * constant;
+          pt.z = Z;
+        }
+
+        // Fill in color
+        RGBValue color;
+        color.Red   = rgb_buffer[color_idx];
+        color.Green = rgb_buffer[color_idx + 1];
+        color.Blue  = rgb_buffer[color_idx + 2];
+        color.Alpha = 0;
+        pt.rgb = color.float_value;
+      }
+    }
+  }
+  else // do_masking == true
+  {
+    int u, v;
+    unsigned int nMask = mask_indices_.size();
+    int max_index = (depth_msg->height * depth_msg->width) - 1;
+    for (unsigned int i = 0; i < nMask; i++, ++pt_iter)
+    {
+      pcl::PointXYZRGB& pt = *pt_iter;
+      depth_idx = mask_indices_[i];
+      if (depth_idx > max_index)
+      {
+        NODELET_ERROR("Mask index %d exceeds maximum index of %d", depth_idx, max_index);
+        continue;
+      }
+      float Z = depth_buffer[depth_idx];
+
+      v = depth_idx / depth_msg->width;
+      u = depth_idx % depth_msg->width;
+      // Check for invalid measurements
+
+      if (std::isnan (Z))
+      {
+        pt.x = pt.y = pt.z = Z;
+      }
+      else
+      {
+        // Fill in XYZ
+        pt.x = (u - centerX) * Z * constant;
+        pt.y = (v - centerY) * Z * constant;
+        pt.z = Z;
+      }
+
+      // Fill in color
+      RGBValue color;
+      color_idx = (v*depth_msg->width + u)*color_step;
+      color.Red   = rgb_buffer[color_idx];
+      color.Green = rgb_buffer[color_idx + 1];
+      color.Blue  = rgb_buffer[color_idx + 2];
+      color.Alpha = 0;
+      pt.rgb = color.float_value;
+    }
+  }
+
+  pub_human_point_cloud_rgb_.publish (cloud_msg);
+
+  printf("pubbed HUMAN pointcloud\n");
+
+}
+
 
 sensor_msgs::CameraInfoPtr OpenNINodelet::fillCameraInfo (ros::Time time, bool is_rgb)
 {
@@ -845,19 +1002,19 @@ void OpenNINodelet::configCallback (Config &config, uint32_t level)
     NODELET_WARN ("%s does not output bayer images. Selection has no affect.", device_->getProductName () );
   }
 
-  if (pub_point_cloud_rgb_.getNumSubscribers () > 0)
+  if (pub_point_cloud_rgb_.getNumSubscribers () > 0 || pub_human_point_cloud_rgb_.getNumSubscribers() > 0)
   {
     if ( (depth_mode.nXRes > image_mode.nXRes) || (depth_mode.nYRes > image_mode.nYRes) ||
      (image_mode.nXRes % depth_mode.nXRes != 0) )
     {
       // we dont care about YRes, since SXGA works fine for kinect with all depth resolutions
-      NODELET_WARN ("depth mode not compatible to image mode, since PointCloudXYZRGB has subscribers.");
+      NODELET_WARN ("depth mode not compatible to image mode, since (Human)PointCloudXYZRGB has subscribers.");
       config = config_;
       return;
     }
     if (!config.depth_registration && config_.depth_registration)
     {
-      NODELET_WARN ("can not turn of registration, since PointCloudXYZRGB has subscribers.");
+      NODELET_WARN ("can not turn of registration, since (Human)PointCloudXYZRGB has subscribers.");
       config = config_;
       return;
     }
