@@ -1,6 +1,6 @@
 #include <pcl/visualization/cloud_viewer.h>
 
-#include <BodyScanner/OpenNIAndNITEGrabber.h>
+#include <BodyScanner/io/openni_nite_grabber.h>
 
  class SimpleOpenNIViewer
  {
