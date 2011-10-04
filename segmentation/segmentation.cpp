@@ -59,11 +59,10 @@ void assignPoints( pcl::PointXYZ a , pcl::PointXYZ b , double length , double ra
           
           double dotproduct = dot(normalized , vector_ac);
 //          std::cout<< " dot product = " << dotproduct << std::endl;
-          if(dotproduct < 0)
+          if(dotproduct < 0) // dotproduct should not be less than 0
             continue;
-            
-                      
-          if( dotproduct > 0)
+          else                     
+          if(dotproduct <= length) // if dotproduct is greater than 0, it must be less than the length of the vector between two joints
           {
  //          std::cout<< " dot product = " << dotproduct << std::endl;
             double distance = sqrt(pow(Euclidean_Distance(a,c),2.0) - pow(dotproduct,2.0));
@@ -81,11 +80,7 @@ void assignPoints( pcl::PointXYZ a , pcl::PointXYZ b , double length , double ra
           }
    }
    
-   if(j != 0)
-   input->points.resize(j-1);
-   else
-   if(j==0)
-    input->points.resize(0);
+  input->points().resize(j);
    
      
 } 
