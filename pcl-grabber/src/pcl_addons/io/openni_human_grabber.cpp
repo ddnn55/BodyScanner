@@ -194,7 +194,7 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 		skeleton = skeleton + 1.0f;
 
 	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_meta_data);
-	  boost::shared_ptr<OpenNIHumanGrabber::BodyPose> body_pose(new BodyPose(user_pixels_scene_meta_data));
+	  boost::shared_ptr<OpenNIHumanGrabber::BodyPose> body_pose(new BodyPose(users[0], user_pixels_scene_meta_data));
 	  //unsigned long time = (unsigned long) user_pixels_scene_meta_data->Timestamp();
 	  unsigned long time = (unsigned long) user_generator_.GetTimestamp();
 	  rgb_depth_user_sync_.add2(body_pose, time);
@@ -311,12 +311,13 @@ OpenNIHumanGrabber::~OpenNIHumanGrabber() throw()
 	    user_thread_.join ();
 }
 
-OpenNIHumanGrabber::BodyPose::BodyPose(boost::shared_ptr<xn::SceneMetaData>)
+OpenNIHumanGrabber::BodyPose::BodyPose(XnLabel user_label, boost::shared_ptr<xn::SceneMetaData>& smd)
 {
-
+	scene_meta_data_ = smd;
+	user_label_ = user_label;
 }
 
 bool OpenNIHumanGrabber::BodyPose::bodyIsAtPixel(int p)
 {
-	return true;
+	return scene_meta_data_->Data()[p] == user_label_;
 }

@@ -21,8 +21,11 @@ namespace BodyScanner
 			class BodyPose
 			{
 			  public:
-				BodyPose(boost::shared_ptr<xn::SceneMetaData> smd);
+				BodyPose(XnLabel user_label, boost::shared_ptr<xn::SceneMetaData>& smd);
 				bool bodyIsAtPixel(int p);
+			  private:
+				boost::shared_ptr<xn::SceneMetaData> scene_meta_data_;
+				XnLabel user_label_;
 			};
 
 		public:
