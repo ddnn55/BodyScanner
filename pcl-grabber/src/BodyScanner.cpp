@@ -36,6 +36,8 @@
 
        interface->start ();
 
+
+
        while (!viewer.wasStopped())
        {
          sleep (1);

@@ -43,9 +43,10 @@ void __stdcall /*OpenNIHumanGrabber::*/LostUserCallback (xn::UserGenerator& gene
 
 OpenNIHumanGrabber::OpenNIHumanGrabber()
 {
-	rgb_depth_user_sync_.addCallback(boost::bind(&OpenNIHumanGrabber::imageDepthImageUserCallback, this, _1, _2, _3));
 
 	user_skeleton_and_point_cloud_rgb_signal_ = createSignal <sig_cb_openni_user_skeleton_and_point_cloud_rgb > ();
+
+	rgb_depth_user_sync_.addCallback(boost::bind(&OpenNIHumanGrabber::imageDepthImageUserCallback, this, _1, _2, _3));
 
 	BodyScanner::OpenNIDriverNITE& driver = (BodyScanner::OpenNIDriverNITE&) openni_wrapper::OpenNIDriver::getInstance();
 	xn::Context* context = driver.getOpenNIContext();
@@ -100,6 +101,33 @@ OpenNIHumanGrabber::OpenNIHumanGrabber()
 
 }
 
+void OpenNIHumanGrabber::checkImageStreamRequired()
+{
+  // do we have anyone listening to images or color point clouds?
+  if (num_slots<sig_cb_openni_image > () > 0 ||
+      num_slots<sig_cb_openni_image_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud_rgb > () > 0 ||
+      num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0)
+    image_required_ = true;
+  else
+    image_required_ = false;
+}
+
+void OpenNIHumanGrabber::checkDepthStreamRequired()
+{
+  // do we have anyone listening to depth images or (color) point clouds?
+  if (num_slots<sig_cb_openni_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_image_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_ir_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud_rgb > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud_i > () > 0 ||
+      num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0 )
+    depth_required_ = true;
+  else
+    depth_required_ = false;
+}
+
 void OpenNIHumanGrabber::start () throw (pcl::PCLIOException)
 {
 	pcl::OpenNIGrabber::start();
@@ -117,8 +145,12 @@ void OpenNIHumanGrabber::startUserStream () throw (openni_wrapper::OpenNIExcepti
     {
       XnStatus status = user_generator_.StartGenerating ();
 
+
+
       if (status != XN_STATUS_OK)
+      {
         THROW_OPENNI_EXCEPTION ("starting user stream failed. Reason: %s\n", xnGetStatusString (status));
+      }
       else
       {
     	  printf("started user stream\n");
@@ -162,8 +194,10 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 		skeleton = skeleton + 1.0f;
 
 	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_meta_data);
-	  rgb_depth_user_sync_.add2(skeleton /*TODO something meaningful goes here*/, (unsigned long) user_pixels_scene_meta_data->Timestamp());
-	  printf("got user pixels and stuff\n");
+	  //unsigned long time = (unsigned long) user_pixels_scene_meta_data->Timestamp();
+	  unsigned long time = (unsigned long) user_generator_.GetTimestamp();
+	  rgb_depth_user_sync_.add2(skeleton /*TODO something meaningful goes here*/, time);
+	  //printf("got user pixels and stuff. %lu\n", (unsigned long) user_pixels_scene_meta_data->Timestamp());
 	}
 	user_lock.unlock ();
 
@@ -212,7 +246,7 @@ void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<ope
 		                                             const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
 		                                             float skeleton)
 {
-	printf("hello???????????");
+	//printf("-------------------------------------------------hello???????????");
 
 
 

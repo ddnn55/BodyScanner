@@ -42,6 +42,14 @@ namespace BodyScanner
 
 			void depthForUserCallback(boost::shared_ptr<openni_wrapper::DepthImage> depth_image, void* cookie);
 
+		      /** \brief ... */
+		      virtual inline void
+		      checkImageStreamRequired ();
+
+		      /** \brief ... */
+		      virtual inline void
+		      checkDepthStreamRequired ();
+
 		protected:
 			//typedef boost::function<void(boost::shared_ptr<openni_wrapper::Image>, void* cookie) > UserDataCallbackFunction;
 
