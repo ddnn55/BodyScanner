@@ -1,4 +1,4 @@
-#include <BodyScanner/io/openni_camera/openni_driver_nite.h>
+#include <pcl_addons/io/openni_camera/openni_driver_nite.h>
 
 
 

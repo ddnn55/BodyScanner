@@ -1,8 +1,9 @@
 #include <pcl/console/print.h>
 #include <pcl/io/openni_camera/openni_exception.h>
 
-#include <BodyScanner/io/openni_human_grabber.h>
-#include <BodyScanner/io/openni_camera/openni_driver_nite.h>
+#include <pcl_addons/io/openni_human_grabber.h>
+#include <pcl_addons/io/openni_camera/openni_driver_nite.h>
+
 #include <XnCppWrapper.h>
 
 using namespace BodyScanner;

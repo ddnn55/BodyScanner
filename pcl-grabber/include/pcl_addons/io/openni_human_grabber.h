@@ -4,9 +4,11 @@
 #include <pcl/io/openni_camera/openni_device.h>
 #include <pcl/point_cloud.h>
 
+#include <pcl_addons/common/synchronizer3.h>
+
 #include <boost/tuple/tuple.hpp>
 
-#include <BodyScanner/pcl_addons/common/synchronizer3.h>
+
 
 namespace BodyScanner
 {
