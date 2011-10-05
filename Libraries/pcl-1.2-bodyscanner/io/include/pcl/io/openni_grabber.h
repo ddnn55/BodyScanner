@@ -209,9 +209,10 @@ namespace pcl
 
     protected:
       /** \brief ... */
-      boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > 
+      virtual boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >
       convertToXYZRGBPointCloud (const boost::shared_ptr<openni_wrapper::Image> &image,
                                  const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image) const;
+
     private:
       /** \brief ... */
       boost::shared_ptr<pcl::PointCloud<pcl::PointXYZI> > 
@@ -231,11 +232,13 @@ namespace pcl
       unsigned depth_width_;
       unsigned depth_height_;
 
+    protected:
       bool image_required_;
       bool depth_required_;
       bool ir_required_;
       bool sync_required_;
 
+    private:
       boost::signals2::signal<sig_cb_openni_image >* image_signal_;
       boost::signals2::signal<sig_cb_openni_depth_image >* depth_image_signal_;
       boost::signals2::signal<sig_cb_openni_ir_image >* ir_image_signal_;

@@ -63,18 +63,21 @@ namespace pcl_addons
     add0 (const T1& t, unsigned long time)
     {
       a_b_sync_.add0(t, time);
+      //printf("added part 11111111111111111 -- %lu\n", time);
     }
 
     void
     add1 (const T2& t, unsigned long time)
     {
       a_b_sync_.add1(t, time);
+      //printf("added t222222222222222222222 -- %lu\n", time);
     }
 
     void
-    add2 (const T2& t, unsigned long time)
+    add2 (const T3& t, unsigned long time)
     {
       ab_c_sync_.add1(t, time);
+      //printf("added t333333333333333333333 -- %lu\n", time);
     }
 
   private:
@@ -82,12 +85,15 @@ namespace pcl_addons
     void
     abCallback(const T1& t1, const T2& t2, unsigned long stamp1, unsigned long stamp2)
     {
-    	ab_c_sync_.add0(std::pair<T1Stamped, T2Stamped>(T1Stamped(stamp1, t1), T2Stamped(stamp2, t2)), (stamp1 + stamp2) / 2.0f);
+      unsigned long time = (stamp1/2) + (stamp2/2);
+      ab_c_sync_.add0(std::pair<T1Stamped, T2Stamped>(T1Stamped(stamp1, t1), T2Stamped(stamp2, t2)), time);
+      //printf("added t111111111----22222222 -- %lu\n", time);
     }
 
     void
     abcCallback(const std::pair<T1Stamped, T2Stamped>& t1t2stamped, const T3& t3, unsigned long stamp12, unsigned long stamp3)
     {
+    	//printf("abc CALLBACKKKKK <<<<<<<<<<<<<<<<<<<<<<<<<\n");
         for (typename std::map<int, CallbackFunction>::iterator cb = cb_.begin (); cb != cb_.end (); ++cb)
         {
           if (!cb->second.empty ())

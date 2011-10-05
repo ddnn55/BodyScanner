@@ -6,6 +6,8 @@
 
 #include <XnCppWrapper.h>
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 using namespace BodyScanner;
 using namespace boost;
 using namespace openni_wrapper;
@@ -24,25 +26,58 @@ void __stdcall OpenNIHumanGrabber::NewUserDataAvailable (xn::ProductionNode& nod
 	grabber->user_condition_.notify_all ();
 }
 
-void __stdcall /*OpenNIHumanGrabber::*/NewUserCallback (xn::UserGenerator& generator, XnUserID user, void* cookie) throw ()
+void __stdcall OpenNIHumanGrabber::NewUserCallback (xn::UserGenerator& generator, XnUserID user, void* cookie) throw ()
 {
   OpenNIHumanGrabber* grabber = reinterpret_cast<OpenNIHumanGrabber*>(cookie);
   PCL_INFO("new user\n");
   //grabber->user_condition_.notify_all();
+	if (grabber->need_pose_)
+		grabber->user_generator_.GetPoseDetectionCap().StartPoseDetection(grabber->pose_, user);
+	else
+		grabber->user_generator_.GetSkeletonCap().RequestCalibration(user, TRUE);
 }
 
-void __stdcall /*OpenNIHumanGrabber::*/LostUserCallback (xn::UserGenerator& generator, XnUserID user, void* cookie) throw ()
+void __stdcall OpenNIHumanGrabber::LostUserCallback (xn::UserGenerator& generator, XnUserID user, void* cookie) throw ()
 {
   OpenNIHumanGrabber* grabber = reinterpret_cast<OpenNIHumanGrabber*>(cookie);
   PCL_INFO("lost user\n");
   //grabber->user_condition_.notify_all();
 }
 
+void __stdcall OpenNIHumanGrabber::UserCalibration_CalibrationStart(xn::SkeletonCapability& capability, XnUserID nId, void* pCookie) {
+	PCL_INFO("Calibration started for user %d\n", nId);
+}
+
+void __stdcall OpenNIHumanGrabber::UserCalibration_CalibrationComplete(xn::SkeletonCapability& capability, XnUserID nId, XnCalibrationStatus bStatus, void* pCookie) {
+	OpenNIHumanGrabber* grabber = (OpenNIHumanGrabber*) pCookie;
+
+	if (bStatus == XN_CALIBRATION_STATUS_OK) {
+		PCL_INFO("Calibration complete, start tracking user %d\n", nId);
+		grabber->user_generator_.GetSkeletonCap().StartTracking(nId);
+	}
+	else {
+		PCL_INFO("Calibration failed for user %d\n", nId);
+		if (grabber->need_pose_)
+			grabber->user_generator_.GetPoseDetectionCap().StartPoseDetection(grabber->pose_, nId);
+		else
+			grabber->user_generator_.GetSkeletonCap().RequestCalibration(nId, TRUE);
+	}
+}
+
+void __stdcall OpenNIHumanGrabber::UserPose_PoseDetected(xn::PoseDetectionCapability& capability, XnChar const* strPose, XnUserID nId, void* pCookie) {
+	OpenNIHumanGrabber* grabber = (OpenNIHumanGrabber*) pCookie;
+
+	PCL_INFO("Pose %s detected for user %d", strPose, nId);
+	grabber->user_generator_.GetPoseDetectionCap().StopPoseDetection(nId);
+	grabber->user_generator_.GetSkeletonCap().RequestCalibration(nId, TRUE);
+}
 
 OpenNIHumanGrabber::OpenNIHumanGrabber()
 {
-	rgb_depth_user_sync_.addCallback(boost::bind(&OpenNIHumanGrabber::imageDepthImageUserCallback, this, _1, _2, _3));
 
+	user_skeleton_and_point_cloud_rgb_signal_ = createSignal <sig_cb_openni_user_skeleton_and_point_cloud_rgb > ();
+
+	rgb_depth_user_sync_.addCallback(boost::bind(&OpenNIHumanGrabber::imageDepthImageUserCallback, this, _1, _2, _3));
 
 	BodyScanner::OpenNIDriverNITE& driver = (BodyScanner::OpenNIDriverNITE&) openni_wrapper::OpenNIDriver::getInstance();
 	xn::Context* context = driver.getOpenNIContext();
@@ -64,37 +99,64 @@ OpenNIHumanGrabber::OpenNIHumanGrabber()
 
 	quit_ = false;
 
-	//user_callback_handle = registerUserCallback(&OpenNIHumanGrabber::userCallback, this);
-
-	//XnCallbackHandle hUserCallbacks;
-	//user_generator_.RegisterUserCallbacks(User_NewUser, User_LostUser, NULL, hUserCallbacks);
 
 
-
-	/*
-	XnCallbackHandle hCalibrationCallbacks;
-	user_generator_.GetSkeletonCap().RegisterCalibrationCallbacks(UserCalibration_CalibrationStart, UserCalibration_CalibrationEnd, NULL, hCalibrationCallbacks);
+	//XnCallbackHandle hCalibrationCallbacks;
+	//user_generator_.GetSkeletonCap().RegisterCalibrationCallbacks(UserCalibration_CalibrationStart, UserCalibration_CalibrationEnd, NULL, /*TODO calibration_callback_handle_, shutdown, etc*/ hCalibrationCallbacks);
+	user_generator_.GetSkeletonCap().RegisterToCalibrationStart(UserCalibration_CalibrationStart, this, calibration_start_callback_handle_);
+	user_generator_.GetSkeletonCap().RegisterToCalibrationComplete(UserCalibration_CalibrationComplete, this, calibration_complete_callback_handle_);
 
 	if (user_generator_.GetSkeletonCap().NeedPoseForCalibration()) {
-		g_bNeedPose = TRUE;
+		need_pose_ = TRUE;
 		if (!user_generator_.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION)) {
-			ROS_INFO("Pose required, but not supported");
-			return 1;
+			PCL_INFO("Pose required, but not supported");
+			//return 1;
 		}
 
 		XnCallbackHandle hPoseCallbacks;
-		user_generator_.GetPoseDetectionCap().RegisterToPoseCallbacks(UserPose_PoseDetected, NULL, NULL, hPoseCallbacks);
+		//user_generator_.GetPoseDetectionCap().RegisterToPoseCallbacks(UserPose_PoseDetected, NULL, NULL, hPoseCallbacks);
+		user_generator_.GetPoseDetectionCap().RegisterToPoseDetected(UserPose_PoseDetected, this, user_pose_detected_callback_handle_);
 
-		user_generator_.GetSkeletonCap().GetCalibrationPose(g_strPose);
+		user_generator_.GetSkeletonCap().GetCalibrationPose(pose_);
+		printf("Getting calibration pose %s\n", pose_);
 	}
 
 	user_generator_.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
-	*/
+
 
 
 	image_for_user_callback_handle = getDevice()->registerImageCallback(&OpenNIHumanGrabber::imageForUserCallback, *this);
 	depth_for_user_callback_handle = getDevice()->registerDepthCallback(&OpenNIHumanGrabber::depthForUserCallback, *this);
 
+
+
+}
+
+void OpenNIHumanGrabber::checkImageStreamRequired()
+{
+  // do we have anyone listening to images or color point clouds?
+  if (num_slots<sig_cb_openni_image > () > 0 ||
+      num_slots<sig_cb_openni_image_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud_rgb > () > 0 ||
+      num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0)
+    image_required_ = true;
+  else
+    image_required_ = false;
+}
+
+void OpenNIHumanGrabber::checkDepthStreamRequired()
+{
+  // do we have anyone listening to depth images or (color) point clouds?
+  if (num_slots<sig_cb_openni_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_image_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_ir_depth_image > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud_rgb > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud > () > 0 ||
+      num_slots<sig_cb_openni_point_cloud_i > () > 0 ||
+      num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0 )
+    depth_required_ = true;
+  else
+    depth_required_ = false;
 }
 
 void OpenNIHumanGrabber::start () throw (pcl::PCLIOException)
@@ -102,6 +164,11 @@ void OpenNIHumanGrabber::start () throw (pcl::PCLIOException)
 	pcl::OpenNIGrabber::start();
 
 	startUserStream();
+
+	// debug FIXME remove
+	//BodyScanner::OpenNIDriverNITE& driver = (BodyScanner::OpenNIDriverNITE&) openni_wrapper::OpenNIDriver::getInstance();
+	//xn::Context* context = driver.getOpenNIContext();
+	//context->StartGeneratingAll();
 }
 
 
@@ -114,11 +181,17 @@ void OpenNIHumanGrabber::startUserStream () throw (openni_wrapper::OpenNIExcepti
     {
       XnStatus status = user_generator_.StartGenerating ();
 
+
+
       if (status != XN_STATUS_OK)
-        THROW_OPENNI_EXCEPTION ("starting user stream failed. Reason: %s\nDo you need to install NITE?\n", xnGetStatusString (status));
+      {
+        THROW_OPENNI_EXCEPTION ("starting user stream failed. Reason: %s\n", xnGetStatusString (status));
+      }
       else
       {
+    	  printf("started user stream\n");
 			user_thread_ = boost::thread (&OpenNIHumanGrabber::UserDataThreadFunction, this);
+
       }
     }
   }
@@ -146,7 +219,7 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 	  return;
 
 	user_generator_.WaitAndUpdateData ();
-	boost::shared_ptr<xn::SceneMetaData> user_pixels_scene_data (new xn::SceneMetaData);
+	boost::shared_ptr<xn::SceneMetaData> user_pixels_scene_meta_data (new xn::SceneMetaData);
 
 	XnUserID users[15];
 	XnUInt16 users_count = 15;
@@ -154,8 +227,15 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 
 	if(users_count > 0) // TODO handle multiple users
 	{
-	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_data);
-	  printf("got user pixels and stuff\n");
+		static float skeleton = 0.0f;
+		skeleton = skeleton + 1.0f;
+
+	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_meta_data);
+	  boost::shared_ptr<OpenNIHumanGrabber::BodyPose> body_pose(new BodyPose(users[0], user_pixels_scene_meta_data));
+	  //unsigned long time = (unsigned long) user_pixels_scene_meta_data->Timestamp();
+	  unsigned long time = (unsigned long) user_generator_.GetTimestamp();
+	  rgb_depth_user_sync_.add2(body_pose, time);
+	  //printf("got user pixels and stuff. %lu\n", (unsigned long) user_pixels_scene_meta_data->Timestamp());
 	}
 	user_lock.unlock ();
 
@@ -171,6 +251,7 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 
 void OpenNIHumanGrabber::imageForUserCallback(boost::shared_ptr<openni_wrapper::Image> image, void* cookie)
 {
+	//printf("imageforusercallback\n");
   if (num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0 //||
       /*num_slots<sig_cb_openni_image_depth_image > () > 0*/)
     rgb_depth_user_sync_.add0(image, image->getTimeStamp());
@@ -183,6 +264,7 @@ void OpenNIHumanGrabber::imageForUserCallback(boost::shared_ptr<openni_wrapper::
 
 void OpenNIHumanGrabber::depthForUserCallback(boost::shared_ptr<openni_wrapper::DepthImage> depth_image, void* cookie)
 {
+	//printf("depth for user callback\n");
   if (num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0 //||
       /*num_slots<sig_cb_openni_image_depth_image > () > 0*/)
 	  rgb_depth_user_sync_.add1(depth_image, depth_image->getTimeStamp());
@@ -202,13 +284,43 @@ void OpenNIHumanGrabber::depthForUserCallback(boost::shared_ptr<openni_wrapper::
 
 void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<openni_wrapper::Image> &image,
 		                                             const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
-		                                             float skeleton)
+		                                             const boost::shared_ptr<OpenNIHumanGrabber::BodyPose> &body_pose)
 {
+	//printf("-------------------------------------------------hello???????????");
+
+
+	// mask depth image with user presence!
+	boost::shared_ptr<openni_wrapper::DepthImage> masked_depth_image(new openni_wrapper::DepthImage(*depth_image));
+	XnDepthPixel* masked_depth_map = masked_depth_image->getDepthMetaData().WritableData();
+
+
+	//for(int x = 0; x < depth_image->getWidth(); x++)
+	//{
+	//  for(int y = 0; y < depth_image->getHeight(); y++)
+	//  {
+	for(int p = 0; p < depth_image->getWidth() * depth_image->getHeight(); p++)
+		 if(!body_pose->bodyIsAtPixel(p))
+			 masked_depth_map[p] = masked_depth_image->getNoSampleValue();
+	//  }
+	//}
+
+
   // check if we have color point cloud slots
   if (user_skeleton_and_point_cloud_rgb_signal_->num_slots() > 0)
-	  user_skeleton_and_point_cloud_rgb_signal_->operator()(convertToXYZRGBPointCloud(image, depth_image), 0.0f);
+  {
+	  //pcl::PointCloud<pcl::PointXYZRGB>::Ptr scene_cloud = convertToXYZRGBPointCloud(image, depth_image);
+	  //pcl::PointCloud<pcl::PointXYZRGB>::Ptr body_cloud(new pcl::PointCloud<pcl::PointXYZRGB>(scene_cloud));
 
-  printf("hello???????????");
+	  //for(int p = 0; p < scene_cloud->size(); p++)
+	  //{
+	//	  if(body_pose->bodyIsAtPixel(p))
+	//		  body_cloud->push_back((*scene_cloud)[p]);
+	 // }
+
+	  user_skeleton_and_point_cloud_rgb_signal_->operator()(convertToXYZRGBPointCloud(image, masked_depth_image), body_pose);
+  }
+
+
 
   /*if (ir_depth_image_signal_->num_slots() > 0)
   {
@@ -216,27 +328,6 @@ void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<ope
     ir_depth_image_signal_->operator()(ir_image, depth_image, constant);
   }*/
 }
-
-/*OpenNIDevice::CallbackHandle OpenNIHumanGrabber::registerUserCallback (const UserDataCallbackFunction& callback, void* custom_data) throw ()
-{
-  if (!hasUserStream ())
-    THROW_OPENNI_EXCEPTION ("Current OpenNI installation does not provide user detection ... do you need to install NITE?");
-
-  user_callback_[user_callback_handle_counter_] = boost::bind (callback, _1, custom_data);
-  return user_callback_handle_counter_++;
-}
-
-void OpenNIHumanGrabber::userCallback(boost::shared_ptr<openni_wrapper::Image> image, void* cookie)
-{
-  if (num_slots<sig_cb_openni_point_cloud_rgb > () > 0 ||
-      num_slots<sig_cb_openni_image_depth_image > () > 0)
-    user_sync_.add0(image, image->getTimeStamp());
-
-  if (user_signal_->num_slots() > 0)
-    user_signal_->operator()(image);
-
-  return;
-}*/
 
 OpenNIHumanGrabber::~OpenNIHumanGrabber() throw()
 {
@@ -255,4 +346,15 @@ OpenNIHumanGrabber::~OpenNIHumanGrabber() throw()
 
 	  if (hasUserStream ())
 	    user_thread_.join ();
+}
+
+OpenNIHumanGrabber::BodyPose::BodyPose(XnLabel user_label, boost::shared_ptr<xn::SceneMetaData>& smd)
+{
+	scene_meta_data_ = smd;
+	user_label_ = user_label;
+}
+
+bool OpenNIHumanGrabber::BodyPose::bodyIsAtPixel(int p)
+{
+	return scene_meta_data_->Data()[p] == user_label_;
 }
