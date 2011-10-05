@@ -14,6 +14,13 @@
          viewer.showCloud (cloud);
      }
 
+     void body_cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud, float skeleton)
+     {
+    	 //assert(0);
+       if (!viewer.wasStopped())
+         viewer.showCloud (cloud);
+     }
+
      void run ()
      {
        BodyScanner::OpenNIHumanGrabber* interface = new BodyScanner::OpenNIHumanGrabber();
@@ -21,7 +28,11 @@
        boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&)> f =
          boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
 
-       interface->registerCallback (f);
+       boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, float)> g =
+         boost::bind (&SimpleOpenNIViewer::body_cloud_cb_, this, _1, _2);
+
+       //interface->registerCallback (f);
+       interface->registerCallback (g);
 
        interface->start ();
 

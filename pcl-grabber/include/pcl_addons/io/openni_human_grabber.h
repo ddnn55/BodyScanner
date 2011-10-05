@@ -19,7 +19,7 @@ namespace BodyScanner
 		public:
 			//typedef void (sig_cb_openni_user) (const boost::shared_ptr<openni_wrapper::Image>&);
 			typedef void (sig_cb_openni_user_skeleton_and_point_cloud_rgb)
-				(const boost::shared_ptr<const pcl::PointCloud<pcl::PointXYZRGB> >&, /* TODO put skeleton here! */ float skeleton) ;
+				(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, /* TODO put skeleton here! */ float skeleton) ;
 
 
 		public:

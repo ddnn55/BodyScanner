@@ -6,6 +6,8 @@
 
 #include <XnCppWrapper.h>
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 using namespace BodyScanner;
 using namespace boost;
 using namespace openni_wrapper;
@@ -43,6 +45,7 @@ OpenNIHumanGrabber::OpenNIHumanGrabber()
 {
 	rgb_depth_user_sync_.addCallback(boost::bind(&OpenNIHumanGrabber::imageDepthImageUserCallback, this, _1, _2, _3));
 
+	user_skeleton_and_point_cloud_rgb_signal_ = createSignal <sig_cb_openni_user_skeleton_and_point_cloud_rgb > ();
 
 	BodyScanner::OpenNIDriverNITE& driver = (BodyScanner::OpenNIDriverNITE&) openni_wrapper::OpenNIDriver::getInstance();
 	xn::Context* context = driver.getOpenNIContext();
@@ -115,9 +118,10 @@ void OpenNIHumanGrabber::startUserStream () throw (openni_wrapper::OpenNIExcepti
       XnStatus status = user_generator_.StartGenerating ();
 
       if (status != XN_STATUS_OK)
-        THROW_OPENNI_EXCEPTION ("starting user stream failed. Reason: %s\nDo you need to install NITE?\n", xnGetStatusString (status));
+        THROW_OPENNI_EXCEPTION ("starting user stream failed. Reason: %s\n", xnGetStatusString (status));
       else
       {
+    	  printf("started user stream\n");
 			user_thread_ = boost::thread (&OpenNIHumanGrabber::UserDataThreadFunction, this);
       }
     }
@@ -146,7 +150,7 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 	  return;
 
 	user_generator_.WaitAndUpdateData ();
-	boost::shared_ptr<xn::SceneMetaData> user_pixels_scene_data (new xn::SceneMetaData);
+	boost::shared_ptr<xn::SceneMetaData> user_pixels_scene_meta_data (new xn::SceneMetaData);
 
 	XnUserID users[15];
 	XnUInt16 users_count = 15;
@@ -154,7 +158,11 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 
 	if(users_count > 0) // TODO handle multiple users
 	{
-	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_data);
+		static float skeleton = 0.0f;
+		skeleton = skeleton + 1.0f;
+
+	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_meta_data);
+	  rgb_depth_user_sync_.add2(skeleton /*TODO something meaningful goes here*/, (unsigned long) user_pixels_scene_meta_data->Timestamp());
 	  printf("got user pixels and stuff\n");
 	}
 	user_lock.unlock ();
@@ -204,11 +212,15 @@ void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<ope
 		                                             const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
 		                                             float skeleton)
 {
+	printf("hello???????????");
+
+
+
   // check if we have color point cloud slots
   if (user_skeleton_and_point_cloud_rgb_signal_->num_slots() > 0)
 	  user_skeleton_and_point_cloud_rgb_signal_->operator()(convertToXYZRGBPointCloud(image, depth_image), 0.0f);
 
-  printf("hello???????????");
+
 
   /*if (ir_depth_image_signal_->num_slots() > 0)
   {
