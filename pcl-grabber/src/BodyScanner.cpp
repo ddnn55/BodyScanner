@@ -3,6 +3,7 @@
 
 #include <pcl_addons/io/openni_human_grabber.h>
 
+#include <fstream>
 #include <string>
 using namespace std;
 
@@ -16,12 +17,12 @@ using namespace std;
     		 basename = argv[1];
      }
 
-     void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud)
+     /*void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud)
      {
     	 //assert(0);
        if (!viewer.wasStopped())
          viewer.showCloud (cloud);
-     }
+     }*/
 
      void body_cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud,
     		              const boost::shared_ptr<BodyScanner::OpenNIHumanGrabber::BodyPose> & body_pose)
@@ -30,13 +31,25 @@ using namespace std;
        if (!viewer.wasStopped())
          viewer.showCloud (cloud);
 
-       if(record)
+       if(record && body_pose->skeleton_pose != NULL)
        {
 		   static int frame = 0;
-		   char filename[strlen(basename)+11];
-		   sprintf(filename, "%s_%05d.pcd", basename, frame++);
-		   writer.writeBinary(string(filename), *cloud);
-		   printf("saved %s\n", filename);
+
+		   char pcd_filename[strlen(basename)+11];
+		   sprintf(pcd_filename, "%s_%05d.pcd", basename, frame);
+		   writer.writeBinary(string(pcd_filename), *cloud);
+
+		   char skeleton_filename[strlen(basename)+21];
+		   sprintf(skeleton_filename, "%s_skeleton_%05d.yaml", basename, frame);
+		   skeleton_writer.open(skeleton_filename);
+		   Body::Skeleton::Pose pose = * body_pose->skeleton_pose;
+		   std::cout << "got the pose" << endl;
+		   skeleton_writer << pose.toYaml() << endl;
+		   std::cout << "yamled the pose" << endl;
+		   skeleton_writer.close();
+
+		   printf("saved %s and %s\n", pcd_filename, skeleton_filename);
+		   frame++;
        }
      }
 
@@ -44,8 +57,8 @@ using namespace std;
      {
        BodyScanner::OpenNIHumanGrabber* interface = new BodyScanner::OpenNIHumanGrabber();
 
-       boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&)> f =
-         boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
+       //boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&)> f =
+       //  boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
 
        boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, const boost::shared_ptr<BodyScanner::OpenNIHumanGrabber::BodyPose>&)> g =
          boost::bind (&SimpleOpenNIViewer::body_cloud_cb_, this, _1, _2);
@@ -67,6 +80,7 @@ using namespace std;
 
      pcl::visualization::CloudViewer viewer;
      pcl::PCDWriter writer;
+     ofstream skeleton_writer;
      bool record;
      char* basename;
  };

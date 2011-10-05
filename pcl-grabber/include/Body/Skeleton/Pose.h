@@ -9,6 +9,8 @@
 #ifndef POSE_H_
 #define POSE_H_
 
+#include <boost/shared_ptr.hpp>
+
 #include <XnCppWrapper.h>
 
 namespace Body {
@@ -17,6 +19,8 @@ namespace Skeleton {
 
 class Pose {
 public:
+	typedef boost::shared_ptr<Pose> Ptr;
+
 	Pose();
 	virtual ~Pose();
 
@@ -39,6 +43,8 @@ public:
 	XnSkeletonJointPosition right_hip;
 	XnSkeletonJointPosition right_knee;
 	XnSkeletonJointPosition right_foot;
+
+	const std::string toYaml() const;
 };
 
 }

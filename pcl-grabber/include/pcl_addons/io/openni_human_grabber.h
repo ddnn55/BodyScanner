@@ -19,15 +19,15 @@ namespace BodyScanner
 	class OpenNIHumanGrabber : public pcl::OpenNIGrabber
 	{
 		public:
-			class BodyPose
+			class BodyPose // TODO move to Body namespace, rename ImagePresence? ImageRegion?
 			{
 			  public:
 				BodyPose(XnLabel user_label, boost::shared_ptr<xn::SceneMetaData>& smd);
 				bool bodyIsAtPixel(int p);
+				Body::Skeleton::Pose::Ptr skeleton_pose;
 			  private:
 				boost::shared_ptr<xn::SceneMetaData> scene_meta_data_;
 				XnLabel user_label_;
-				boost::shared_ptr<Body::Skeleton::Pose> skeleton_pose_;
 			};
 
 		public:
