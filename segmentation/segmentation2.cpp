@@ -33,7 +33,6 @@ double Euclidean_Distance(pcl::PointXYZ a , pcl::PointXYZ b)
 
 pcl::PointXYZ normalize( pcl::PointXYZ a , pcl::PointXYZ b , double mag)
 { 
-
   pcl::PointXYZ vector;
   vector.x = (b.x - a.x)/mag;
   vector.y = (b.y - a.y)/mag;
@@ -44,23 +43,14 @@ pcl::PointXYZ normalize( pcl::PointXYZ a , pcl::PointXYZ b , double mag)
 
 double dot(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 {
-   double sum = 0;
-   
-   sum = (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z);
-      
-   return sum; 
-      
+   return (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z);
 }
 
 double crossNorm(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 {
-	double sum = 0;
-
-
-	sum = sqrt( pow(vector1.y*vector2.z - vector2.y*vector1.z,2.0) + pow(vector1.y*vector2.z - vector2.y*vector1.z,2.0) + pow(vector1.x*vector2.y - vector2.x*vector1.y,2.0));
-
-	return sum;  
-
+	return sqrt( pow(vector1.y*vector2.z - vector2.y*vector1.z, 2.0)
+	           + pow(vector1.x*vector2.z - vector2.x*vector1.z, 2.0)
+	           + pow(vector1.x*vector2.y - vector2.x*vector1.y, 2.0));
 }
 
 pcl::PointXYZ map(int bone)
@@ -209,8 +199,6 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 
 int segmentation (string filename , int index)
 {
-
-
    int count_valid = 0;
    int j = 0;
 
@@ -268,6 +256,7 @@ int segmentation (string filename , int index)
 
 
 // create points to store the skeleton data
+/*
    joints[LH] = pcl::PointXYZ(2.61650214587 , 0.42341399938 , 0.741739473523);
    joints[LE] = pcl::PointXYZ(2.6694900322 , 0.47918342009 , 0.490597951981);
    joints[LS] = pcl::PointXYZ(2.62625012634 , 0.262870272978 , 0.363720638888);
@@ -285,7 +274,23 @@ int segmentation (string filename , int index)
    joints[RHI] = pcl::PointXYZ(2.64326965169 , 0.00574492112083 , -0.0279414280981);
    joints[RK] = pcl::PointXYZ(2.61471274281 , 0.00723112289278 , -0.43181264393);
    joints[RF] = pcl::PointXYZ(2.62011127176 , -0.0365560763252 , -0.783027446477);
+*/
 
+joints[LH] = pcl::PointXYZ(2.94981203421, -0.310165403751, 0.22766924897);
+joints[RH] = pcl::PointXYZ(2.25765830251, 0.525413078002, 0.22013626892);
+joints[LK] = pcl::PointXYZ(2.54905170716, -0.0750193843694, -0.421143976229);
+joints[LS] = pcl::PointXYZ(2.56312031822, -0.098670814321, 0.354840713311);
+joints[RE] = pcl::PointXYZ(2.17971916283, 0.267622661098, 0.247073627964);
+joints[H] = pcl::PointXYZ(2.54155516756, 0.0321924411224, 0.561667788373);
+joints[LHI] = pcl::PointXYZ(2.44146131848, -0.0681756099542, -0.0309315391697);
+joints[LF] = pcl::PointXYZ(2.47534371769, -0.108826806909, -0.782286008953);
+joints[T] = pcl::PointXYZ(2.43844688376, 0.0076821794574, 0.169575622553);
+joints[LE] = pcl::PointXYZ(2.65717451047, -0.343801885163, 0.240742024938);
+joints[RF] = pcl::PointXYZ(2.29353501992, 0.15205008112, -0.749121278636);
+joints[RS] = pcl::PointXYZ(2.40287003609, 0.134917197207, 0.37869085028);
+joints[N] = pcl::PointXYZ(2.48299517715, 0.018123191443, 0.366765781795);
+joints[RK] = pcl::PointXYZ(2.44338954755, 0.22577034287, -0.333426852274);
+joints[RHI] = pcl::PointXYZ(2.3326878762, 0.0827771917936, -0.0142110859517);
      
 // Compute bones vectors   
 
@@ -293,12 +298,12 @@ int segmentation (string filename , int index)
 	double b = 0;
 
 	for (int m = LH; m<= RF; m++){
-
+/*
 		a = joints[m].y;
 		joints[m].y = joints[m].z;
 		joints[m].z = joints[m].x;
 		joints[m].x = a;
-
+*/
 	}
 	
 
@@ -360,8 +365,8 @@ view->initCameraParameters ();
      
 	view->addPointCloud(limbs_clouds[index],color1,"littlecloud");
 	view->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE*10, 1, "littlecloud");
-	//view->addPointCloud(cloud,color2,"cloud");
-	//view->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE/4, 1, "cloud");
+	view->addPointCloud(cloud,color2,"cloud");
+	view->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE/4, 1, "cloud");
 	
 
 
