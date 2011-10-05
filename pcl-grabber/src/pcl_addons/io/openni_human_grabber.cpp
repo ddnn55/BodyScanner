@@ -227,15 +227,45 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 
 	if(users_count > 0) // TODO handle multiple users
 	{
-		static float skeleton = 0.0f;
-		skeleton = skeleton + 1.0f;
+		XnUserID user = users[0];
 
-	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_meta_data);
-	  boost::shared_ptr<OpenNIHumanGrabber::BodyPose> body_pose(new BodyPose(users[0], user_pixels_scene_meta_data));
+
+	  user_generator_.GetUserPixels (user, *user_pixels_scene_meta_data);
+	  boost::shared_ptr<OpenNIHumanGrabber::BodyPose> body_pose(new BodyPose(user, user_pixels_scene_meta_data));
 	  //unsigned long time = (unsigned long) user_pixels_scene_meta_data->Timestamp();
 	  unsigned long time = (unsigned long) user_generator_.GetTimestamp();
 	  rgb_depth_user_sync_.add2(body_pose, time);
 	  //printf("got user pixels and stuff. %lu\n", (unsigned long) user_pixels_scene_meta_data->Timestamp());
+
+
+      if (user_generator_.GetSkeletonCap().IsTracking(user))
+      {
+    	  Body::Skeleton::Pose skeleton_pose;
+    	  XnSkeletonJointPosition joint_position;
+
+    	  //XnSkeletonJoint joint;
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_HEAD, 		  skeleton_pose.head);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_NECK, 		  skeleton_pose.neck);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_TORSO, 		  skeleton_pose.torso);
+
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_LEFT_SHOULDER,  skeleton_pose.left_shoulder);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_LEFT_ELBOW, 	  skeleton_pose.left_elbow);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_LEFT_HAND, 	  skeleton_pose.left_hand);
+
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_SHOULDER, skeleton_pose.right_shoulder);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_ELBOW,    skeleton_pose.right_elbow);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_HAND,     skeleton_pose.right_hand);
+
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_LEFT_HIP,       skeleton_pose.left_hip);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_LEFT_KNEE,      skeleton_pose.left_knee);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_LEFT_FOOT,      skeleton_pose.left_foot);
+
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_HIP,      skeleton_pose.right_hip);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_KNEE,     skeleton_pose.right_knee);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_FOOT,     skeleton_pose.right_foot);
+      }
+
+
 	}
 	user_lock.unlock ();
 

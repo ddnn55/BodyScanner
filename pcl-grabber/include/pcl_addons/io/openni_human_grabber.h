@@ -1,5 +1,7 @@
 #pragma once
 
+#include <boost/tuple/tuple.hpp>
+
 #include <pcl/io/openni_grabber.h>
 #include <pcl/io/openni_camera/openni_device.h>
 #include <pcl/point_cloud.h>
@@ -7,8 +9,7 @@
 
 #include <pcl_addons/common/synchronizer3.h>
 
-#include <boost/tuple/tuple.hpp>
-
+#include <Body/Skeleton/Pose.h>
 
 
 namespace BodyScanner
@@ -26,6 +27,7 @@ namespace BodyScanner
 			  private:
 				boost::shared_ptr<xn::SceneMetaData> scene_meta_data_;
 				XnLabel user_label_;
+				boost::shared_ptr<Body::Skeleton::Pose> skeleton_pose_;
 			};
 
 		public:
