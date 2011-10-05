@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/segmentation/include/pcl/segmentation/impl
+END
+extract_clusters.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/pcl/!svn/ver/2617/tags/pcl-1.2/segmentation/include/pcl/segmentation/impl/extract_clusters.hpp
+END
+segment_differences.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/pcl/!svn/ver/2617/tags/pcl-1.2/segmentation/include/pcl/segmentation/impl/segment_differences.hpp
+END
+extract_polygonal_prism_data.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/pcl/!svn/ver/2617/tags/pcl-1.2/segmentation/include/pcl/segmentation/impl/extract_polygonal_prism_data.hpp
+END
+sac_segmentation.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/pcl/!svn/ver/2617/tags/pcl-1.2/segmentation/include/pcl/segmentation/impl/sac_segmentation.hpp
+END

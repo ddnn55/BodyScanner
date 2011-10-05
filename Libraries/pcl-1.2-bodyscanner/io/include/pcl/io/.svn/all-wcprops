@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io
+END
+oni_grabber.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/oni_grabber.h
+END
+pcd_grabber.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/pcd_grabber.h
+END
+ply_io.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/ply_io.h
+END
+vtk_io.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/vtk_io.h
+END
+openni_grabber.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/openni_grabber.h
+END
+pcd_io.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/pcd_io.h
+END
+pcl_io_exception.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/pcl_io_exception.h
+END
+grabber.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/grabber.h
+END
+ply.h
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/ply.h
+END
+file_io.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/file_io.h
+END
+io.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/io/io.h
+END

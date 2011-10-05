@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/pcl/!svn/ver/2617/tags/pcl-1.2/keypoints/include/pcl/keypoints/impl
+END
+uniform_sampling.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/pcl/!svn/ver/2617/tags/pcl-1.2/keypoints/include/pcl/keypoints/impl/uniform_sampling.hpp
+END
+keypoint.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/pcl/!svn/ver/2617/tags/pcl-1.2/keypoints/include/pcl/keypoints/impl/keypoint.hpp
+END
+sift_keypoint.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/pcl/!svn/ver/2617/tags/pcl-1.2/keypoints/include/pcl/keypoints/impl/sift_keypoint.hpp
+END

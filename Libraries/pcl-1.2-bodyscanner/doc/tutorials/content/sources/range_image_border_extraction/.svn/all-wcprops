@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/range_image_border_extraction
+END
+range_image_border_extraction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/range_image_border_extraction/range_image_border_extraction.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/range_image_border_extraction/CMakeLists.txt
+END

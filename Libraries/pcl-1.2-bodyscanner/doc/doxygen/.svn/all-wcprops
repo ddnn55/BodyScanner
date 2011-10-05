@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen
+END
+segmentation.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/segmentation.doxy
+END
+range_image.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/range_image.doxy
+END
+visualization.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/visualization.doxy
+END
+doxyfile.in
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/doxyfile.in
+END
+io.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/io.doxy
+END
+filters.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/filters.doxy
+END
+registration.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/registration.doxy
+END
+pcl.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/pcl.doxy
+END
+kdtree.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/kdtree.doxy
+END
+features.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/features.doxy
+END
+sample_consensus.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/sample_consensus.doxy
+END
+octree.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/octree.doxy
+END
+keypoints.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/keypoints.doxy
+END
+doxygen_layout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/doxygen_layout.xml
+END
+surface.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/surface.doxy
+END
+common.doxy
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/common.doxy
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/doxygen/CMakeLists.txt
+END

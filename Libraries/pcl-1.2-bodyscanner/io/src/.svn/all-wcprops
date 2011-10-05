@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src
+END
+compression.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/compression.cpp
+END
+oni_grabber.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/oni_grabber.cpp
+END
+pcd_grabber.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/pcd_grabber.cpp
+END
+ply_io.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/ply_io.cpp
+END
+vtk_io.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/vtk_io.cpp
+END
+openni_grabber.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/openni_grabber.cpp
+END
+pcd_io.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/src/pcd_io.cpp
+END

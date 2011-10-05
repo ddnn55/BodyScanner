@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/src
+END
+correspondence_estimation.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/src/correspondence_estimation.cpp
+END
+pyramid_feature_matching.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/src/pyramid_feature_matching.cpp
+END
+registration.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/src/registration.cpp
+END
