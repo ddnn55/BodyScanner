@@ -80,7 +80,7 @@ void assignPoints( pcl::PointXYZ a , pcl::PointXYZ b , double length , double ra
           }
    }
    
-  input->points().resize(j);
+  input->points.resize(j);
    
      
 } 
