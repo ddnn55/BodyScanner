@@ -143,7 +143,7 @@ int argmin(std::vector<double> vec)
 }
 
 
-void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds)
+void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds,int vizindex)
 {
 
 
@@ -154,6 +154,7 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 
 
    int j = 0;
+   int temparg;
    //input->points.resize(cloud->points.size());
    
   
@@ -185,9 +186,18 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 
 	// Add point to argmin bone
 
-	  (*limbs_clouds)[argmin(distances)]->push_back(c); 
+	//  (*limbs_clouds)[argmin(distances)]->push_back(c);
+	 
+	temparg = argmin(distances);
 
+	if (temparg == vizindex){
+	cloud->points[i].x = 0;
+	cloud->points[i].y = 0;
+	cloud->points[i].z = 0;
+	}
 	
+	(*limbs_clouds)[temparg]->points[i] = c; 
+
           
    }
 
@@ -250,6 +260,7 @@ int segmentation (string filename , int index)
 	{
 
 	limbs_clouds[k] = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
+	limbs_clouds[k]->resize(cloud->size());
 
 	}
 
@@ -317,7 +328,7 @@ joints[RHI] = pcl::PointXYZ(2.3326878762, 0.0827771917936, -0.0142110859517);
 // Compute 1st method bone ownership
       
     
-  assignPoints(bones,joints,&limbs_clouds);
+  assignPoints(bones,joints,&limbs_clouds,index);
 
 // Check bones clouds size and output
 
@@ -345,13 +356,14 @@ joints[RHI] = pcl::PointXYZ(2.3326878762, 0.0827771917936, -0.0142110859517);
 
 //pcl::visualization::CloudViewer viewer("Cloud Viewer");
 
+
+// Visualization stuff
 boost::shared_ptr<pcl::visualization::PCLVisualizer> view (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-
-
 
 view->addCoordinateSystem (1.0);
 view->initCameraParameters ();
 
+// Visualizasion of the joints position
 	for (int m = LH2E; m<= RK2F; m++){
 
 		std::stringstream s;
@@ -395,7 +407,7 @@ int main (int argc , char** argv)
 {
   if(argc != 3)
    {
-     std::cout<< "Usage: segmentation <file_name> " << std::endl;
+     std::cout<< "Usage: segmentation2 <file_name> <number between 0 and 8>" << std::endl;
      exit(0);
    }
    
