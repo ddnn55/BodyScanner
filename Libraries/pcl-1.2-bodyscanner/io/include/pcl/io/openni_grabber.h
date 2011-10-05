@@ -209,9 +209,10 @@ namespace pcl
 
     protected:
       /** \brief ... */
-      boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> > 
+      virtual boost::shared_ptr<pcl::PointCloud<pcl::PointXYZRGB> >
       convertToXYZRGBPointCloud (const boost::shared_ptr<openni_wrapper::Image> &image,
                                  const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image) const;
+
     private:
       /** \brief ... */
       boost::shared_ptr<pcl::PointCloud<pcl::PointXYZI> > 

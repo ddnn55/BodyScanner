@@ -14,7 +14,8 @@
          viewer.showCloud (cloud);
      }
 
-     void body_cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud, float skeleton)
+     void body_cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud,
+    		              const boost::shared_ptr<BodyScanner::OpenNIHumanGrabber::BodyPose> & body_pose)
      {
     	 //assert(0);
        if (!viewer.wasStopped())
@@ -28,7 +29,7 @@
        boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&)> f =
          boost::bind (&SimpleOpenNIViewer::cloud_cb_, this, _1);
 
-       boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, float)> g =
+       boost::function<void (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, const boost::shared_ptr<BodyScanner::OpenNIHumanGrabber::BodyPose>&)> g =
          boost::bind (&SimpleOpenNIViewer::body_cloud_cb_, this, _1, _2);
 
        //interface->registerCallback (f);

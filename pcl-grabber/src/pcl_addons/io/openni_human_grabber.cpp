@@ -194,9 +194,10 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 		skeleton = skeleton + 1.0f;
 
 	  user_generator_.GetUserPixels (users[0], *user_pixels_scene_meta_data);
+	  boost::shared_ptr<OpenNIHumanGrabber::BodyPose> body_pose(new BodyPose(user_pixels_scene_meta_data));
 	  //unsigned long time = (unsigned long) user_pixels_scene_meta_data->Timestamp();
 	  unsigned long time = (unsigned long) user_generator_.GetTimestamp();
-	  rgb_depth_user_sync_.add2(skeleton /*TODO something meaningful goes here*/, time);
+	  rgb_depth_user_sync_.add2(body_pose, time);
 	  //printf("got user pixels and stuff. %lu\n", (unsigned long) user_pixels_scene_meta_data->Timestamp());
 	}
 	user_lock.unlock ();
@@ -213,6 +214,7 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 
 void OpenNIHumanGrabber::imageForUserCallback(boost::shared_ptr<openni_wrapper::Image> image, void* cookie)
 {
+	//printf("imageforusercallback\n");
   if (num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0 //||
       /*num_slots<sig_cb_openni_image_depth_image > () > 0*/)
     rgb_depth_user_sync_.add0(image, image->getTimeStamp());
@@ -225,6 +227,7 @@ void OpenNIHumanGrabber::imageForUserCallback(boost::shared_ptr<openni_wrapper::
 
 void OpenNIHumanGrabber::depthForUserCallback(boost::shared_ptr<openni_wrapper::DepthImage> depth_image, void* cookie)
 {
+	printf("depth for user callback\n");
   if (num_slots<sig_cb_openni_user_skeleton_and_point_cloud_rgb > () > 0 //||
       /*num_slots<sig_cb_openni_image_depth_image > () > 0*/)
 	  rgb_depth_user_sync_.add1(depth_image, depth_image->getTimeStamp());
@@ -244,15 +247,41 @@ void OpenNIHumanGrabber::depthForUserCallback(boost::shared_ptr<openni_wrapper::
 
 void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<openni_wrapper::Image> &image,
 		                                             const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
-		                                             float skeleton)
+		                                             const boost::shared_ptr<OpenNIHumanGrabber::BodyPose> &body_pose)
 {
 	//printf("-------------------------------------------------hello???????????");
 
 
+	// mask depth image with user presence!
+	boost::shared_ptr<openni_wrapper::DepthImage> masked_depth_image(new openni_wrapper::DepthImage(*depth_image));
+	XnDepthPixel* masked_depth_map = masked_depth_image->getDepthMetaData().WritableData();
+
+
+	//for(int x = 0; x < depth_image->getWidth(); x++)
+	//{
+	//  for(int y = 0; y < depth_image->getHeight(); y++)
+	//  {
+	for(int p = 0; p < depth_image->getWidth() * depth_image->getHeight(); p++)
+		 if(!body_pose->bodyIsAtPixel(p))
+			 masked_depth_map[p] = masked_depth_image->getNoSampleValue();
+	//  }
+	//}
+
 
   // check if we have color point cloud slots
   if (user_skeleton_and_point_cloud_rgb_signal_->num_slots() > 0)
-	  user_skeleton_and_point_cloud_rgb_signal_->operator()(convertToXYZRGBPointCloud(image, depth_image), 0.0f);
+  {
+	  //pcl::PointCloud<pcl::PointXYZRGB>::Ptr scene_cloud = convertToXYZRGBPointCloud(image, depth_image);
+	  //pcl::PointCloud<pcl::PointXYZRGB>::Ptr body_cloud(new pcl::PointCloud<pcl::PointXYZRGB>(scene_cloud));
+
+	  //for(int p = 0; p < scene_cloud->size(); p++)
+	  //{
+	//	  if(body_pose->bodyIsAtPixel(p))
+	//		  body_cloud->push_back((*scene_cloud)[p]);
+	 // }
+
+	  user_skeleton_and_point_cloud_rgb_signal_->operator()(convertToXYZRGBPointCloud(image, masked_depth_image), body_pose);
+  }
 
 
 
@@ -262,27 +291,6 @@ void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<ope
     ir_depth_image_signal_->operator()(ir_image, depth_image, constant);
   }*/
 }
-
-/*OpenNIDevice::CallbackHandle OpenNIHumanGrabber::registerUserCallback (const UserDataCallbackFunction& callback, void* custom_data) throw ()
-{
-  if (!hasUserStream ())
-    THROW_OPENNI_EXCEPTION ("Current OpenNI installation does not provide user detection ... do you need to install NITE?");
-
-  user_callback_[user_callback_handle_counter_] = boost::bind (callback, _1, custom_data);
-  return user_callback_handle_counter_++;
-}
-
-void OpenNIHumanGrabber::userCallback(boost::shared_ptr<openni_wrapper::Image> image, void* cookie)
-{
-  if (num_slots<sig_cb_openni_point_cloud_rgb > () > 0 ||
-      num_slots<sig_cb_openni_image_depth_image > () > 0)
-    user_sync_.add0(image, image->getTimeStamp());
-
-  if (user_signal_->num_slots() > 0)
-    user_signal_->operator()(image);
-
-  return;
-}*/
 
 OpenNIHumanGrabber::~OpenNIHumanGrabber() throw()
 {
@@ -301,4 +309,14 @@ OpenNIHumanGrabber::~OpenNIHumanGrabber() throw()
 
 	  if (hasUserStream ())
 	    user_thread_.join ();
+}
+
+OpenNIHumanGrabber::BodyPose::BodyPose(boost::shared_ptr<xn::SceneMetaData>)
+{
+
+}
+
+bool OpenNIHumanGrabber::BodyPose::bodyIsAtPixel(int p)
+{
+	return true;
 }

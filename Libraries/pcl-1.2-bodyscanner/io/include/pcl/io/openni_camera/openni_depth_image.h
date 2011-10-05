@@ -61,7 +61,7 @@ public:
   inline DepthImage (boost::shared_ptr<xn::DepthMetaData> depth_meta_data, float baseline, float focal_length, XnUInt64 shadow_value, XnUInt64 no_sample_value) throw ();
   inline virtual ~DepthImage () throw ();
 
-  inline const xn::DepthMetaData& getDepthMetaData () const throw ();
+  inline /*const*/ xn::DepthMetaData& getDepthMetaData () const throw ();
   void fillDisparityImage (unsigned width, unsigned height, float* disparity_buffer, unsigned line_step = 0) const throw (OpenNIException);
   void fillDepthImage (unsigned width, unsigned height, float* depth_buffer, unsigned line_step = 0) const throw (OpenNIException);
   void fillDepthImageRaw (unsigned width, unsigned height, unsigned short* depth_buffer, unsigned line_step = 0) const throw (OpenNIException);
@@ -95,7 +95,7 @@ DepthImage::~DepthImage () throw ()
 {
 }
 
-const xn::DepthMetaData& DepthImage::getDepthMetaData () const throw ()
+/*const*/ xn::DepthMetaData& DepthImage::getDepthMetaData () const throw ()
 {
   return *depth_md_;
 }

@@ -3,6 +3,7 @@
 #include <pcl/io/openni_grabber.h>
 #include <pcl/io/openni_camera/openni_device.h>
 #include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 #include <pcl_addons/common/synchronizer3.h>
 
@@ -17,9 +18,17 @@ namespace BodyScanner
 	class OpenNIHumanGrabber : public pcl::OpenNIGrabber
 	{
 		public:
+			class BodyPose
+			{
+			  public:
+				BodyPose(boost::shared_ptr<xn::SceneMetaData> smd);
+				bool bodyIsAtPixel(int p);
+			};
+
+		public:
 			//typedef void (sig_cb_openni_user) (const boost::shared_ptr<openni_wrapper::Image>&);
 			typedef void (sig_cb_openni_user_skeleton_and_point_cloud_rgb)
-				(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, /* TODO put skeleton here! */ float skeleton) ;
+				(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, const boost::shared_ptr<OpenNIHumanGrabber::BodyPose> &) ;
 
 
 		public:
@@ -60,7 +69,11 @@ namespace BodyScanner
 
 			void imageDepthImageUserCallback(const boost::shared_ptr<openni_wrapper::Image> &image,
 				                             const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image,
-				                             float skeleton);
+				                             const boost::shared_ptr<OpenNIHumanGrabber::BodyPose> & body_pose);
+
+			// TODO: make this convert function in order to throw away background earlier
+			//pcl::PointCloud<pcl::PointXYZRGB>::Ptr convertToXYZRGBPointCloud(const boost::shared_ptr<openni_wrapper::Image> &image,
+			//  const boost::shared_ptr<openni_wrapper::DepthImage> &depth_image) const;
 		private:
 			//typedef boost::function<void(boost::shared_ptr<openni_wrapper::Image>) > ActualUserCallbackFunction;
 			//std::map< openni_wrapper::OpenNIDevice::CallbackHandle, ActualUserCallbackFunction > user_callback_;
@@ -71,7 +84,7 @@ namespace BodyScanner
 
 			pcl_addons::Synchronizer3<boost::shared_ptr<openni_wrapper::Image>,
 			                          boost::shared_ptr<openni_wrapper::DepthImage>,
-			                          float /* skeleton goes here */ > rgb_depth_user_sync_;
+			                          const boost::shared_ptr<OpenNIHumanGrabber::BodyPose> /* skeleton goes here */ > rgb_depth_user_sync_;
 
 
 			//boost::signals2::signal<sig_cb_openni_user >* user_signal_;
