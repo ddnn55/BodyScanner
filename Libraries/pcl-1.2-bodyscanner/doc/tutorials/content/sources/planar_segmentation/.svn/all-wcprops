@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/planar_segmentation
+END
+planar_segmentation.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/planar_segmentation/planar_segmentation.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/planar_segmentation/CMakeLists.txt
+END

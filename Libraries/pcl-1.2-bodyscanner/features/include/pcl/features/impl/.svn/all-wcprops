@@ -1,0 +1,149 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl
+END
+normal_3d_omp.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/normal_3d_omp.hpp
+END
+feature.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/feature.hpp
+END
+integral_image_2d.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/integral_image_2d.hpp
+END
+moment_invariants.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/moment_invariants.hpp
+END
+fpfh_omp.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/fpfh_omp.hpp
+END
+intensity_gradient.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/intensity_gradient.hpp
+END
+principal_curvatures.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/principal_curvatures.hpp
+END
+rift.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/rift.hpp
+END
+pfh.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/pfh.hpp
+END
+shot.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/shot.hpp
+END
+normal_3d.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/normal_3d.hpp
+END
+intensity_spin.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/intensity_spin.hpp
+END
+integral_image_normal.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/integral_image_normal.hpp
+END
+multiscale_feature_persistence.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/multiscale_feature_persistence.hpp
+END
+fpfh.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/fpfh.hpp
+END
+boundary.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/boundary.hpp
+END
+vfh.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/vfh.hpp
+END
+ppf.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/ppf.hpp
+END
+narf.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/narf.hpp
+END
+cvfh.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/cvfh.hpp
+END
+range_image_border_extractor.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/range_image_border_extractor.hpp
+END
+statistical_multiscale_interest_region_extraction.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/statistical_multiscale_interest_region_extraction.hpp
+END
+rsd.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/rsd.hpp
+END
+shot_omp.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/include/pcl/features/impl/shot_omp.hpp
+END

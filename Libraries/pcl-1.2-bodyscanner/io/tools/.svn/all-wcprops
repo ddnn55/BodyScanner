@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/tools
+END
+pcd_convert_NaN_nan.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/tools/pcd_convert_NaN_nan.cpp
+END
+convert_pcd_ascii_binary.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/tools/convert_pcd_ascii_binary.cpp
+END
+openni_grabber_example.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/tools/openni_grabber_example.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/tools/CMakeLists.txt
+END
+openni_grab_frame.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/tools/openni_grab_frame.cpp
+END

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/pcl/!svn/ver/2617/tags/pcl-1.2/visualization/include/pcl/visualization/impl
+END
+histogram_visualizer.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/pcl/!svn/ver/2617/tags/pcl-1.2/visualization/include/pcl/visualization/impl/histogram_visualizer.hpp
+END
+pcl_visualizer.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/pcl/!svn/ver/2617/tags/pcl-1.2/visualization/include/pcl/visualization/impl/pcl_visualizer.hpp
+END
+point_cloud_handlers.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/pcl/!svn/ver/2617/tags/pcl-1.2/visualization/include/pcl/visualization/impl/point_cloud_handlers.hpp
+END
+registration_visualizer.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/pcl/!svn/ver/2617/tags/pcl-1.2/visualization/include/pcl/visualization/impl/registration_visualizer.hpp
+END

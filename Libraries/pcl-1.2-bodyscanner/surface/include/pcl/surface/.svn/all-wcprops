@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface
+END
+gp3.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/gp3.h
+END
+marching_cubes.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/marching_cubes.h
+END
+mls.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/mls.h
+END
+organized_fast_mesh.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/organized_fast_mesh.h
+END
+simplification_remove_unused_vertices.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/simplification_remove_unused_vertices.h
+END
+grid_projection.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/grid_projection.h
+END
+reconstruction.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/reconstruction.h
+END
+concave_hull.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/concave_hull.h
+END
+convex_hull.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/convex_hull.h
+END
+surfel_smoothing.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/surfel_smoothing.h
+END
+marching_cubes_greedy.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/pcl/!svn/ver/2617/tags/pcl-1.2/surface/include/pcl/surface/marching_cubes_greedy.h
+END

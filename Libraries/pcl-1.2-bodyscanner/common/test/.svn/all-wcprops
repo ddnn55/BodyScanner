@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/test
+END
+test_pca.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/test/test_pca.cpp
+END
+test_common.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/test/test_common.cpp
+END
+test_vector_average.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/test/test_vector_average.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/test/CMakeLists.txt
+END

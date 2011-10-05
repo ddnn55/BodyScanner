@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/iterative_closest_point
+END
+iterative_closest_point.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/iterative_closest_point/iterative_closest_point.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/iterative_closest_point/CMakeLists.txt
+END

@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration
+END
+warp_point_rigid_6d.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/warp_point_rigid_6d.h
+END
+pyramid_feature_matching.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/pyramid_feature_matching.h
+END
+transformation_estimation_lm.h
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/transformation_estimation_lm.h
+END
+correspondence_rejection_trimmed.h
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_rejection_trimmed.h
+END
+correspondence_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_types.h
+END
+transforms.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/transforms.h
+END
+warp_point_rigid.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/warp_point_rigid.h
+END
+transformation_estimation.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/transformation_estimation.h
+END
+icp_nl.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/icp_nl.h
+END
+correspondence_estimation.h
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_estimation.h
+END
+correspondence_rejection_features.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_rejection_features.h
+END
+registration.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/registration.h
+END
+icp.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/icp.h
+END
+correspondence_rejection.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_rejection.h
+END
+correspondence_rejection_sample_consensus.h
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_rejection_sample_consensus.h
+END
+correspondence_sorting.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_sorting.h
+END
+transformation_estimation_svd.h
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/transformation_estimation_svd.h
+END
+correspondence_rejection_one_to_one.h
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_rejection_one_to_one.h
+END
+ia_ransac.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/ia_ransac.h
+END
+correspondence_rejection_distance.h
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/correspondence_rejection_distance.h
+END
+warp_point_rigid_3d.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/warp_point_rigid_3d.h
+END

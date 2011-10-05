@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/CMakeLists.txt
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/Makefile
+END

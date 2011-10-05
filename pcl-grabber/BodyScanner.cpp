@@ -5,10 +5,11 @@
  class SimpleOpenNIViewer
  {
    public:
-     SimpleOpenNIViewer () : viewer ("PCL OpenNI Viewer") {}
+     SimpleOpenNIViewer () : viewer ("Body Scanner") {}
 
      void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud)
      {
+    	 //assert(0);
        if (!viewer.wasStopped())
          viewer.showCloud (cloud);
      }

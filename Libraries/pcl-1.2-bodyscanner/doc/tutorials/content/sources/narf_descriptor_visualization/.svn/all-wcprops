@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/narf_descriptor_visualization
+END
+narf_descriptor_visualization.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/narf_descriptor_visualization/narf_descriptor_visualization.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/narf_descriptor_visualization/CMakeLists.txt
+END
