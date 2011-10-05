@@ -219,8 +219,8 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 
 int segmentation (string filename , int index)
 {
-
-
+	
+	int timestamp = 9999;
    int count_valid = 0;
    int j = 0;
 
@@ -279,24 +279,46 @@ int segmentation (string filename , int index)
 
 
 // create points to store the skeleton data
-   joints[LH] = pcl::PointXYZ(2.61650214587 , 0.42341399938 , 0.741739473523);
-   joints[LE] = pcl::PointXYZ(2.6694900322 , 0.47918342009 , 0.490597951981);
-   joints[LS] = pcl::PointXYZ(2.62625012634 , 0.262870272978 , 0.363720638888);
-   joints[LHI] = pcl::PointXYZ(2.63965052228 , 0.192339774104 , -0.0376897763944);
-   joints[LK] = pcl::PointXYZ(2.61901994098 , 0.247822165975 , -0.438225348963);
-   joints[LF] = pcl::PointXYZ(2.61006204065 , 0.279194157608 , -0.776382878318);
-   
-   joints[N] = pcl::PointXYZ(2.62798041482 , 0.120929086706 , 0.372099904995);
-   joints[H] = pcl::PointXYZ(2.62009243892 , 0.133765620842 , 0.574407307017);
-   joints[T] = pcl::PointXYZ(2.6342453413 , 0.109085436012 , 0.170089673852);
-   
-   joints[RH] = pcl::PointXYZ(2.57094874609 , -0.230743653914 , 0.704013261464);
-   joints[RE] = pcl::PointXYZ(2.67929422096 , -0.275082718219 , 0.464603531212);
-   joints[RS] = pcl::PointXYZ(2.62971094745 , -0.0210120804922 , 0.380479201619);
-   joints[RHI] = pcl::PointXYZ(2.64326965169 , 0.00574492112083 , -0.0279414280981);
-   joints[RK] = pcl::PointXYZ(2.61471274281 , 0.00723112289278 , -0.43181264393);
-   joints[RF] = pcl::PointXYZ(2.62011127176 , -0.0365560763252 , -0.783027446477);
 
+
+   
+
+
+   
+
+   joints[H] = pcl::PointXYZ(    -119.256    ,578.291    ,2697.7);
+   joints[N] = pcl::PointXYZ(    -120.229    ,369.454    ,2717.83);
+   joints[T] = pcl::PointXYZ(    -118.916    ,163.087    ,2734.82);
+   joints[LS] = pcl::PointXYZ(    -271.074    ,369.464    ,2729.62);
+   joints[LE] = pcl::PointXYZ(    -502.381    ,469.116    ,2747.78);
+   joints[LH] = pcl::PointXYZ(    -459.796    ,732.338    ,2732.48);
+   joints[RS] = pcl::PointXYZ(    30.6165    ,369.445    ,2706.05);
+   joints[RE] = pcl::PointXYZ(    287.775    ,399.261    ,2748.22);
+   joints[RH] = pcl::PointXYZ(    303.523    ,658.461    ,2689.35);
+   joints[LHI] = pcl::PointXYZ(    -210.989    ,-46.0787    ,2757.23);
+   joints[LK] = pcl::PointXYZ(    -256.645    ,-453.075    ,2695.73);
+   joints[LF] = pcl::PointXYZ(    -296.778    ,-787.3    ,2700.03);
+   joints[RHI] = pcl::PointXYZ(    -20.4899    ,-44.0785    ,2741.59);
+   joints[RK] = pcl::PointXYZ(    -6.85411    ,-456.544    ,2707.54);
+   joints[RF] = pcl::PointXYZ(    44.1491    ,-799.139    ,2735.77);
+
+/*
+   joints[H] = pcl::PointXYZ();
+   joints[N] = pcl::PointXYZ();
+   joints[T] = pcl::PointXYZ();
+   joints[LS] = pcl::PointXYZ();
+   joints[LE] = pcl::PointXYZ();
+   joints[LH] = pcl::PointXYZ();
+   joints[RS] = pcl::PointXYZ();
+   joints[RE] = pcl::PointXYZ();
+   joints[RH] = pcl::PointXYZ();
+   joints[LHI] = pcl::PointXYZ();
+   joints[LK] = pcl::PointXYZ();
+   joints[LF] = pcl::PointXYZ();
+   joints[RHI] = pcl::PointXYZ();
+   joints[RK] = pcl::PointXYZ();
+   joints[RF] = pcl::PointXYZ();
+*/
      
 // Compute bones vectors   
 
@@ -305,10 +327,15 @@ int segmentation (string filename , int index)
 
 	for (int m = LH; m<= RF; m++){
 
-		a = joints[m].y;
-		joints[m].y = joints[m].z;
-		joints[m].z = joints[m].x;
-		joints[m].x = a;
+		//a = joints[m].y;
+		//joints[m].y = joints[m].z;
+		//joints[m].z = joints[m].x;
+		//joints[m].x = a;
+
+		
+		joints[m].y = -joints[m].y/1000;
+		joints[m].z = joints[m].z/1000;
+		joints[m].x = joints[m].x/1000;
 
 	}
 	
@@ -333,16 +360,14 @@ int segmentation (string filename , int index)
 
 	
 	std::cout << "Limb # " << k << " " << limbs_clouds[k]->points.size() << std::endl;
-
-/*
 	std::cout<< " written to file" << std::endl;
-   	string in = "../segmented/" ;
+   	string in = "../segmented" ;
     	std::stringstream ss;
-	ss << in << k << ".pcd";
+	ss << in << timestamp << "/" << k << ".pcd";
 	
     	pcl::io::savePCDFileASCII (ss.str().c_str(), *limbs_clouds[k]);
     	std::cout<< " saved to file" << std::endl;
-*/
+
 	}
 
 
@@ -359,13 +384,15 @@ view->addCoordinateSystem (1.0);
 view->initCameraParameters ();
 
 // Visualizasion of the joints position
-	for (int m = LH2E; m<= RK2F; m++){
+	for (int m = LH; m<= RF; m++){
 
 		std::stringstream s;
 		s << m;
 		
 	  	view->addSphere(joints[m], 0.025, s.str(), 0);
 	}
+
+
 	
   	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color1(limbs_clouds[index], 255, 0, 0);
   	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color2(cloud, 0, 120, 0);
@@ -386,13 +413,7 @@ view->spinOnce (100);
 boost::this_thread::sleep (boost::posix_time::microseconds (100000));
        }
 
-    //std::cout<< " written to file" << std::endl;
-    //string in = "../../segmentation/segmented/" ;
-    //in += outputfilename;
-    //pcl::io::savePCDFileASCII (in.c_str(), output);
-    //std::cout<< " saved to file" << std::endl;
-   
-   
+    
    
 
    return(0);
