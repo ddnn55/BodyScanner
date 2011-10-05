@@ -46,9 +46,12 @@ namespace BodyScanner
 
 			bool hasUserStream () const throw ();
 
+			static void __stdcall UserCalibration_CalibrationStart(xn::SkeletonCapability& capability, XnUserID nId, void* pCookie);
+			static void __stdcall UserCalibration_CalibrationComplete(xn::SkeletonCapability& capability, XnUserID nId, XnCalibrationStatus bStatus, void* pCookie);
+			static void __stdcall UserPose_PoseDetected(xn::PoseDetectionCapability& capability, XnChar const* strPose, XnUserID nId, void* pCookie);
 			static void __stdcall NewUserDataAvailable (xn::ProductionNode& node, void* cookie) throw ();
-			//void __stdcall NewUserCallback(xn::UserGenerator& generator, XnUserID user, void* cookie) throw ();
-			//void __stdcall LostUserCallback(xn::UserGenerator& generator, XnUserID user, void* cookie) throw ();
+			static void __stdcall NewUserCallback(xn::UserGenerator& generator, XnUserID user, void* cookie) throw ();
+			static void __stdcall LostUserCallback(xn::UserGenerator& generator, XnUserID user, void* cookie) throw ();
 
 			void imageForUserCallback(boost::shared_ptr<openni_wrapper::Image> image, void* cookie);
 
@@ -83,6 +86,11 @@ namespace BodyScanner
 
 			xn::UserGenerator user_generator_;
 			XnCallbackHandle user_callback_handle_;
+			XnCallbackHandle calibration_start_callback_handle_;
+			XnCallbackHandle calibration_complete_callback_handle_;
+			XnCallbackHandle user_pose_detected_callback_handle_;
+			bool need_pose_;
+			XnChar pose_[20];
 			//openni_wrapper::OpenNIDevice::CallbackHandle user_callback_handle_counter_;
 
 			pcl_addons::Synchronizer3<boost::shared_ptr<openni_wrapper::Image>,
