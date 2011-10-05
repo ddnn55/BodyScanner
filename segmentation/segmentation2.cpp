@@ -161,10 +161,14 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
         std::vector<double> distances(NB_BONES);  
 	pcl::PointXYZ c;
 	pcl::PointXYZ ac;
+	pcl::PointXYZ bc;
 
 
    int j = 0;
    int temparg;
+   double temp;
+  double length;
+  double proj;
    //input->points.resize(cloud->points.size());
    
   
@@ -179,14 +183,34 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 	  {
 
 		 
-          ac.x = c.x - joints[(int)(map(j).y)].x;
-          ac.y = c.y - joints[(int)(map(j).y)].y;
-          ac.z = c.z - joints[(int)(map(j).y)].z;
+          ac.x = c.x - joints[(int)(map(j).x)].x;
+          ac.y = c.y - joints[(int)(map(j).x)].y;
+          ac.z = c.z - joints[(int)(map(j).x)].z;
+
+          bc.x = c.x - joints[(int)(map(j).y)].x;
+          bc.y = c.y - joints[(int)(map(j).y)].y;
+          bc.z = c.z - joints[(int)(map(j).y)].z;
 
 
+	length = sqrt(dot(bones[j],bones[j]));
+	proj = dot(bones[j],ac)/length;
+
+	if (proj > length){
+
+		temp = sqrt(dot(bc,bc));
+
+	}
+	else if (proj <0)
+	{
+		temp = sqrt(dot(ac,ac));
+	}
+	else {
+		temp = crossNorm(bones[j],ac)/length;
+	}
+		
 
 
-	  distances[j] = crossNorm(bones[j],ac)/sqrt(dot(bones[j],bones[j]));
+	  distances[j] = temp;
 
 	//std::cout << "Bone length " << j << "  = " << sqrt(dot(bones[j],bones[j])) << std::endl;
 
@@ -355,11 +379,11 @@ int segmentation (string filename , int index)
 // Check bones clouds size and output
 
 	
-      for (int k = LH2E; k<= RK2F; k++)
+     /* for (int k = LH2E; k<= RK2F; k++)
 	{
 
 	
-	std::cout << "Limb # " << k << " " << limbs_clouds[k]->points.size() << std::endl;
+	std::cout << "Limb # " << k << " "  << std::endl;
 	std::cout<< " written to file" << std::endl;
    	string in = "../segmented" ;
     	std::stringstream ss;
@@ -369,7 +393,7 @@ int segmentation (string filename , int index)
     	std::cout<< " saved to file" << std::endl;
 
 	}
-
+*/
 
 
   
@@ -392,6 +416,17 @@ view->initCameraParameters ();
 	  	view->addSphere(joints[m], 0.025, s.str(), 0);
 	}
 
+	for (int m = LH2E; m<= RK2F; m++){
+		std::stringstream s;
+		s << m << m << m;
+
+		if (m == index){
+		view->addLine(joints[(int)(map(m).y)],joints[(int)(map(m).x)],255,0,0,s.str(),0);
+		}
+		else {
+		view->addLine(joints[(int)(map(m).y)],joints[(int)(map(m).x)],s.str(),0);
+		}
+	}
 
 	
   	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color1(limbs_clouds[index], 255, 0, 0);
