@@ -1,0 +1,20 @@
+K 10
+svn:ignore
+V 115
+msg_gen
+*~
+rospack_nosubdirs
+cleaned
+wiped
+patched
+installed
+*.cfgc
+Makefile
+*.html
+*.exe
+*.rpm
+*.deb
+*.tmp
+html/*
+
+END

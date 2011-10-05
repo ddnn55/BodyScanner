@@ -1,0 +1,26 @@
+K 10
+svn:ignore
+V 122
+msg_gen
+*~
+rospack_nosubdirs
+cleaned
+wiped
+patched
+installed
+*.cfgc
+Makefile
+*.html
+*.exe
+*.rpm
+*.deb
+*.tmp
+html/*
+*.bak
+
+
+K 13
+svn:mergeinfo
+V 96
+/trunk/doc/tutorials/content:768,770-775,797,807,869,872,1498,1501,1503,1505-1506,1510,1512,1571
+END

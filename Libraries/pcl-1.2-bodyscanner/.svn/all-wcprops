@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/pcl/!svn/ver/2617/tags/pcl-1.2
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcl/!svn/ver/2617/tags/pcl-1.2/LICENSE
+END
+AUTHORS
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcl/!svn/ver/2617/tags/pcl-1.2/AUTHORS
+END
+PCLConfig.cmake.in
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/pcl/!svn/ver/2617/tags/pcl-1.2/PCLConfig.cmake.in
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/pcl/!svn/ver/2617/tags/pcl-1.2/CMakeLists.txt
+END
+pcl_config.h.in
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/pcl/!svn/ver/2617/tags/pcl-1.2/pcl_config.h.in
+END
+PCLConfigVersion.cmake.in
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/pcl/!svn/ver/2617/tags/pcl-1.2/PCLConfigVersion.cmake.in
+END

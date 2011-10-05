@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl
+END
+vector_average.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/vector_average.hpp
+END
+transforms.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/transforms.hpp
+END
+norms.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/norms.hpp
+END
+pca.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/pca.hpp
+END
+transformation_from_correspondences.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/transformation_from_correspondences.hpp
+END
+file_io.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/file_io.hpp
+END
+io.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/io.hpp
+END
+centroid.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/centroid.hpp
+END
+bivariate_polynomial.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/bivariate_polynomial.hpp
+END
+angles.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/angles.hpp
+END
+rigid_transforms.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/rigid_transforms.hpp
+END
+piecewise_linear_function.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/piecewise_linear_function.hpp
+END
+polynomial_calculations.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/polynomial_calculations.hpp
+END
+eigen.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/eigen.hpp
+END
+common.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/common/impl/common.hpp
+END

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/test
+END
+test_io.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/test/test_io.cpp
+END
+test_range_coder.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/test/test_range_coder.cpp
+END
+test_iterators.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/test/test_iterators.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/test/CMakeLists.txt
+END

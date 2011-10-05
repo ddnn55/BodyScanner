@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/pcl/!svn/ver/2617/tags/pcl-1.2/kdtree/test
+END
+test_organized_neighbor_search.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/pcl/!svn/ver/2617/tags/pcl-1.2/kdtree/test/test_organized_neighbor_search.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/kdtree/test/CMakeLists.txt
+END
+test_kdtree.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/kdtree/test/test_kdtree.cpp
+END

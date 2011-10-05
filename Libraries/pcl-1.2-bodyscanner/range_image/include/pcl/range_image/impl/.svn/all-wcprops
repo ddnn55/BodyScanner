@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/pcl/!svn/ver/2617/tags/pcl-1.2/range_image/include/pcl/range_image/impl
+END
+range_image_planar.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/pcl/!svn/ver/2617/tags/pcl-1.2/range_image/include/pcl/range_image/impl/range_image_planar.hpp
+END
+range_image.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/pcl/!svn/ver/2617/tags/pcl-1.2/range_image/include/pcl/range_image/impl/range_image.hpp
+END
