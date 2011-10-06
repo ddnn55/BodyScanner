@@ -14,7 +14,7 @@
 using std::string;
 
 #define NB_JOINTS 15
-#define NB_BONES 9
+#define NB_BONES 14
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ> );
 pcl::PointCloud<pcl::PointXYZ>::Ptr temp (new pcl::PointCloud<pcl::PointXYZ> );
@@ -27,7 +27,7 @@ struct skinWeights {
 // Labels for bones
 
 enum joints {LH,LE,LS,LHI,LK,LF,N,H,T,RH,RE,RS,RHI,RK,RF};
-enum bones {LH2E,LE2S,N2H,RS2E,RE2H,LH2K,RH2K,LK2F,RK2F};
+enum bones {LH2E,LE2S,N2H,RS2E,RE2H,LH2K,RH2K,LK2F,TORSO,TORSO1,TORSO2,TORSO3,TORSO4,RK2F};
 
 
 double Euclidean_Distance(pcl::PointXYZ a , pcl::PointXYZ b)
@@ -115,6 +115,31 @@ pcl::PointXYZ map(int bone)
 		case RK2F:
 		p.x = RK;
 		p.y = RF;
+		break;
+
+		case TORSO:
+		p.x = N;
+		p.y = T;
+		break;
+
+		case TORSO1:
+		p.x = T;
+		p.y = RHI;
+		break;
+
+		case TORSO2:
+		p.x = T;
+		p.y = LHI;
+		break;
+
+		case TORSO3:
+		p.x = T;
+		p.y = LS;
+		break;
+
+		case TORSO4:
+		p.x = T;
+		p.y = RS;
 		break;
 
 		default:
