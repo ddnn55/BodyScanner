@@ -8,5 +8,5 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-add_executable (segmentation2 segmentation2.cpp)
-target_link_libraries (segmentation2 ${PCL_LIBRARIES})
+add_executable (segmentation3 segmentation3.cpp)
+target_link_libraries (segmentation3 ${PCL_LIBRARIES})

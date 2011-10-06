@@ -9,7 +9,7 @@
 #include <pcl/visualization/pcl_visualizer.h>
 #include <boost/thread/thread.hpp>
 #include "pcl/common/common_headers.h"
-#include "SkeletonYaml.h"
+#include <cmath>
 
 using std::string;
 
@@ -20,9 +20,9 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ> );
 pcl::PointCloud<pcl::PointXYZ>::Ptr temp (new pcl::PointCloud<pcl::PointXYZ> );
 
 // Define the structure for skinning weights.
-struct skinWeights {
+struct skinWeight {
     int index;   // x coordinate
-    double weight;   // y coordinate
+    double w;   // y coordinate
 };
 // Labels for bones
 
@@ -59,11 +59,6 @@ double dot(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 
 double crossNorm(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 {
-<<<<<<< HEAD
-  return sqrt( pow(vector1.y*vector2.z - vector2.y*vector1.z, 2.0)
-             + pow(vector1.x*vector2.z - vector2.x*vector1.z, 2.0)
-             + pow(vector1.x*vector2.y - vector2.x*vector1.y, 2.0));
-=======
 	double sum = 0;
 
 
@@ -71,7 +66,6 @@ double crossNorm(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 
 	return sum;  
 
->>>>>>> d224836583b61668c2eeaa72a34a4801d1d68f1d
 }
 
 pcl::PointXYZ map(int bone)
@@ -96,6 +90,7 @@ pcl::PointXYZ map(int bone)
 		p.x = N;
 		p.y = H;
 		break;
+
 
 		case RS2E:
 		p.x = RS;
@@ -166,13 +161,11 @@ int argmin2(std::vector<double> vec, int argmin)
 {
 
 	int res = 0;
-	int init;
+	int init = 0;
 
-	if (argmin = 0){
-	init = 1
-	}
-	else {
-	init = 0;
+	if (argmin == 0)
+	{
+	init = 1;
 	}
 	
 	for (int i = init ; i< vec.size() ; i++)
@@ -191,93 +184,183 @@ int argmin2(std::vector<double> vec, int argmin)
 
 }
 
-
-
-
-void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds,int vizindex)
+float smoothFunction(float x, float alpha, float thres)
 {
-    std::vector<double> distances(NB_BONES);  
+	
+	// Alpha represents speed of descent of the curve
+	double s;
+
+	s = 1/2*exp(alpha)*x*exp(-alpha/x);
+	if (s < thres){
+		s = 0;
+	}	
+
+
+	return s;
+
+}
+
+
+void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds,std::vector<std::vector<skinWeight> > *weights,int vizindex)
+{
+
+
+
+        std::vector<double> distances(NB_BONES);  
 	pcl::PointXYZ c;
 	pcl::PointXYZ ac;
 	pcl::PointXYZ bc;
 
 
-    int j = 0;
-    int temparg;
-    double temp;
-    double length;
-    double proj;
-    for(size_t i = 0 ; i < cloud->points.size() ; i++)
-    {    
-        c = cloud->points[i];
+	// Temporary variables
+   int j = 0;
+   int arg1;
+   int arg2;
+   double temp;
+   double length;
+   double proj;
+   double d1,d2;
+   double temps;
+	skinWeight weight;
+   //input->points.resize(cloud->points.size());
+   
+  
+   for(size_t i = 0 ; i < cloud->points.size() ; i++)
+   {
+    
+          c = cloud->points[i];
           
-        // Compute distances from point to bones
+       	  // Compute distances from point to bones
 
-        for (int j = LH2E; j<= RK2F; j++)
-        {
-            ac.x = c.x - joints[(int)(map(j).x)].x;
-            ac.y = c.y - joints[(int)(map(j).x)].y;
-            ac.z = c.z - joints[(int)(map(j).x)].z;
+	  for (int j = LH2E; j<= RK2F; j++)
+	  {
 
-            bc.x = c.x - joints[(int)(map(j).y)].x;
-            bc.y = c.y - joints[(int)(map(j).y)].y;
-            bc.z = c.z - joints[(int)(map(j).y)].z;
+		 
+          ac.x = c.x - joints[(int)(map(j).x)].x;
+          ac.y = c.y - joints[(int)(map(j).x)].y;
+          ac.z = c.z - joints[(int)(map(j).x)].z;
+
+          bc.x = c.x - joints[(int)(map(j).y)].x;
+          bc.y = c.y - joints[(int)(map(j).y)].y;
+          bc.z = c.z - joints[(int)(map(j).y)].z;
 
 
-            length = sqrt(dot(bones[j],bones[j]));
-            proj = dot(bones[j],ac)/length;
+	length = sqrt(dot(bones[j],bones[j]));
+	proj = dot(bones[j],ac)/length;
 
-            if (proj > length) {
-            temp = sqrt(dot(bc,bc));
-            }
-            else if (proj <0)
-            {
-            temp = sqrt(dot(ac,ac));
-            }
-            else {
-                temp = crossNorm(bones[j],ac)/length;
-            }
-	        distances[j] = temp;                    
-        }
+	if (proj > length){
 
-	// Add point to argmin bone
+		temp = sqrt(dot(bc,bc));
+
+	}
+	else if (proj <0)
+	{
+		temp = sqrt(dot(ac,ac));
+	}
+	else {
+		temp = crossNorm(bones[j],ac)/length;
+	}
+		
+
+
+	  distances[j] = temp;
+
+                    
+          }
+
+	// Find 2 nearest bones
+
 
 	//  (*limbs_clouds)[argmin(distances)]->push_back(c);
 	 
-	temparg = argmin(distances);
+	arg1 = argmin(distances);
+	arg2 = argmin2(distances,arg1);
 
-    if (temparg == vizindex){
-        cloud->points[i].x = 0;
-        cloud->points[i].y = 0;
-        cloud->points[i].z = 0;
-    }
+	d1 = distances[arg1];
+	d2 = distances[arg2];
+
+	temps = smoothFunction(d2/d1,2,0.2);
+
+	// Add skin weight to nearest bone
+	weight.index = i;
+	weight.w = 1-temps;
+	(*weights)[arg1].push_back(weight);
+	// Add skin weight to second nearest bone if positive
+	if (temps > 0)
+	{
+	weight.index = i;
+	weight.w = temps;
+	(*weights)[arg1].push_back(weight);
+	}
+
+
+	if (arg1 == vizindex){
+	cloud->points[i].x = 0;
+	cloud->points[i].y = 0;
+	cloud->points[i].z = 0;
+	}
 	
-	(*limbs_clouds)[temparg]->points[i] = c; 
+	(*limbs_clouds)[arg1]->points[i] = c; 
+
+          
    }
+
+
+     
 } 
 
 
-int segmentation(string cloudFilename, string skeletonFilename, int index)
-{	
-    int timestamp = 9999;
+
+int segmentation (string filename , int index)
+{
+	
+	int timestamp = 9999;
    int count_valid = 0;
    int j = 0;
 
- if(pcl::io::loadPCDFile<pcl::PointXYZ> (cloudFilename , *cloud) == -1)
+  // load the file 
+ 
+// if(pcl::io::loadPCDFile<pcl::PointXYZ> (filename , *temp) == -1)
+
+
+ if(pcl::io::loadPCDFile<pcl::PointXYZ> (filename , *cloud) == -1)
   {
      std::stringstream x;
-     x <<"Couldn't read file " << cloudFilename << ".pcd\n";
+     x <<"Couldn't read file " << filename << ".pcd\n";
      PCL_ERROR (x.str().c_str());
      return (-1);
   }
-  SkeletonYaml skel(skeletonFilename.c_str());
+
+/*
+
+  // Fix cloud
+ for( size_t i = 0 ; i < temp->points.size() ; i++)
+  {
+     if(!(temp->points[i].x!= temp->points[i].x) && !(temp->points[i].y!= temp->points[i].y) && !(temp->points[i].z!= temp->points[i].z))
+         count_valid++;
+         
+  }
+  
+  cloud->points.resize(count_valid);
+   // remove NAN's 
+  for( size_t i = 0 ; i < temp->points.size() ; i++)
+  {
+     if(!(temp->points[i].x!= temp->points[i].x) && !(temp->points[i].y!= temp->points[i].y) && !(temp->points[i].z!= temp->points[i].z))
+        { 
+           cloud->points[j++] = temp->points[i];
+                   
+        }
+         
+  }
+
+*/
    
 
 // create vectors for bones and joints
-   std::vector<pcl::PointXYZ> joints(NB_JOINTS);
-   std::vector<pcl::PointXYZ> bones(NB_BONES);
-   std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> limbs_clouds(NB_BONES);
-
+	std::vector<pcl::PointXYZ> joints(NB_JOINTS);
+	std::vector<pcl::PointXYZ> bones(NB_BONES);
+	std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> limbs_clouds(NB_BONES);
+	std::vector<std::vector<skinWeight> > weights(NB_BONES);
 
       for (int k = LH2E; k<= RK2F; k++)
 	{
@@ -287,16 +370,43 @@ int segmentation(string cloudFilename, string skeletonFilename, int index)
 
 	}
 
-    // create points to store the skeleton data
-    for(int i = 0; i < SkeletonYaml::numJoints; i++) {
-        joints[i] = pcl::PointXYZ(
-            skel.translations[i][0],
-            skel.translations[i][1],
-            skel.translations[i][2]
-        );
-    }
-   
 
+
+// create points to store the skeleton data
+
+   joints[H] = pcl::PointXYZ(    -119.256    ,578.291    ,2697.7);
+   joints[N] = pcl::PointXYZ(    -120.229    ,369.454    ,2717.83);
+   joints[T] = pcl::PointXYZ(    -118.916    ,163.087    ,2734.82);
+   joints[LS] = pcl::PointXYZ(    -271.074    ,369.464    ,2729.62);
+   joints[LE] = pcl::PointXYZ(    -502.381    ,469.116    ,2747.78);
+   joints[LH] = pcl::PointXYZ(    -459.796    ,732.338    ,2732.48);
+   joints[RS] = pcl::PointXYZ(    30.6165    ,369.445    ,2706.05);
+   joints[RE] = pcl::PointXYZ(    287.775    ,399.261    ,2748.22);
+   joints[RH] = pcl::PointXYZ(    303.523    ,658.461    ,2689.35);
+   joints[LHI] = pcl::PointXYZ(    -210.989    ,-46.0787    ,2757.23);
+   joints[LK] = pcl::PointXYZ(    -256.645    ,-453.075    ,2695.73);
+   joints[LF] = pcl::PointXYZ(    -296.778    ,-787.3    ,2700.03);
+   joints[RHI] = pcl::PointXYZ(    -20.4899    ,-44.0785    ,2741.59);
+   joints[RK] = pcl::PointXYZ(    -6.85411    ,-456.544    ,2707.54);
+   joints[RF] = pcl::PointXYZ(    44.1491    ,-799.139    ,2735.77);
+
+/*
+   joints[H] = pcl::PointXYZ();
+   joints[N] = pcl::PointXYZ();
+   joints[T] = pcl::PointXYZ();
+   joints[LS] = pcl::PointXYZ();
+   joints[LE] = pcl::PointXYZ();
+   joints[LH] = pcl::PointXYZ();
+   joints[RS] = pcl::PointXYZ();
+   joints[RE] = pcl::PointXYZ();
+   joints[RH] = pcl::PointXYZ();
+   joints[LHI] = pcl::PointXYZ();
+   joints[LK] = pcl::PointXYZ();
+   joints[LF] = pcl::PointXYZ();
+   joints[RHI] = pcl::PointXYZ();
+   joints[RK] = pcl::PointXYZ();
+   joints[RF] = pcl::PointXYZ();
+*/
      
 // Compute bones vectors   
 
@@ -304,12 +414,22 @@ int segmentation(string cloudFilename, string skeletonFilename, int index)
 	double b = 0;
 
 	for (int m = LH; m<= RF; m++){
+
+		//a = joints[m].y;
+		//joints[m].y = joints[m].z;
+		//joints[m].z = joints[m].x;
+		//joints[m].x = a;
+
+		
 		joints[m].y = -joints[m].y/1000;
 		joints[m].z = joints[m].z/1000;
 		joints[m].x = joints[m].x/1000;
+
 	}
+	
 
 	for (int m = LH2E; m<= RK2F; m++){
+
 		bones[m].x = joints[(int)(map(m).y)].x - joints[(int)(map(m).x)].x;
 		bones[m].y = joints[(int)(map(m).y)].y - joints[(int)(map(m).x)].y;
 		bones[m].z = joints[(int)(map(m).y)].z - joints[(int)(map(m).x)].z;
@@ -318,7 +438,7 @@ int segmentation(string cloudFilename, string skeletonFilename, int index)
 // Compute 1st method bone ownership
       
     
-  assignPoints(bones,joints,&limbs_clouds,index);
+  assignPoints(bones,joints,&limbs_clouds,&weights,index);
 
 // Check bones clouds size and output
 
@@ -400,13 +520,13 @@ boost::this_thread::sleep (boost::posix_time::microseconds (100000));
 
 int main (int argc , char** argv)
 {
-  if(argc != 4)
+  if(argc != 3)
    {
-     std::cout<< "Usage: segmentation2 <cloud_file_name> <skeleton_file_name> <integer from 0 to 8>" << std::endl;
+     std::cout<< "Usage: segmentation2 <file_name> <number between 0 and 8>" << std::endl;
      exit(0);
    }
    
-   segmentation(argv[1], argv[2], atoi(argv[3]));
+   segmentation(argv[1] , atoi(argv[2]));
   
   return(0);
 }
