@@ -9,22 +9,22 @@ class Skeleton(object):
         self.head = self.GetPosRel('head', 'neck')
         self.neck = self.GetPosRel('neck', 'torso')
 
-        self.leftShoulder = self.GetPosRel('left_shoulder', 'neck')
-        self.rightShoulder = self.GetPosRel('right_shoulder', 'neck')
+        self.left_shoulder = self.GetPosRel('left_shoulder', 'neck')
+        self.right_shoulder = self.GetPosRel('right_shoulder', 'neck')
 
-        self.leftElbow = self.GetPosRel('left_elbow', 'left_shoulder')
-        self.rightElbow = self.GetPosRel('right_elbow', 'right_shoulder')
+        self.left_elbow = self.GetPosRel('left_elbow', 'left_shoulder')
+        self.right_elbow = self.GetPosRel('right_elbow', 'right_shoulder')
 
-        self.leftHand = self.GetPosRel('left_hand', 'left_elbow')
-        self.rightHand = self.GetPosRel('right_hand', 'right_elbow')
+        self.left_hand = self.GetPosRel('left_hand', 'left_elbow')
+        self.right_hand = self.GetPosRel('right_hand', 'right_elbow')
 
-        self.leftHip = self.GetPosRel('left_hip', 'torso')
-        self.rightHip = self.GetPosRel('right_hip', 'torso')
+        self.left_hip = self.GetPosRel('left_hip', 'torso')
+        self.right_hip = self.GetPosRel('right_hip', 'torso')
 
-        self.leftKnee = self.GetPosRel('left_knee', 'left_hip')
-        self.rightKnee = self.GetPosRel('right_knee', 'right_hip')
-        self.leftFoot = self.GetPosRel('left_foot', 'left_knee')
-        self.rightFoot = self.GetPosRel('right_foot', 'right_knee')
+        self.left_knee = self.GetPosRel('left_knee', 'left_hip')
+        self.right_knee = self.GetPosRel('right_knee', 'right_hip')
+        self.left_foot = self.GetPosRel('left_foot', 'left_knee')
+        self.right_foot = self.GetPosRel('right_foot', 'right_knee')
 
     def GetPos(self, jointName):
         pos = self.pos.get(jointName, None)
@@ -32,16 +32,16 @@ class Skeleton(object):
             return pos
         else:
             # maybe the _1 indicates that it tracks several people?
-            joint = self.sk.get('/'+jointName+'_1',None)
-            if joint is None:
-                return None
-            else:
-                tr = joint['translation']
+            #joint = self.sk.get('/'+jointName+'_1',None) # this is the old style
+            try:
+                tr = self.sk[jointName]['position']['translation']
                 return ( # shuffle so that the skelton is upright, remember to do this transform on the mesh too
                     float(tr[1].replace('y -- ', ''))*self.scale,
                     float(tr[2].replace('z -- ', ''))*self.scale,
                     float(tr[0].replace('x -- ', ''))*self.scale
                 )
+            except KeyError:
+                return None
 
     def GetPosRel(self, jointName, parentName):
         j = self.GetPos(jointName)
