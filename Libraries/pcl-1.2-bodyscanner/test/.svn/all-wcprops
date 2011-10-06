@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/pcl/!svn/ver/2617/tags/pcl-1.2/test
+END
+table_scene_mug_stereo_textured.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/table_scene_mug_stereo_textured.pcd
+END
+cturtle.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/cturtle.pcd
+END
+test_filters.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_filters.cpp
+END
+sac_plane_test.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/sac_plane_test.pcd
+END
+test_registration.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_registration.cpp
+END
+bunny.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/bunny.pcd
+END
+test_sample_consensus.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_sample_consensus.cpp
+END
+pcl_logo.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/pcl_logo.pcd
+END
+test_keypoints.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_keypoints.cpp
+END
+test_surface.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_surface.cpp
+END
+bun0.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/bun0.pcd
+END
+test_feature.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_feature.cpp
+END
+nhood_test.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/nhood_test.pcd
+END
+test_ii_normals.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_ii_normals.cpp
+END
+test_segmentation.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_segmentation.cpp
+END
+bun4.pcd
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/bun4.pcd
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/CMakeLists.txt
+END
+test_transforms.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/test/test_transforms.cpp
+END

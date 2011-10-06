@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/test
+END
+test_narf.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/test/test_narf.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/pcl/!svn/ver/2617/tags/pcl-1.2/features/test/CMakeLists.txt
+END

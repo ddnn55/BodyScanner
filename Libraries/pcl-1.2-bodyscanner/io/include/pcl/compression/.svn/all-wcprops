@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/compression
+END
+point_coding.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/compression/point_coding.h
+END
+color_coding.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/compression/color_coding.h
+END
+octree_pointcloud_compression.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/compression/octree_pointcloud_compression.h
+END
+compression_profiles.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/compression/compression_profiles.h
+END
+entropy_range_coder.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/pcl/!svn/ver/2617/tags/pcl-1.2/io/include/pcl/compression/entropy_range_coder.h
+END

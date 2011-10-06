@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake
+END
+pcl_tests.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_tests.cmake
+END
+pcl_find_ros.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_find_ros.cmake
+END
+cpack_options.cmake.in
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/cpack_options.cmake.in
+END
+CMakeParseArguments.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/CMakeParseArguments.cmake
+END
+pcl_targets.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_targets.cmake
+END
+pkgconfig.cmake.in
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pkgconfig.cmake.in
+END
+pcl_find_python.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_find_python.cmake
+END
+pcl_cpack.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_cpack.cmake
+END
+pcl_find_boost.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_find_boost.cmake
+END
+uninstall_target.cmake.in
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/uninstall_target.cmake.in
+END
+pcl_find_sse.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_find_sse.cmake
+END
+pcl_options.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_options.cmake
+END
+dep_graph.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/dep_graph.cmake
+END
+pcl_openmp.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_openmp.cmake
+END
+merge_cmake_install.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/merge_cmake_install.py
+END
+pcl_utils.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/pcl_utils.cmake
+END

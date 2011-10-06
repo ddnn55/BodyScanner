@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/ros
+END
+point_traits.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/ros/point_traits.h
+END
+register_point_struct.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/ros/register_point_struct.h
+END
+for_each_type.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/ros/for_each_type.h
+END
+conversions.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/pcl/!svn/ver/2617/tags/pcl-1.2/common/include/pcl/ros/conversions.h
+END

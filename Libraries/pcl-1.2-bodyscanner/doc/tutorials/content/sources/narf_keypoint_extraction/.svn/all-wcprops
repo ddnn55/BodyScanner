@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/narf_keypoint_extraction
+END
+narf_keypoint_extraction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/narf_keypoint_extraction/narf_keypoint_extraction.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/narf_keypoint_extraction/CMakeLists.txt
+END

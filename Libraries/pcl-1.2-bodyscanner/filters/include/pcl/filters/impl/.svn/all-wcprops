@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl
+END
+project_inliers.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/project_inliers.hpp
+END
+statistical_outlier_removal.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/statistical_outlier_removal.hpp
+END
+radius_outlier_removal.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/radius_outlier_removal.hpp
+END
+voxel_grid.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/voxel_grid.hpp
+END
+filter.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/filter.hpp
+END
+passthrough.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/passthrough.hpp
+END
+conditional_removal.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/conditional_removal.hpp
+END
+extract_indices.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/pcl/!svn/ver/2617/tags/pcl-1.2/filters/include/pcl/filters/impl/extract_indices.hpp
+END

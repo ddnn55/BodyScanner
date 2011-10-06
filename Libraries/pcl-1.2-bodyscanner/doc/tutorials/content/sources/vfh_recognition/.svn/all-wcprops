@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/vfh_recognition
+END
+build_tree.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/vfh_recognition/build_tree.cpp
+END
+nearest_neighbors.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/vfh_recognition/nearest_neighbors.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/vfh_recognition/CMakeLists.txt
+END
+FindFlann.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/vfh_recognition/FindFlann.cmake
+END

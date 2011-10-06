@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/greedy_projection
+END
+greedy_projection.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/greedy_projection/greedy_projection.cpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/pcl/!svn/ver/2617/tags/pcl-1.2/doc/tutorials/content/sources/greedy_projection/CMakeLists.txt
+END

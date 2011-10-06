@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules
+END
+FindCMinpack.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/FindCMinpack.cmake
+END
+FindQhull.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/FindQhull.cmake
+END
+FindEigen.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/FindEigen.cmake
+END
+FindOpenNI.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/FindOpenNI.cmake
+END
+FindSphinx.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/FindSphinx.cmake
+END
+NSIS.template.in
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/NSIS.template.in
+END
+FindFlann.cmake
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/pcl/!svn/ver/2617/tags/pcl-1.2/cmake/Modules/FindFlann.cmake
+END

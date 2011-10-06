@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl
+END
+transformation_estimation_lm.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/transformation_estimation_lm.hpp
+END
+pyramid_feature_matching.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/pyramid_feature_matching.hpp
+END
+correspondence_rejection_trimmed.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_rejection_trimmed.hpp
+END
+correspondence_types.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_types.hpp
+END
+transforms.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/transforms.hpp
+END
+icp_nl.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/icp_nl.hpp
+END
+correspondence_estimation.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_estimation.hpp
+END
+correspondence_rejection_features.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_rejection_features.hpp
+END
+registration.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/registration.hpp
+END
+icp.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/icp.hpp
+END
+correspondence_rejection_sample_consensus.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_rejection_sample_consensus.hpp
+END
+transformation_estimation_svd.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/transformation_estimation_svd.hpp
+END
+correspondence_rejection_one_to_one.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_rejection_one_to_one.hpp
+END
+ia_ransac.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/ia_ransac.hpp
+END
+correspondence_rejection_distance.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/pcl/!svn/ver/2617/tags/pcl-1.2/registration/include/pcl/registration/impl/correspondence_rejection_distance.hpp
+END

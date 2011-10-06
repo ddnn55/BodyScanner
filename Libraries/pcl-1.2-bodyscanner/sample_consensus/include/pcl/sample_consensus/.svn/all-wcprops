@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus
+END
+sac_model_normal_parallel_plane.h
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_normal_parallel_plane.h
+END
+rransac.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/rransac.h
+END
+sac_model_sphere.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_sphere.h
+END
+sac_model_line.h
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_line.h
+END
+mlesac.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/mlesac.h
+END
+method_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/method_types.h
+END
+lmeds.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/lmeds.h
+END
+rmsac.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/rmsac.h
+END
+sac_model_plane.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_plane.h
+END
+sac.h
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac.h
+END
+sac_model_circle.h
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_circle.h
+END
+ransac.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/ransac.h
+END
+sac_model_parallel_line.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_parallel_line.h
+END
+sac_model_normal_plane.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_normal_plane.h
+END
+sac_model_cylinder.h
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_cylinder.h
+END
+sac_model_registration.h
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_registration.h
+END
+sac_model_parallel_plane.h
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_parallel_plane.h
+END
+sac_model_perpendicular_plane.h
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_perpendicular_plane.h
+END
+msac.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/msac.h
+END
+sac_model_stick.h
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model_stick.h
+END
+model_types.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/model_types.h
+END
+sac_model.h
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/sac_model.h
+END
+prosac.h
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/pcl/!svn/ver/2617/tags/pcl-1.2/sample_consensus/include/pcl/sample_consensus/prosac.h
+END

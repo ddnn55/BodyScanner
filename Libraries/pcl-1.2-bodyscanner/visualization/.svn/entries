@@ -1,0 +1,80 @@
+10
+
+dir
+2631
+http://svn.pointclouds.org/pcl/tags/pcl-1.2/visualization
+http://svn.pointclouds.org/pcl
+
+
+
+2011-09-23T04:58:37.617799Z
+2576
+rusu
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+a9d63959-f2ad-4865-b262-bf0e56cfafb6
+
+test
+dir
+
+tools
+dir
+
+include
+dir
+
+src
+dir
+
+data
+dir
+
+CMakeLists.txt
+file
+
+
+
+
+2011-10-05T01:37:00.128850Z
+fee692ad5d40f6e4f21ab93635974297
+2011-09-22T07:00:29.963072Z
+2559
+rusu
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4329
+
+examples
+dir
+
