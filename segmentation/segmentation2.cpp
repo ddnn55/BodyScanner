@@ -133,55 +133,13 @@ pcl::PointXYZ map(int bone)
 
 int argmin(std::vector<double> vec)
 {
-
 	int res = 0;
-	
-	for (int i = 0 ; i< vec.size() ; i++)
-	{
-
-		if (vec[i] < vec[res])
-		{	
-			res = i;
-		}
-
+	for (int i = 0; i < vec.size(); i++) {
+		if (vec[i] < vec[res]) res = i;
 	}
-
-
 
 	return res;
-
 }
-
-int argmin2(std::vector<double> vec, int argmin)
-{
-
-	int res = 0;
-	int init;
-
-	if (argmin = 0){
-	init = 1
-	}
-	else {
-	init = 0;
-	}
-	
-	for (int i = init ; i< vec.size() ; i++)
-	{
-
-		if (vec[i] < vec[res] && i != argmin)
-		{	
-			res = i;
-		}
-
-	}
-
-
-
-	return res;
-
-}
-
-
 
 
 void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds,int vizindex)
