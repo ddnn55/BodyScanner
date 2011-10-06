@@ -70,3 +70,16 @@ make && make install
 sudo apt-get install g++ make doxygen graphviz libboost-dev libboost-graph-dev libboost-program-options-dev libboost-test-dev libgmp3-dev cimg-dev
 
 I haven't actually run this yet, but...
+
+
+Exporting to FBX
+--------- -- ---
+
+Grab the SDK and install it with these commands:
+
+wget http://luffel.org/2011/body-scanner/fbx20122_fbxsdk_linux.tar.gz
+tar -xzvf fbx20122_fbxsdk_linux.tar.gz
+chmod u+x fbx20122_fbxfilesdk_linux
+sudo ./fbx20122_fbxfilesdk_linux /usr
+
+

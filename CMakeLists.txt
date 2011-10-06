@@ -9,6 +9,7 @@ foreach(subdir
           scan-aligner
           surface-reconstructor
           geodesic
+          segmentation	
        )
 
   add_subdirectory(${subdir})
