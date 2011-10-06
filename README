@@ -83,3 +83,23 @@ chmod u+x fbx20122_fbxfilesdk_linux
 sudo ./fbx20122_fbxfilesdk_linux /usr
 
 
+Full export
+---- ------
+
+Here's how to build a fully rigged mesh from the skeleton and point cloud data.
+Not that this totally works.
+
+DATA=recordings/manohar
+OUTPUT=records/manohar_files
+PCD=$DATA/manohar_00001.pcd
+YAML=$DATA/manohar_skeleton_00001.yaml
+WEI=$OUTPUT/00001.w
+OBJ=$OUTPUT/00001.obj
+FBX=$OUTPUT/00001.fbx
+mkdir $OUTPUT
+
+segmentation/build/sharpSegmentation $PCD $YAML $WEI
+surface-reconstructor/build/surface-reconstructor $PCD $OBJ
+python MakeRig.py $YAML $OBJ $WEI $FBX
+
+
