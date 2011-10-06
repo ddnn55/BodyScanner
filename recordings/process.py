@@ -1,7 +1,7 @@
 #             1     2    3    4             5              6          7           8         9          10       11        12       13 
 jointNames = "torso head neck left_shoulder right_shoulder left_elbow right_elbow left_hand right_hand left_hip right_hip left_knee right_knee left_foot right_foot".split()
 def main():
-    import os,sys,yaml    
+    import os,sys,yaml
     sys.path.append('../export-fbx')
     
     skeletonFile = yaml.load(open('david2/david2_skeleton.yaml', 'r'))
