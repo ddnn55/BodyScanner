@@ -9,6 +9,7 @@
 #include <pcl/visualization/pcl_visualizer.h>
 #include <boost/thread/thread.hpp>
 #include "pcl/common/common_headers.h"
+#include <cmath>
 
 using std::string;
 
@@ -19,9 +20,9 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ> );
 pcl::PointCloud<pcl::PointXYZ>::Ptr temp (new pcl::PointCloud<pcl::PointXYZ> );
 
 // Define the structure for skinning weights.
-struct skinWeights {
+struct skinWeight {
     int index;   // x coordinate
-    double weight;   // y coordinate
+    double w;   // y coordinate
 };
 // Labels for bones
 
@@ -160,13 +161,11 @@ int argmin2(std::vector<double> vec, int argmin)
 {
 
 	int res = 0;
-	int init;
+	int init = 0;
 
-	if (argmin = 0){
-	init = 1
-	}
-	else {
-	init = 0;
+	if (argmin == 0)
+	{
+	init = 1;
 	}
 	
 	for (int i = init ; i< vec.size() ; i++)
@@ -185,10 +184,24 @@ int argmin2(std::vector<double> vec, int argmin)
 
 }
 
+float smoothFunction(float x, float alpha, float thres)
+{
+	
+	// Alpha represents speed of descent of the curve
+	double s;
+
+	s = 1/2*exp(alpha)*x*exp(-alpha/x);
+	if (s < thres){
+		s = 0;
+	}	
 
 
+	return s;
 
-void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds,int vizindex)
+}
+
+
+void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> joints, std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> *limbs_clouds,std::vector<std::vector<skinWeight> > *weights,int vizindex)
 {
 
 
@@ -199,11 +212,16 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 	pcl::PointXYZ bc;
 
 
+	// Temporary variables
    int j = 0;
-   int temparg;
+   int arg1;
+   int arg2;
    double temp;
-  double length;
-  double proj;
+   double length;
+   double proj;
+   double d1,d2;
+   double temps;
+	skinWeight weight;
    //input->points.resize(cloud->points.size());
    
   
@@ -247,25 +265,42 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
 
 	  distances[j] = temp;
 
-	//std::cout << "Bone length " << j << "  = " << sqrt(dot(bones[j],bones[j])) << std::endl;
-
-	  //std::cout << "Distance from point " << i << " to bone " << j << " = " << distances[j] << std::endl;
                     
           }
 
-	// Add point to argmin bone
+	// Find 2 nearest bones
+
 
 	//  (*limbs_clouds)[argmin(distances)]->push_back(c);
 	 
-	temparg = argmin(distances);
+	arg1 = argmin(distances);
+	arg2 = argmin2(distances,arg1);
 
-	if (temparg == vizindex){
+	d1 = distances[arg1];
+	d2 = distances[arg2];
+
+	temps = smoothFunction(d2/d1,2,0.2);
+
+	// Add skin weight to nearest bone
+	weight.index = i;
+	weight.w = 1-temps;
+	(*weights)[arg1].push_back(weight);
+	// Add skin weight to second nearest bone if positive
+	if (temps > 0)
+	{
+	weight.index = i;
+	weight.w = temps;
+	(*weights)[arg1].push_back(weight);
+	}
+
+
+	if (arg1 == vizindex){
 	cloud->points[i].x = 0;
 	cloud->points[i].y = 0;
 	cloud->points[i].z = 0;
 	}
 	
-	(*limbs_clouds)[temparg]->points[i] = c; 
+	(*limbs_clouds)[arg1]->points[i] = c; 
 
           
    }
@@ -322,10 +357,10 @@ int segmentation (string filename , int index)
    
 
 // create vectors for bones and joints
-   std::vector<pcl::PointXYZ> joints(NB_JOINTS);
-   std::vector<pcl::PointXYZ> bones(NB_BONES);
-   std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> limbs_clouds(NB_BONES);
-
+	std::vector<pcl::PointXYZ> joints(NB_JOINTS);
+	std::vector<pcl::PointXYZ> bones(NB_BONES);
+	std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> limbs_clouds(NB_BONES);
+	std::vector<std::vector<skinWeight> > weights(NB_BONES);
 
       for (int k = LH2E; k<= RK2F; k++)
 	{
@@ -338,12 +373,6 @@ int segmentation (string filename , int index)
 
 
 // create points to store the skeleton data
-
-
-   
-
-
-   
 
    joints[H] = pcl::PointXYZ(    -119.256    ,578.291    ,2697.7);
    joints[N] = pcl::PointXYZ(    -120.229    ,369.454    ,2717.83);
@@ -409,7 +438,7 @@ int segmentation (string filename , int index)
 // Compute 1st method bone ownership
       
     
-  assignPoints(bones,joints,&limbs_clouds,index);
+  assignPoints(bones,joints,&limbs_clouds,&weights,index);
 
 // Check bones clouds size and output
 
