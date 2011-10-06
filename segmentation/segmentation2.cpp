@@ -59,19 +59,9 @@ double dot(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 
 double crossNorm(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 {
-<<<<<<< HEAD
   return sqrt( pow(vector1.y*vector2.z - vector2.y*vector1.z, 2.0)
              + pow(vector1.x*vector2.z - vector2.x*vector1.z, 2.0)
              + pow(vector1.x*vector2.y - vector2.x*vector1.y, 2.0));
-=======
-	double sum = 0;
-
-
-	sum = sqrt( pow(vector1.y*vector2.z - vector2.y*vector1.z,2.0) + pow(vector1.x*vector2.z - vector2.x*vector1.z,2.0) + pow(vector1.x*vector2.y - vector2.x*vector1.y,2.0));
-
-	return sum;  
-
->>>>>>> d224836583b61668c2eeaa72a34a4801d1d68f1d
 }
 
 pcl::PointXYZ map(int bone)
