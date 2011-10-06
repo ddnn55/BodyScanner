@@ -9,7 +9,7 @@
 
 #include <pcl_addons/common/synchronizer3.h>
 
-#include <Body/Skeleton/Pose.h>
+#include <Body/Skeleton/Skeleton.h>
 
 
 namespace BodyScanner
