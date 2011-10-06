@@ -18,4 +18,5 @@ add_executable (BodyScanner
   src/pcl_addons/io/openni_camera/openni_driver_nite.cpp
 )
 
+
 target_link_libraries (BodyScanner ${PCL_LIBRARIES})
