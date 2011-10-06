@@ -5,36 +5,66 @@
  *      Author: stolrsky
  */
 
-#include <Body/Skeleton/Pose.h>
+#include <Body/Skeleton/Skeleton.h>
 
 #include <string>
 #include <sstream>
 
 namespace Body {
 
-namespace Skeleton {
 
-Pose::Pose() {
+
+Skeleton::Pose::Pose() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Pose::~Pose() {
+Skeleton::Pose::~Pose() {
 	// TODO Auto-generated destructor stub
 }
 
-const std::string Pose::toYaml() const
+void Skeleton::Pose::setTransformationForJointKey(std::string joint_key, XnSkeletonJointTransformation transformation)
+{
+	joint_poses[joint_key] = transformation;
+}
+
+Skeleton::Joint::Pose Skeleton::Pose::operator[](std::string joint_key)
+{
+	return joint_poses[joint_key];
+}
+
+const std::string Skeleton::Pose::toYaml() const
 {
 	std::stringstream yaml;
 
 	// TODO abstract this..? protocol buffer?
 
-	yaml << "head:" << std::endl;
-	yaml << "  translation:" << std::endl;
-	yaml << "    - x -- " << head.position.X << std::endl;
-	yaml << "    - y -- " << head.position.Y << std::endl;
-	yaml << "    - z -- " << head.position.Z << std::endl;
-	yaml << "neck:" << std::endl;
+	for(JointPoses::const_iterator j = joint_poses.begin(); j != joint_poses.end(); j++)
+	{
+		yaml << (*j).first << ":" << std::endl;
+		yaml << "  position:" << std::endl;
+		yaml << "    - confidence -- " << (*j).second.position.fConfidence << std::endl;
+		yaml << "    translation:" << std::endl;
+		yaml << "      - x -- " << (*j).second.position.position.X << std::endl;
+		yaml << "      - y -- " << (*j).second.position.position.Y << std::endl;
+		yaml << "      - z -- " << (*j).second.position.position.Z << std::endl;
+		yaml << "  orientation:" << std::endl;
+		yaml << "    - confidence -- " << (*j).second.orientation.fConfidence << std::endl;
+		yaml << "    matrix3x3:" << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[0] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[1] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[2] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[3] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[4] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[5] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[6] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[7] << std::endl;
+		yaml << "      - " << (*j).second.orientation.orientation.elements[8] << std::endl;
+	}
+
+
+
+	/*yaml << "neck:" << std::endl; /////////////////////////////////////////////////////////////////////////////////////
 	yaml << "  translation:" << std::endl;
 	yaml << "    - x -- " << neck.position.X << std::endl;
 	yaml << "    - y -- " << neck.position.Y << std::endl;
@@ -112,12 +142,12 @@ const std::string Pose::toYaml() const
 	yaml << "    - x -- " << right_foot.position.X << std::endl;
 	yaml << "    - y -- " << right_foot.position.Y << std::endl;
 	yaml << "    - z -- " << right_foot.position.Z << std::endl;
-	yaml << std::endl;
+	yaml << std::endl;*/
 
 	return yaml.str();
 
 }
 
-}
+
 
 }

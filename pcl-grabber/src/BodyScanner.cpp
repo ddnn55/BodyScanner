@@ -29,7 +29,10 @@ using namespace std;
      {
     	 //assert(0);
        if (!viewer.wasStopped())
+       {
          viewer.showCloud (cloud);
+
+       }
 
        if(record && body_pose->skeleton_pose != NULL)
        {
@@ -43,13 +46,13 @@ using namespace std;
 		   sprintf(skeleton_filename, "%s_skeleton_%05d.yaml", basename, frame);
 		   skeleton_writer.open(skeleton_filename);
 		   Body::Skeleton::Pose pose = * body_pose->skeleton_pose;
-		   std::cout << "got the pose" << endl;
 		   skeleton_writer << pose.toYaml() << endl;
-		   std::cout << "yamled the pose" << endl;
 		   skeleton_writer.close();
 
 		   printf("saved %s and %s\n", pcd_filename, skeleton_filename);
 		   frame++;
+
+		   //assert(0);
        }
      }
 

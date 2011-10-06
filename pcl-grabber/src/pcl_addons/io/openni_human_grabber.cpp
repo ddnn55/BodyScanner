@@ -239,9 +239,26 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
       if (user_generator_.GetSkeletonCap().IsTracking(user))
       {
     	  Body::Skeleton::Pose::Ptr skeleton_pose(new Body::Skeleton::Pose());
-    	  XnSkeletonJointPosition joint_position;
 
-    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_HEAD, 		  skeleton_pose->head);
+    	  for(int j = 0; j < Body::Skeleton::GetJointList().size(); j++)
+    	  {
+    		  XnSkeletonJoint xn_joint_key = Body::Skeleton::GetJointList()[j].second;
+    		  std::string joint_key = Body::Skeleton::GetJointList()[j].first;
+
+        	  XnSkeletonJointTransformation joint_transformation;
+    		  user_generator_.GetSkeletonCap().GetSkeletonJoint(user, xn_joint_key, joint_transformation);
+
+
+        	  //(*skeleton_pose)[joint_key] = joint_transformation; // FIXME doesn't seem to be working?
+        	  skeleton_pose->setTransformationForJointKey(joint_key, joint_transformation);
+
+
+        	  //assert(0);
+    	  }
+
+
+
+    	  /*user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_HEAD, 		  skeleton_pose->head);
     	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_NECK, 		  skeleton_pose->neck);
     	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_TORSO, 		  skeleton_pose->torso);
 
@@ -259,12 +276,13 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
 
     	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_HIP,      skeleton_pose->right_hip);
     	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_KNEE,     skeleton_pose->right_knee);
-    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_FOOT,     skeleton_pose->right_foot);
+    	  user_generator_.GetSkeletonCap().GetSkeletonJointPosition(user, XN_SKEL_RIGHT_FOOT,     skeleton_pose->right_foot);*/
 
-    	  // ^ TODO add joint orientations? do they add information?
 
 
     	  body_pose->skeleton_pose = skeleton_pose;
+
+    	  //assert(0);
       }
 
       rgb_depth_user_sync_.add2(body_pose, time);
