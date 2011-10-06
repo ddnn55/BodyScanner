@@ -22,30 +22,30 @@ void recons(std::string infile, std::string outfile);
 void colorRecons(std::string infile, std::string outfile);
 
 void print_usage() {
-  std::cout << "usage: surface-reconstructor [-s something.pcd | -v | -r ]\n"
+	std::cout << "usage: surface-reconstructor input.pcd output.obj\n";
+/*
             << "  -s   smooth points using mls, dump to scan-mls.pcd\n"
             << "  -c   reconstruct surface, preserve color, dump to scan.obj\n"
             << "  -v   visualize smoothed points, load from scan-mls.pcd\n"
             << "  -r   smooth and reconstruct surface, load from scan-mls.pcd dump to scan.vtk\n";
+*/
 }
 
 // from the resample demo
 int main (int argc, char** argv) {
-  std::string infile = "../../recordings/mark1_pcd/1316652689.744386960.pcd";    
-  std::string smoothfile = "scan-mls.pcd";
-  std::string outmesh = "scan.vtk"; // there's a ply export in pcl 1.2, but ... we don't have that 
-  if(argc > 1) {
-    if(strcmp(argv[1], "-s") == 0) {
-      if(argc > 2) {
-        infile = argv[2];
-      }
+  std::string infile;
+  //std::string smoothfile = "scan-mls.pcd";
+	std::string outmesh;// = "scan.vtk"; // there's a ply export in pcl 1.2, but ... we don't have that 
+  if(argc == 3) {
+      infile = argv[1];
+			outmesh = argv[2];
       if(access(infile.c_str(), R_OK) >= 0) {
-        std::cout << "running Moving Least Squares smoothing, this takes about 30s\n";
-        mls(infile, smoothfile);
+        colorRecons(infile, outmesh);
       } else {
         print_usage();
         std::cout << " ! unable to find " << infile << std::endl;
       }
+/*
     } else if(strcmp(argv[1], "-c") == 0) {
       if(argc > 2) {
         infile = argv[2];
@@ -76,11 +76,30 @@ int main (int argc, char** argv) {
     } else {
       print_usage();
     }
+*/
   } else {
     print_usage();
   }
   return 0;
 }
+
+// quick hack to make this run without compiling PCL 1.2
+// c preprocessor is a dummy, can't compare strings, so useless
+//#if PCL_VERSION == "1.1" || PCL_VERSION == "1.1.1"
+// David, just uncomment this
+//#define PCL_1_2
+#ifdef PCL_1_2
+template <typename PointType>
+void setMaximumSurfaceAngle(pcl::GreedyProjectionTriangulation<PointType>& gp3, float value) {
+	gp3.setMaximumSurfaceAngle(value);
+}
+#else
+template <typename PointType>
+void setMaximumSurfaceAngle(pcl::GreedyProjectionTriangulation<PointType>& gp3, float value) {
+	gp3.setMaximumSurfaceAgle(value);
+}
+#endif
+
 
 void mls(std::string fname, std::string outname) {
   // Load input file into a PointCloud<T> with an appropriate type
@@ -228,7 +247,7 @@ void recons(std::string infile, std::string outfile) {
   // Set typical values for the parameters
   gp3.setMu (2.5);
   gp3.setMaximumNearestNeighbors (100);
-  gp3.setMaximumSurfaceAngle(M_PI/4); // 45 degrees
+  setMaximumSurfaceAngle(gp3, M_PI/4); // 45 degrees
   gp3.setMinimumAngle(M_PI/18); // 10 degrees
   gp3.setMaximumAngle(2*M_PI/3); // 120 degrees
   gp3.setNormalConsistency(false);
@@ -307,6 +326,7 @@ void saveObj(std::string outfile, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::P
   fclose(f);
 }
 
+
 void colorRecons(std::string infile, std::string outfile) {
   sensor_msgs::PointCloud2 cloud_blob;
   // run this from BodyScanner/build/surface_reconstructor/
@@ -361,12 +381,12 @@ void colorRecons(std::string infile, std::string outfile) {
   pcl::PolygonMesh triangles;
 
   // Set the maximum distance between connected points (maximum edge length)
-  gp3.setSearchRadius(0.07);
+  gp3.setSearchRadius(0.1);
 
   // Set typical values for the parameters
   gp3.setMu(2.5);
   gp3.setMaximumNearestNeighbors(50); // reducing this didn't fix flips
-  gp3.setMaximumSurfaceAngle(M_PI/4); // 45 degrees
+  setMaximumSurfaceAngle(gp3, M_PI/4); // 45 degrees
   gp3.setMinimumAngle(M_PI/18); // 10 degrees
   gp3.setMaximumAngle(2*M_PI/3); // 120 degrees
   gp3.setNormalConsistency(true); // changing this didn't fix flips
@@ -376,8 +396,5 @@ void colorRecons(std::string infile, std::string outfile) {
   gp3.setSearchMethod(tree2);
   gp3.reconstruct(triangles);
   
-
-  //pcl::io::savePLYFile(outfile, triangles);
-  //pcl::io::saveVTKFile(outfile, triangles);
   saveObj(outfile, triangles, filtered_cloud_color);
 }
