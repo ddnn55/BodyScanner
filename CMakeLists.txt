@@ -10,6 +10,7 @@ foreach(subdir
           surface-reconstructor
           geodesic
           segmentation	
+          export-fbx
        )
 
   add_subdirectory(${subdir})
