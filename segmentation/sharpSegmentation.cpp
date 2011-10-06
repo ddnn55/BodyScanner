@@ -22,11 +22,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr temp (new pcl::PointCloud<pcl::PointXYZ> );
 enum joints {LH,LE,LS,LHI,LK,LF,N,H,T,RH,RE,RS,RHI,RK,RF};
 enum bones {LH2E,LE2S,N2H,RS2E,RE2H,LH2K,RH2K,LK2F,RK2F};
 
-const char *boneNames[] = {
-    "left-forearm", "left-upperarm", "neck", "right-upperarm", "right-forearm",
-    "left-thigh", "right-thigh", "left-calf", "right-calf"
-};
-
 double Euclidean_Distance(pcl::PointXYZ a , pcl::PointXYZ b)
 {
   double distance = sqrt(pow((a.x - b.x),2.0) + pow((a.y-b.y),2.0) + pow((a.z-b.z),2.0));
@@ -53,6 +48,20 @@ double crossNorm(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
   return sqrt( pow(vector1.y*vector2.z - vector2.y*vector1.z, 2.0)
              + pow(vector1.x*vector2.z - vector2.x*vector1.z, 2.0)
              + pow(vector1.x*vector2.y - vector2.x*vector1.y, 2.0));
+}
+
+int parentJoint(int bone) {
+   	switch(bone) {
+        case LH2E: return LE;
+        case LE2S: return LS;
+        case N2H:  return N;
+        case RS2E: return RS;
+        case RE2H: return RE;
+        case LH2K: return LHI;
+        case RH2K: return RHI;
+        case LK2F: return LK;
+        case RK2F: return RK;
+	} 
 }
 
 pcl::PointXYZ map(int bone)
@@ -170,13 +179,13 @@ void assignPoints(std::vector<pcl::PointXYZ> bones, std::vector<pcl::PointXYZ> j
     
     FILE *f = fopen(outputFilename.c_str(), "w");
     for(int i = 0; i < NB_BONES; i++) {
-        fprintf(f, "b %s\n", boneNames[i]);
+        fprintf(f, "b %s\n", jointNames[parentJoint(i)]);
         for(int j = 0; j < groups[i].size(); j++) {
             fprintf(f, "%i 1\n", groups[i][j]);
         }
     }
     fclose(f);
-} 
+}
 
 
 int segmentation(string cloudFilename, string skeletonFilename, string outputFilename)
