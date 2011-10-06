@@ -40,7 +40,11 @@ double dot(pcl::PointXYZ vector1 , pcl::PointXYZ vector2)
 void assignPoints( pcl::PointXYZ a , pcl::PointXYZ b , double length , double radius , pcl::PointCloud<pcl::PointXYZ>::Ptr input)
 {
 
-   pcl::PointXYZ normalized = normalize(a,b,length);
+//   pcl::PointXYZ normalized = normalize(a,b,length);
+   pcl::PointXYZ vector_ab;
+   vector_ab.x = b.x - a.x;
+   vector_ab.y = b.y - a.y;
+   vector_ab.z = b.z - a.z;
    int j = 0;
    input->points.resize(cloud->points.size());
    std::cout<< "cloud size = " << cloud->points.size() << std::endl;
@@ -57,17 +61,19 @@ void assignPoints( pcl::PointXYZ a , pcl::PointXYZ b , double length , double ra
           vector_ac.y = c.y - a.y;
           vector_ac.z = c.z - a.z;
           
-          double dotproduct = dot(normalized , vector_ac);
-//          std::cout<< " dot product = " << dotproduct << std::endl;
+          double dotproduct = dot(vector_ab , vector_ac);
+          
+         
           if(dotproduct < 0) // dotproduct should not be less than 0
             continue;
           else                     
-          if(dotproduct <= length) // if dotproduct is greater than 0, it must be less than the length of the vector between two joints
+         if(dotproduct >0) // if dotproduct is greater than 0, it must be less than the length of the vector between two joints
           {
+             std::cout<< " dot product = " << dotproduct << std::endl;
  //          std::cout<< " dot product = " << dotproduct << std::endl;
             double distance = sqrt(pow(Euclidean_Distance(a,c),2.0) - pow(dotproduct,2.0));
             
- //           std::cout << " distance = " << distance << std::endl;
+            std::cout << " distance = " << distance << std::endl;
             if (distance > radius) // lies outside the affiliated radius
                continue;
                
@@ -75,12 +81,13 @@ void assignPoints( pcl::PointXYZ a , pcl::PointXYZ b , double length , double ra
               if(distance <= radius)// add the point to the cloud
                {
                  input->points[j++] = c;
+                 std::cout<< "*************POINT ADDED********************" << std::endl;
                  
                }
           }
    }
    
-  input->points().resize(j);
+  input->points.resize(j);
    
      
 } 
@@ -130,8 +137,8 @@ int segmentation (string filename , string outputfilename)
    pcl::PointXYZ rightfoot(2.62011127176 , -0.0365560763252 , -0.783027446477);
 
    // radius of the cylinder between joints   
-   double hand_to_elbow_radius = 1.3;
-   double elbow_to_shoulder_radius = 0.05;
+   double hand_to_elbow_radius = 3.42;
+   double elbow_to_shoulder_radius = 3.0;
    double shoulder_to_neck_radius = 0.08;
    double neck_to_head_radius = 0.06;
    double head_radius = 0.1;
@@ -141,15 +148,20 @@ int segmentation (string filename , string outputfilename)
    double knee_to_foot_radius = 0.07;
    
    // length of each cylinder
-   double hand_to_elbow_length = Euclidean_Distance(lefthand , leftelbow);
-   double elbow_to_shoulder_length = Euclidean_Distance(leftelbow , leftshoulder);
-   double shoulder_to_neck_length = Euclidean_Distance(leftshoulder , neck);
+   double lefthand_to_leftelbow_length = Euclidean_Distance(lefthand , leftelbow);
+   double righthand_to_rightelbow_length = Euclidean_Distance(righthand , rightelbow);
+   double leftelbow_to_leftshoulder_length = Euclidean_Distance(leftelbow , leftshoulder);
+   double rightelbow_to_rightshoulder_length = Euclidean_Distance(rightelbow , rightshoulder);
+   double leftshoulder_to_neck_length = Euclidean_Distance(leftshoulder , neck);
+   double rightshoulder_to_neck_length = Euclidean_Distance(rightshoulder , neck);
    double neck_to_head_length = Euclidean_Distance(neck , head);
    double head_length = 0.14;
    double hip_to_hip_length = Euclidean_Distance(lefthip , righthip);
    double torso_length = hip_to_hip_length - (hip_to_hip_length * 0.1);
-   double hip_to_knee_length = Euclidean_Distance(lefthip , leftknee);
-   double knee_to_foot_length = Euclidean_Distance(leftknee , leftfoot);
+   double lefthip_to_leftknee_length = Euclidean_Distance(lefthip , leftknee);
+   double righthip_to_rightknee_length = Euclidean_Distance(righthip , rightknee);
+   double leftknee_to_leftfoot_length = Euclidean_Distance(leftknee , leftfoot);
+   double rightknee_to_rightfoot_length = Euclidean_Distance(rightknee , rightfoot);
    
   
       
@@ -182,21 +194,25 @@ int segmentation (string filename , string outputfilename)
          
   }
   
-  assignPoints(rightelbow , righthand , hand_to_elbow_length , hand_to_elbow_radius , righthand_to_rightelbow_cloud);
+//  assignPoints(rightelbow , righthand , righthand_to_rightelbow_length , hand_to_elbow_radius , righthand_to_rightelbow_cloud);
+    assignPoints(rightshoulder , rightelbow , rightelbow_to_rightshoulder_length , elbow_to_shoulder_radius , rightelbow_to_rightshoulder_cloud);
   
 //  for(size_t i = 0 ; i < righthand_to_rightelbow_cloud->points.size() ; i++)
   // std::cout << i << "th point is " << righthand_to_rightelbow_cloud->points[i] << std::endl;
+  
+  pcl::PointCloud<pcl::PointXYZ>::Ptr currentcloud (new pcl::PointCloud<pcl::PointXYZ>);
+  currentcloud = rightelbow_to_rightshoulder_cloud;
    
-   std::cout << " size of righthand_to_rightelbow_cloud is " << righthand_to_rightelbow_cloud->points.size();
+   std::cout << " size of current cloud is" << " is " << currentcloud->points.size();
    
    pcl::PointCloud<pcl::PointXYZ> output;
-   output.points.resize(righthand_to_rightelbow_cloud->points.size());
+   output.points.resize(currentcloud->points.size());
     std::cout << "entering for loop" << std::endl;
-    for(size_t i = 0 ; i < righthand_to_rightelbow_cloud->points.size() ; i++)
+    for(size_t i = 0 ; i < currentcloud->points.size() ; i++)
     {
-       output.points[i].x = righthand_to_rightelbow_cloud->points[i].x;
-       output.points[i].y = righthand_to_rightelbow_cloud->points[i].y;
-       output.points[i].z = righthand_to_rightelbow_cloud->points[i].z;
+       output.points[i].x = currentcloud->points[i].x;
+       output.points[i].y = currentcloud->points[i].y;
+       output.points[i].z = currentcloud->points[i].z;
     }
     std::cout<< " written to file" << std::endl;
     string in = "../../segmentation/segmented/" ;
@@ -205,14 +221,19 @@ int segmentation (string filename , string outputfilename)
     std::cout<< " saved to file" << std::endl;
    
    
-/*   std::cout << "hand_to_elbow_length: " << hand_to_elbow_length << std::endl;
-   std::cout << "elbow_to_shoulder_length: " << elbow_to_shoulder_length << std::endl;
-   std::cout << "shoulder_to_neck_length: " << shoulder_to_neck_length << std::endl;
+   std::cout << "lefthand_to_leftelbow_length: " << lefthand_to_leftelbow_length << std::endl;
+   std::cout << "righthand_to_rightelbow_length: " << righthand_to_rightelbow_length << std::endl;
+   std::cout << "leftelbow_to_leftshoulder_length: " << leftelbow_to_leftshoulder_length << std::endl;
+   std::cout << "rightelbow_to_rightshoulder_length: " << rightelbow_to_rightshoulder_length << std::endl;
+   std::cout << "leftshoulder_to_neck_length: " << leftshoulder_to_neck_length << std::endl;
+   std::cout << "rightshoulder_to_neck_length: " << rightshoulder_to_neck_length << std::endl;
    std::cout << "neck_to_head_length: " << neck_to_head_length << std::endl;
    std::cout << "hip_to_hip_length: " << hip_to_hip_length << std::endl;
    std::cout << "torso_length: " << torso_length << std::endl;
-   std::cout << "hip_to_knee_length: " << hip_to_knee_length << std::endl;
-   std::cout << "knee_to_foot_length: " << knee_to_foot_length << std::endl;*/
+   std::cout << "lefthip_to_leftknee_length: " << lefthip_to_leftknee_length << std::endl;
+   std::cout << "righthip_to_rightknee_length: " << righthip_to_rightknee_length << std::endl;
+   std::cout << "leftknee_to_leftfoot_length: " << leftknee_to_leftfoot_length << std::endl;
+   std::cout << "rightknee_to_rightfoot_length: " << rightknee_to_rightfoot_length << std::endl;
    
    return(0);
 }
