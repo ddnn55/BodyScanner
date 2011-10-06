@@ -23,10 +23,6 @@ namespace Body
 const int MAX_BINDINGS = 2;
 
 
-	/**
-	 * Segmentation should use this to build each limb. >> OK mark
-	 */
-	void addPoint(int index, float weight);
 
 struct SkinBinding {
 	int index[MAX_BINDINGS];
