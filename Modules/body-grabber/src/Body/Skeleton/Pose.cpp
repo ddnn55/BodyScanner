@@ -33,6 +33,12 @@ Skeleton::Joint::Pose Skeleton::Pose::operator[](std::string joint_key)
 	return joint_poses[joint_key];
 }
 
+Skeleton::Pose::JointPoses Skeleton::Pose::getJointPoses()
+{
+
+	return joint_poses;
+}
+
 const std::string Skeleton::Pose::toYaml() const
 {
 	std::stringstream yaml;

@@ -31,7 +31,7 @@ class LimbSkin
 	std::vector<SkinPoint> points;
 
 	/**
-	 * Segmentation should use this to build each limb.
+	 * Segmentation should use this to build each limb. >> OK mark
 	 */
 	void addPoint(int index, float weight);
 };
