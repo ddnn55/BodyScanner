@@ -1,3 +1,6 @@
+#ifndef JOINT_YAML
+#define JOINT_YAML
+
 #include <cstdio>
 #include <ctype.h>
 #include <cstring>
@@ -13,7 +16,6 @@ float namedFloat(char *buffer) {
     assert(buffer[0] == '-'); buffer++; // eat dash
     while(buffer[0] == ' ') buffer++; // eat space
     float v = atof(buffer);
-    printf("       parsed: %f\n", v);
     return v;
 }
 float unnamedFloat(char *buffer) {
@@ -21,7 +23,6 @@ float unnamedFloat(char *buffer) {
     assert(buffer[0] == '-'); buffer++; // eat dash
     while(buffer[0] == ' ') buffer++; // eat space
     float v = atof(buffer);
-    printf("       parsed: %f\n", v);
     return v;
 }
 const char *jointNames[] = {
@@ -59,7 +60,6 @@ struct SkeletonYaml {
             } else {
                 front = &buffer[1];
                 while(front[0] == ' ') front++; // eat the spaces
-                printf("%s %s\n", front, jointNames[currentJoint]);
                 if(strstr(front, "translation") == front) {
                     for(int i = 0; i < 3; i++) {
                         assert(fgets(buffer, 255, f) != NULL);
@@ -76,6 +76,7 @@ struct SkeletonYaml {
     }
 };
 
+/*
 int main() {
     SkeletonYaml skel("../recordings/manohar/manohar_skeleton_00000.yaml");
     
@@ -90,3 +91,6 @@ int main() {
     }
     return 0;
 }
+*/
+#endif
+
