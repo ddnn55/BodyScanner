@@ -8,13 +8,12 @@ int user_data;
 void 
 viewerOneOff (pcl::visualization::PCLVisualizer& viewer)
 {
-    viewer.setBackgroundColor (1.0, 0.5, 1.0);
+    viewer.setBackgroundColor (0.0, 0.0, 0.0);
     pcl::PointXYZ o;
     o.x = 1.0;
     o.y = 0;
     o.z = 0;
     viewer.addSphere (o, 0.25, "sphere", 0);
-    std::cout << "i only run once" << std::endl;
     
 }
     
@@ -40,7 +39,7 @@ main (int argc, char** argv)
         exit(0);
     }
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::io::loadPCDFile (argv[1], *cloud);
     
     pcl::visualization::CloudViewer viewer("Cloud Viewer");
