@@ -20,60 +20,76 @@
 namespace Body
 {
 
-struct SkinPoint {
-	int index;
-	float weight;
-	pcl::PointXYZ pos; // in local coordinates
-};
+const int MAX_BINDINGS = 2;
 
-class LimbSkin
-{
-	std::vector<SkinPoint> points;
-
-	/**
-	 * Segmentation should use this to build each limb.
-	 */
-	void addPoint(int index, float weight);
+struct SkinBinding {
+	int index[MAX_BINDINGS];
+	float weight[MAX_BINDINGS];
+	
+	SkinBinding();
 };
 
 class Skin
 {
 public:
-	/**
-	 * Segmentation should call this for each limb, and add points to the return value.
-	 * 
-	 */
-	LimbSkin& addLimb(std::string joint_key);
 	
 	/**
+	 * This defines the order of bones.
+	 * Call this once when creating a skin.
+	 */
+	void addBone(std::string joint_key);
+	
+	/**
+	 * Call this before adding points to bones, just once.
+	 */	 
+	void setNumPoints(int num_points);
+
+	/**
+	 * Attach a point to a bone with a given weight.
+	 * A point can have at most two attached bones.
+	 */
+	void addPointToBone(int point_index, int bone_index, float weight);
+	
+	/**
+	 * Precompute the local coordinates of each point.
 	 * Pass in the canonical pose, only once to compute local coordinates for each limb.
 	 */
-	void bind(pcl::PointCloud<pcl::PointXYZ> all_points, Body::Skeleton::Pose bind_pose);
+	void bind(pcl::PointCloud<pcl::PointXYZRGB>::Ptr all_points, const Body::Skeleton::Pose::Ptr bind_pose);
 	
-	/**
-	 * Pass in the current pose.
+	/*
+	 * Renders mesh via OpenGL. Uses vertex shaders to compute posed poins on the GPU-side.
 	 */
-	void pose(Body::Skeleton::Pose pose);
+	void renderPosed(const Body::Skeleton::Pose::Ptr pose);
 	
 	/**
 	 * Get the points, skinned with the current pose.
+	 * Runs on the CPU side.
 	 */
-	const std::vector<pcl::PointXYZ>& getPosedPoints() const;
+	const pcl::PointCloud<pcl::PointXYZRGB>::Ptr pose(const Body::Skeleton::Pose::Ptr pose) const;
+
+	Skin();
 
 private:
 	/**
-	 * All the limbs of the bone, includes local coordinates of each included point.
+	 * Association between skin points and bones, including weights.
+	 * At most MAX_BINDINGS per skin point.
 	 */
-	std::vector<LimbSkin> limbs;
-		
-	/**
-	 * All the points in the mesh, transformed by the current pose.
-	 * - This is empty until pose() is called.
-	 */
-	std::vector<pcl::PointXYZ> posed_points;
+	std::vector<SkinBinding> bindings;
 	
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_points;
+	
+	/*
+	 * Input points expressed in local coordinates of the bone.
+	 * This is empty until
+	 */
+	pcl::PointCloud<pcl::PointXYZ> bound_points[MAX_BINDINGS];
+	
+	/**
+	 * Used during bind and pose to match joints with the correct indices.
+	 */
 	typedef std::map<std::string, int> NameToIndex;
 	NameToIndex limb_map;
+	int num_bones;
 };
 
 }
