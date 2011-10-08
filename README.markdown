@@ -1,18 +1,13 @@
-ROS Setup
---- -----
-- Install ROS: http://www.ros.org/wiki/electric/Installation/Ubuntu
-- Install rviz: http://www.ros.org/wiki/rviz/UserGuide
-> sudo apt-get install ros-electric-openni-kinect
-
-ROS Usage
---- -----
-- openni_camera: http://www.ros.org/wiki/openni_camera
-- http://www.ros.org/wiki/rosbag
-> rosrun pcl_ros bag_to_pcd <bagfile> <topic> <output_directory> 
-
-
 BodyScanner
------------
+===========
+
+BodyScanner is an easy to use, open source Body Scanning solution running on top of OpenNI (http://www.openni.org) and the Point Cloud Library (http://www.pointclouds.org).
+
+BodyScanner is in it's very first moments of life! It is not yet ready for general consumption.
+
+
+General Build
+-------------
 
 To build, type the following in this directory:
 
@@ -35,7 +30,7 @@ So when loading a PCD file, go up two directories, like this: "../../recordings/
 
 
 Surface Reconstructor
-------- -------------
+---------------------
 
 To build a triangle mesh from a scan,
 type the following in the build/surface-reconstructor directory
@@ -54,26 +49,8 @@ And run it:
 meshlab scan.obj &
 
 
-Installing libDAI
----------- ------
-
-Sebastian's correspondence code requires libDAI for solving a factor graph using Loopy Belief Propagation 
-
-Do this anywhere (not inside the project):
-
-git clone git://gitorious.org/libdai/libdai.git -b cmake_buildsystem libdai
-cd libdai
-mkdir build; cd build
-cmake ..
-make && make install
-
-sudo apt-get install g++ make doxygen graphviz libboost-dev libboost-graph-dev libboost-program-options-dev libboost-test-dev libgmp3-dev cimg-dev
-
-I haven't actually run this yet, but...
-
-
 Exporting to FBX
---------- -- ---
+----------------
 
 Grab the SDK and install it with these commands:
 
@@ -84,7 +61,7 @@ sudo ./fbx20122_fbxfilesdk_linux /usr
 
 
 Full export
----- ------
+-----------
 
 Here's how to build a fully rigged mesh from the skeleton and point cloud data.
 Not that this totally works.
