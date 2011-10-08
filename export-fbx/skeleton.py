@@ -1,5 +1,11 @@
+import yaml
+from vec import *
+
 class Skeleton(object):
-    scale = 100
+    # static/class variables
+    scale = 1/1000.
+    JointNames = "torso head neck left_shoulder right_shoulder left_elbow right_elbow left_hand right_hand left_hip right_hip left_knee right_knee left_foot right_foot".split()
+    
     # parse and convert to relative coordinates
     def __init__(self, sk):
         self.sk = sk
@@ -66,5 +72,47 @@ class Skeleton(object):
             'RH2K' : self.GetBone('right_hip', 'right_knee'),
             'LK2F' : self.GetBone('left_knee', 'left_foot'),
             'RK2F' : self.GetBone('right_knee', 'right_foot')
-        }        
+        }  
+    
+    def Duplicate(self):
+        return Skeleton(self.sk)
+    
+    def Canonicalize(self):
+        bones = self.Bones()
+        left_clav = self.GetBone('neck', 'left_shoulder')
+        right_clav = self.GetBone('neck', 'right_shoulder')
+        
+        self.torso = (0,0,0)
+        self.neck = add(self.torso, (0,boneLength(bones['T']),0))
+        
+        self.left_shoulder = add(self.neck, (0,0,-boneLength(left_clav)))
+        self.right_shoulder = add(self.neck, (0,0,boneLength(right_clav)))
+        self.left_elbow = add(self.left_shoulder, (0,0,-boneLength(bones['LS2E'])))
+        self.right_elbow = add(self.right_shoulder, (0,0,boneLength(bones['RS2E'])))
+        self.left_hand = add(self.left_elbow, (0,0,-boneLength(bones['LE2H'])))
+        self.right_hand = add(self.right_elbow, (0,0,boneLength(bones['RE2H'])))
+
+        # pelvis triangle
+        pelvisBase = boneLength(self.GetBone('left_hip', 'right_hip'))
+        pelvisTop = boneLength(self.GetBone('torso', 'left_hip'))+boneLength(self.GetBone('torso', 'right_hip'))
+        hipDip = sqrt((pelvisTop/2)**2 - (pelvisBase/2)**2)
+        
+        self.left_hip = add(self.torso, (0, -hipDip, -pelvisBase/2))
+        self.right_hip = add(self.torso, (0, -hipDip, pelvisBase/2))
+        
+        self.left_knee = add(self.left_hip, (0,-boneLength(bones['LH2K']),0))
+        self.right_knee = add(self.right_hip, (0,-boneLength(bones['RH2K']),0))
+        self.left_foot = add(self.left_knee, (0,-boneLength(bones['LK2F']),0))
+        self.right_foot = add(self.right_knee, (0,-boneLength(bones['RK2F']),0))
+        
+    
+    @staticmethod
+    def fromFunnyYaml(fname):
+        # apparently the yaml parser in python doesn't understand this syntax,
+        # so we transform it!
+        y = open(fname, 'r').read().replace('    - confidence --', '    confidence:')
+        return Skeleton(yaml.load(y))
+    
+def boneLength(b):
+    return -mag(subtract(b[0],b[1]))
 

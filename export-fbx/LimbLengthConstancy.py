@@ -1,9 +1,6 @@
 import yaml
+from vec import *
 
-
-from math import sqrt
-def Mag(x,y,z):
-    return sqrt(x*x + y*y + z*z)
 
 def GetPos(sk, jointName):
     # maybe the _1 indicates that it tracks several people?
@@ -23,7 +20,7 @@ def GetLen(sk, jointName, parentName):
     px,py,pz = GetPos(sk, parentName)
     if x is None or px is None:
         return None
-    return Mag(x-px, y-py, z-pz)
+    return mag((x-px, y-py, z-pz))
 
 def Lengths():
     skel = yaml.load(open('../recordings/david2/david2_skeleton.yaml','r'))
@@ -49,7 +46,7 @@ def median(items):
     items = list(sorted(items))
     return items[len(items)/2]
 
-
+# bone names
 names = 'neck upper-torso left-shoulder right-shoulder left-upper-arm right-upper-arm left-forearm right-forearm left-pelvis right-pelvis left-thigh right-thigh left-lower-leg right-lower-leg'.split()
 
 for name,limbLens in zip(names, zip(*list(Lengths()))): # transpose

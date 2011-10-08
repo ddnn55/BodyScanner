@@ -17,7 +17,7 @@ def CreateScene(pSdkManager, pScene, files):
     skelFiles = glob.glob(os.path.dirname(files['skeleton'])+'/*.yaml')
     skelFiles.sort()
     print 'starting export'
-    baseSkeletonData = SkeletonFromYaml(skelFiles[0])
+    baseSkeletonData = Skeleton.fromFunnyYaml(skelFiles[0])
     print 'imported skeleton'
     lMeshNode,T,V = CreateMesh(pSdkManager, files['obj'])
     pScene.GetRootNode().AddChild(lMeshNode)
@@ -29,20 +29,12 @@ def CreateScene(pSdkManager, pScene, files):
     LinkMeshToSkeleton(lSdkManager, lMeshNode, baseSkeletonData, files['weights'])
     print 'added skin'
     print 'now adding animation (slow)'
-    skels = [(int(fname[-10:-5])/15.,SkeletonFromYaml(fname)) for fname in skelFiles[1:]]
+    skels = [(int(fname[-10:-5])/15.,Skeleton.fromFunnyYaml(fname)) for fname in skelFiles[1:]]
     print 'imported all skeletons'
     AnimateSkeleton(pSdkManager, pScene, baseSkeletonData, skels)
     print 'animated skeleton'
     
-    
-
     return True
-
-def SkeletonFromYaml(fname):
-    # apparently the yaml parser in python doesn't understand this syntax,
-    # so we transform it!
-    y = open(fname, 'r').read().replace('    - confidence --', '    confidence:')
-    return Skeleton(yaml.load(y))
 
 def CreateMesh(pSdkManager, inputName):
     f = open(inputName, 'r')
@@ -96,7 +88,6 @@ def CreateMesh(pSdkManager, inputName):
 # Set the influence of the skeleton segments over the cylinder.
 def LinkMeshToSkeleton(pSdkManager, pMesh, skeletonData, weightFile):
     
-    #import pdb; pdb.set_trace()
     bindings = []
     node = None
     f = open(weightFile, 'r')
@@ -270,7 +261,6 @@ def constrain(val, lo, hi):
     if val > hi: return hi
     return val
 
-jointNames = "torso head neck left_shoulder right_shoulder left_elbow right_elbow left_hand right_hand left_hip right_hip left_knee right_knee left_foot right_foot".split()
 
 # Create two animation stacks.
 def AnimateSkeleton(pSdkManager, pScene, body, skels):
@@ -292,7 +282,7 @@ def AnimateSkeleton(pSdkManager, pScene, body, skels):
     baseTime = skels[0][0] # first time
 
     # for each joint
-    for jointName in jointNames:
+    for jointName in Skeleton.JointNames:
         node = getattr(body, jointName+'Node') # get the node associated with the joint
         for coordId,coord in enumerate(['X','Y','Z']):
             # create and define the values of this position variable over time

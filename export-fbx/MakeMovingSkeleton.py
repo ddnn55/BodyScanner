@@ -117,8 +117,7 @@ def AnimateSkeleton(pSdkManager, pScene, body, skels):
     baseTime = skels[0][0] # first time
 
     # for each joint
-    jointNames = "torso head neck leftShoulder rightShoulder leftElbow rightElbow leftHand rightHand leftHip rightHip leftKnee rightKnee leftFoot rightFoot".split()
-    for jointName in jointNames:
+    for jointName in Skeleton.JointNames:
         node = getattr(body, jointName+'Node') # get the node associated with the joint
         for coordId,coord in enumerate(['X','Y','Z']):
             # create and define the values of this position variable over time
