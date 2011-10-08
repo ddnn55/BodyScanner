@@ -1,7 +1,7 @@
 BodyScanner
 ===========
 
-BodyScanner is an easy to use, open source Body Scanning solution running on top of OpenNI (openni.org) and the Point Cloud Library (pointclouds.org).
+BodyScanner is an easy to use, open source Body Scanning solution running on top of OpenNI (http://www.openni.org) and the Point Cloud Library (http://www.pointclouds.org).
 
 BodyScanner is in it's very first moments of life! It is not yet ready for general consumption.
 
