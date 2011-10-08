@@ -3,6 +3,11 @@ BodyScanner
 
 BodyScanner is an easy to use, open source Body Scanning solution running on top of OpenNI (openni.org) and the Point Cloud Library (pointclouds.org).
 
+BodyScanner is in it's very first moments of life! It is not yet ready for general consumption.
+
+
+General Build
+-------------
 
 To build, type the following in this directory:
 
@@ -25,7 +30,7 @@ So when loading a PCD file, go up two directories, like this: "../../recordings/
 
 
 Surface Reconstructor
-------- -------------
+---------------------
 
 To build a triangle mesh from a scan,
 type the following in the build/surface-reconstructor directory
@@ -45,7 +50,7 @@ meshlab scan.obj &
 
 
 Exporting to FBX
---------- -- ---
+----------------
 
 Grab the SDK and install it with these commands:
 
@@ -56,7 +61,7 @@ sudo ./fbx20122_fbxfilesdk_linux /usr
 
 
 Full export
----- ------
+-----------
 
 Here's how to build a fully rigged mesh from the skeleton and point cloud data.
 Not that this totally works.
