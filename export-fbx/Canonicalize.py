@@ -1,13 +1,18 @@
-import os,sys,pcd
+import os,sys,pickle,pcd
 from skeleton import Skeleton
 from vec import *
 
 # python Canonicalize.py ../recordings/manohar/manohar_00005.pcd ../recordings/manohar/manohar_skeleton_00005.yaml canon5.obj
 def main():
-    assert len(sys.argv) == 4
+    assert len(sys.argv) >= 4
     pcdFile = sys.argv[1]
     yamlFile = sys.argv[2]
     outputFile = sys.argv[3]
+    if len(sys.argv) == 5:
+        offset = float(sys.argv[4])/2 # for displaying several together, non overlapping
+    else:
+        offset = 0
+    
     assert pcdFile.endswith('pcd')
     assert yamlFile.endswith('yaml')
     assert outputFile.endswith('obj')
@@ -16,21 +21,41 @@ def main():
     cmd = '../segmentation/build/sharpSegmentation %s %s %s'%(pcdFile,yamlFile,weightFile)
     assert os.system(cmd) == 0
     
-    skel = Skeleton.fromFunnyYaml(yamlFile)
-    canon = skel.Duplicate()
-    canon.Canonicalize()
+    skel = Skeleton.fromFunnyYaml(yamlFile, relative=False)
+    # save it so that they all use the same skel
+    canonFile = 'canon.pickle'
+    if os.path.exists(canonFile):
+        canon = pickle.load(open(canonFile,'r'))
+    else:
+        canon = skel.Duplicate()
+        canon.Canonicalize()
+        #canon.sk = None #safe?
+        pickle.dump(canon, open(canonFile,'w'))
     
     points = list(pcd.read(pcdFile))
     weights = ReadWeights(weightFile)
     
-    newPoints = [[0,0,0,r,g,b] for (_,_,_,r,g,b) in points]
-    for jointName,skin in weights.iteritems():
-        # just translation for the moment
-        src = Frame((1,0,0),(0,1,0),(0,0,1), getattr(skel,jointName))
-        dst = Frame((1,0,0),(0,1,0),(0,0,1), getattr(canon,jointName))
-        print jointName,src.o,dst.o
-        for index,weight in skin:
-            plusEq(newPoints[index], mult(absolute(dst, relative(src, points[index])), weight))
+    I = ((1,0,0),(0,1,0),(0,0,1))
+    newPoints = [[offset,0,0,r,g,b] for (_,_,_,r,g,b) in points]
+    
+    if True: # the right code
+        for jointName,skin in weights.iteritems():
+            src = Frame(skel.GetRot(jointName), skel.GetPos(jointName))
+            dst = Frame(I, canon.GetPos(jointName))
+            print jointName,src.o,dst.o
+            for index,weight in skin:
+                plusEq(newPoints[index], mult(absolute(dst, relative(src, points[index])), weight))
+    else: # tesing code
+        j = 0
+        for jointName,skin in weights.iteritems():
+            src = Frame(skel.GetRot(jointName), skel.GetPos(jointName))
+            dst = Frame(I, canon.GetPos(jointName))
+            print jointName,src.o,dst.o
+            for index,weight in skin:
+                plusEq(newPoints[index], relative(src, points[index]))
+                plusEq(newPoints[index], (j,0,0))
+            j += 0.5
+        
     
     f = open(outputFile, 'w')
     for row in newPoints:

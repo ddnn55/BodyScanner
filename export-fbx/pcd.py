@@ -10,7 +10,7 @@ def read(fname):
         row = f.read(16)
         while len(row) == 16:
             x,y,z,b,g,r,a = struct.unpack('fffBBBB', row)
-            yield -x*scale,-y*scale,-z*scale, r/255.,g/255.,b/255.
+            yield xform(x,y,z,r,g,b)
             row = f.read(16)
     else: # ascii
         line = f.readline()
@@ -18,6 +18,10 @@ def read(fname):
             parts = line.split()
             if parts[0] != 'nan':
                 color = float(parts[-1])
+                x,y,z = float(parts[0]),float(parts[1]),float(parts[2])
                 b,g,r,a = struct.unpack('BBBB', struct.pack('f', color))
-                yield -float(parts[0])*scale, -float(parts[1])*scale, float(parts[2])*scale, r/255., g/255., b/255.
+                yield xform(x,y,z,r,g,b)
             line = f.readline()
+
+def xform(x,y,z,r,g,b):
+    return x*scale, -y*scale, z*scale, r/255., g/255., b/255.
