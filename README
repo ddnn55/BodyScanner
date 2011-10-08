@@ -1,5 +1,8 @@
+BodyScanner
+===========
+
 BodyScanner is an easy to use, open source Body Scanning solution running on top of OpenNI (openni.org) and the Point Cloud Library (pointclouds.org).
------------
+
 
 To build, type the following in this directory:
 
