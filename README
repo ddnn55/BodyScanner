@@ -1,17 +1,4 @@
-ROS Setup
---- -----
-- Install ROS: http://www.ros.org/wiki/electric/Installation/Ubuntu
-- Install rviz: http://www.ros.org/wiki/rviz/UserGuide
-> sudo apt-get install ros-electric-openni-kinect
-
-ROS Usage
---- -----
-- openni_camera: http://www.ros.org/wiki/openni_camera
-- http://www.ros.org/wiki/rosbag
-> rosrun pcl_ros bag_to_pcd <bagfile> <topic> <output_directory> 
-
-
-BodyScanner
+BodyScanner is an easy to use, open source Body Scanning solution running on top of OpenNI (openni.org) and the Point Cloud Library (pointclouds.org).
 -----------
 
 To build, type the following in this directory:
@@ -52,24 +39,6 @@ sudo apt-get install meshlab
 And run it:
 
 meshlab scan.obj &
-
-
-Installing libDAI
----------- ------
-
-Sebastian's correspondence code requires libDAI for solving a factor graph using Loopy Belief Propagation 
-
-Do this anywhere (not inside the project):
-
-git clone git://gitorious.org/libdai/libdai.git -b cmake_buildsystem libdai
-cd libdai
-mkdir build; cd build
-cmake ..
-make && make install
-
-sudo apt-get install g++ make doxygen graphviz libboost-dev libboost-graph-dev libboost-program-options-dev libboost-test-dev libgmp3-dev cimg-dev
-
-I haven't actually run this yet, but...
 
 
 Exporting to FBX
