@@ -1,8 +1,8 @@
-#include "ofAppGlutWindow.h"
-#include "testApp.h"
+#include <ofAppGlutWindow.h>
+#include "BodyPuppetApp.h"
 
 int main() {
 	ofAppGlutWindow window;
 	ofSetupOpenGL(&window, 640, 480, OF_WINDOW);
-	ofRunApp(new testApp());
+	ofRunApp(new BodyPuppet());
 }
