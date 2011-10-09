@@ -10,36 +10,38 @@
 namespace Body
 {
 
-void LimbSkin::addPoint(int index, float weight) {
-	SkinPoint sp;
-	sp.index = index;
-	sp.weight = weight;
-	sp.pos.x = 0;
-	sp.pos.y = 0;
-	sp.pos.z = 0;
-	points.push_back(sp);
+
+SkinBinding::SkinBinding() {}
+
+void Skin::addBone(std::string joint_key) {
+	limb_map.insert(std::make_pair(joint_key, num_bones));
+	num_bones++;
 }
 
-LimbSkin& Skin::addLimb(std::string joint_key) {
-	int index = limbs.size();
-	limb_map.insert(std::make_pair(joint_key, index));
-	
-	LimbSkin ls;
-	limbs.push_back(ls);
-	return limbs.back();
-}
-	
-void Skin::bind(pcl::PointCloud<pcl::PointXYZ> all_points, Body::Skeleton::Pose bind_pose) {
-	
+void Skin::setNumPoints(int num_points) {
+	bindings.resize(num_points);
 }
 
-void Skin::pose(Body::Skeleton::Pose pose) {
-	
+void Skin::addPointToBone(int point_index, int bone_index, float weight) {}
+
+void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::Ptr all_points, const Body::Skeleton::Pose::Ptr bind_pose) {}
+
+void Skin::renderPosed(const Body::Skeleton::Pose::Ptr pose) {}
+
+const pcl::PointCloud<pcl::PointXYZRGB>::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose) const {
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr nil;
+	return nil;
 }
 
-const std::vector<pcl::PointXYZ>& Skin::getPosedPoints() const {
-	return posed_points;
-}
+Skin::Skin() : num_bones(0) {}
+/*
+		std::vector<SkinBinding> bindings;
 
+		pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_points;
 
+		pcl::PointCloud<pcl::PointXYZ> bound_points[MAX_BINDINGS];
+
+		typedef std::map<std::string, int> NameToIndex;
+		NameToIndex limb_map;
+*/
 }

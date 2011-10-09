@@ -109,6 +109,8 @@ namespace Body
 			void setTransformationForJointKey(std::string, XnSkeletonJointTransformation transformation);
 			Body::Skeleton::Joint::Pose operator[](std::string joint_key);
 
+			JointPoses getJointPoses();
+
 		private:
 			JointPoses joint_poses;
 		};
