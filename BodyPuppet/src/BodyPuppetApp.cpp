@@ -12,6 +12,9 @@ void BodyPuppet::setup(){
 
 	// this sets the camera's distance from the object
 	cam.setDistance(100);
+
+
+	//ofScale(1, 1, -1);
 }
 
 //--------------------------------------------------------------
@@ -24,18 +27,26 @@ void BodyPuppet::update(){
 		receiver.getNextMessage( &m );
 
         std::cout << m.getAddress();
+        if(m.getAddress() == "/joint")
+        {
+            std::string jointName = m.getArgAsString(0);
+            //if(quickJoints.find(jointName) == quickJoints.end())
+            quickJoints[jointName] = ofVec3f(m.getArgAsFloat(2), m.getArgAsFloat(3), m.getArgAsFloat(4));
+        }
 
         for ( int i=0; i<m.getNumArgs(); i++ )
         {
             // get the argument type
 
             // display the argument - make sure we get the right type
-            /*if( m.getArgType( i ) == OFXOSC_TYPE_INT32 )
-                msg_string += ofToString( m.getArgAsInt32( i ) );
-            else*/ if( m.getArgType( i ) == OFXOSC_TYPE_FLOAT )
+            if( m.getArgType( i ) == OFXOSC_TYPE_INT32 )
+                std::cout << " " << ofToString( m.getArgAsInt32( i ) );
+            else if( m.getArgType( i ) == OFXOSC_TYPE_FLOAT )
                 std::cout << " " << ofToString( m.getArgAsFloat( i ) );
-             if( m.getArgType( i ) == OFXOSC_TYPE_STRING )
-                std::cout << " " << m.getArgAsString( i );
+            else if( m.getArgType( i ) == OFXOSC_TYPE_STRING )
+             {
+
+             }
             /*else
                 msg_string += "unknown";*/
         }
@@ -63,14 +74,27 @@ void BodyPuppet::draw(){
 
 		ofBackground(0);
 
-		ofSetColor(255,0,0);
-		ofFill();
-		ofBox(30);
-		ofNoFill();
-		ofSetColor(0);
-		ofBox(30);
+        ofCircle(100,100, 10);
 
-		ofPushMatrix();
+        for(std::map<std::string, ofVec3f>::iterator joint = quickJoints.begin();
+            joint != quickJoints.end();
+            joint++)
+        {
+            //std::cout << "drawing a circle..." << std::endl;
+            ofPushMatrix();
+                ofTranslate( - joint->second.x, - joint->second.y, 0.0 /*joint->second.z*/);
+                //ofSetColor(255,0,0);
+                //ofFill();
+                //ofBox(30);
+                ofCircle(0, 0, 20);
+                //ofNoFill();
+                //ofSetColor(0);
+                //ofBox(30);
+            ofPopMatrix();
+        }
+
+
+		/*ofPushMatrix();
 			ofTranslate(0,0,20);
 			ofSetColor(0,0,255);
 			ofFill();
@@ -78,7 +102,7 @@ void BodyPuppet::draw(){
 			ofNoFill();
 			ofSetColor(0);
 			ofBox(5);
-		ofPopMatrix();
+		ofPopMatrix();*/
 	cam.end();
 
 	ofSetColor(255);

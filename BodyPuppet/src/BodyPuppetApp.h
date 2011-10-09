@@ -7,6 +7,8 @@
 #define PORT 7110
 #define NUM_MSG_STRINGS 20
 
+#include <map>
+
 class BodyPuppet : public ofBaseApp {
 	public:
 
@@ -36,4 +38,6 @@ class BodyPuppet : public ofBaseApp {
 
 		int				mouseX, mouseY;
 		string			mouseButtonState;
+
+		std::map<std::string, ofVec3f> quickJoints;
 };
