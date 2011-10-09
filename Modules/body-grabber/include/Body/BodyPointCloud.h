@@ -16,16 +16,15 @@
 
 #include "Body/Skeleton/Skeleton.h"
 
+namespace Body {
 
-namespace Body
-{
+class BodyPointCloud : public pcl::PointCloud<pcl::PointXYZRGB> {
 
-class BodyPointCloud : pcl::PointCloud<pcl::PointXYZ>{
+public:
+	typedef boost::shared_ptr< pcl::PointCloud<pcl::PointXYZRGB> > Ptr;
+	typedef boost::shared_ptr< const pcl::PointCloud<pcl::PointXYZRGB> > ConstPtr;
 
-	public:
-	
-
-	private:
+private:
 
 };
 

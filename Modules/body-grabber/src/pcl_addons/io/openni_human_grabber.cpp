@@ -367,7 +367,9 @@ void OpenNIHumanGrabber::imageDepthImageUserCallback(const boost::shared_ptr<ope
 	//		  body_cloud->push_back((*scene_cloud)[p]);
 	 // }
 
-	  user_skeleton_and_point_cloud_rgb_signal_->operator()(convertToXYZRGBPointCloud(image, masked_depth_image), body_pose);
+	  user_skeleton_and_point_cloud_rgb_signal_->operator()(
+			  (Body::BodyPointCloud::ConstPtr) convertToXYZRGBPointCloud(image, masked_depth_image),
+			  body_pose);
   }
 
 

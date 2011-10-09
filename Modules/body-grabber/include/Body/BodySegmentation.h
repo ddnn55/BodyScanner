@@ -24,40 +24,39 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
-namespace Body
-{	
+namespace Body {
 
-	struct intPair {
+struct intPair {
 	int x;
 	int y;
-	};
+};
 
-	class BodySegmentation
-	{
-	public:
+class BodySegmentation {
+public:
 
 	/**
 	 * Constructor to build the segmentator from a Yaml skeleton file.
 	 */
-	BodySegmentation(std::string const skeletonfilename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_);
-
+	BodySegmentation(std::string const skeletonfilename, pcl::PointCloud<
+			pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_);
 
 	/**
 	 * Constructor to build the segmentator from a skeleton pose.
 	 */
-	BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_);
+	BodySegmentation(Skeleton::Pose *pose_,
+			pcl::PointCloud<pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_);
 
 	/**
 	 * Visualization.
 	 */
 	void visualize(int index);
-	
+
 	/**
 	 * Computes the correspondances and fills the Skin attribute.
 	 */
 	void run();
 
-	private:
+private:
 
 	/**
 	 * Pointer to the skinning object that will be modified.
@@ -77,9 +76,8 @@ namespace Body
 	// Initializations methods
 	void initJoints();
 	void initBones();
-	
-	// Skin attributes
 
+	// Skin attributes
 
 
 	// Mapping attributes and methods for keys
@@ -88,8 +86,7 @@ namespace Body
 	void initIndexMap();
 	int getIndexFromKey(std::string const key);
 	std::string getKeyFromBoneIndex(int bone);
-	
-	
+
 	// Segmentation attributes
 	std::vector<pcl::PointXYZ> joints;
 	std::vector<pcl::PointXYZ> bones;
@@ -98,8 +95,7 @@ namespace Body
 	// Skeleton
 	Skeleton::Pose::JointPoses joint_poses;
 
-
-	};
+};
 
 }
 

@@ -9,6 +9,7 @@
 
 #include <pcl_addons/common/synchronizer3.h>
 
+#include <Body/BodyPointCloud.h>
 #include <Body/Skeleton/Skeleton.h>
 
 
@@ -33,7 +34,7 @@ namespace BodyScanner
 		public:
 			//typedef void (sig_cb_openni_user) (const boost::shared_ptr<openni_wrapper::Image>&);
 			typedef void (sig_cb_openni_user_skeleton_and_point_cloud_rgb)
-				(const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&, const boost::shared_ptr<OpenNIHumanGrabber::BodyPose> &) ;
+				(const Body::BodyPointCloud::ConstPtr, const boost::shared_ptr<OpenNIHumanGrabber::BodyPose>) ;
 
 
 		public:
