@@ -64,9 +64,9 @@ void localize(float *pos, float *orientation, const pcl::PointXYZRGB *input, pcl
 void globalize(Body::Skeleton::Joint::Pose *bone, float weight, pcl::PointXYZ *local, pcl::PointXYZRGB *output) {
 	float *position = (float*)&bone->position.position;
 	float *orientation = bone->orientation.orientation.elements;
-	output->x += weight*(position[0] + dot(&orientation[0], (float*)local));
-	output->y += weight*(position[1] + dot(&orientation[3], (float*)local));
-	output->z += weight*(position[2] + dot(&orientation[6], (float*)local));
+	output->x += weight*( position[0]/1000. + dot(&orientation[0], (float*)local));
+	output->y += weight*(-position[1]/1000. + dot(&orientation[3], (float*)local));
+	output->z += weight*( position[2]/1000. + dot(&orientation[6], (float*)local));
 }
 
 void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Body::Skeleton::Pose::Ptr bind_pose) {
@@ -84,7 +84,7 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 		int index = it->second;
 		Body::Skeleton::Joint::Pose config = (*bind_pose)[it->first];
 		XnVector3D v = config.position.position;
-		positions[index][0] = v.X; positions[index][1] = v.Y; positions[index][2] = v.Z;
+		positions[index][0] = v.X/1000.; positions[index][1] = -v.Y/1000.; positions[index][2] = v.Z/1000.;
 		// inverse
 		transpose((float*)config.orientation.orientation.elements, orientations[index]);
 	}
