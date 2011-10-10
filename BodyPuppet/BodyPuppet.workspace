@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<CodeBlocks_workspace_file>
+  <Workspace title="BodyPuppet">
+    <Project filename="BodyPuppet.cbp" active="1">
+      <Depends filename="../Libraries/of_preRelease_v007_linux64/libs/openFrameworksCompiled/project/linux64/libopenFrameworks.cbp"/>
+    </Project>
+    <Project filename="../Libraries/of_preRelease_v007_linux64/libs/openFrameworksCompiled/project/linux64/libopenFrameworks.cbp"/>
+  </Workspace>
+</CodeBlocks_workspace_file>
