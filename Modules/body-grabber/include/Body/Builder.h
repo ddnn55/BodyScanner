@@ -55,6 +55,9 @@ private:
 	Skeleton::Pose::Ptr pending_sample_skeleton_pose_;
 
 
+	Skeleton::Pose::Ptr canonical_skeleton_pose_;
+
+
 };
 
 }

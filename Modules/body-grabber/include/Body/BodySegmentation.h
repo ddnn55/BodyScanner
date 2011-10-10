@@ -64,12 +64,12 @@ public:
 	 * Constructor to build the segmentator from a skeleton pose.
 	 */
 	BodySegmentation(Skeleton::Pose *pose_,
-			pcl::PointCloud<pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_);
+			pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr bodycloud_, Skin *pskin_);
 
 	/**
 	 * Visualization.
 	 */
-	void visualize(int index);
+	//void visualize(int index);
 
 	/**
 	 * Computes the correspondances and fills the Skin attribute.
@@ -91,7 +91,7 @@ private:
 	/**
 	 * Pointer to the body point cloud.
 	 */
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr bodycloud;
+	pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr bodycloud;
 
 	// Initializations methods
 	void initJoints();

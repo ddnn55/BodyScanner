@@ -118,7 +118,7 @@ BodySegmentation::BodySegmentation(std::string const skeletonfilename,
 }
 
 BodySegmentation::BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<
-		pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_) {
+		pcl::PointXYZRGB>::ConstPtr bodycloud_, Skin *pskin_) {
 
 	pskin = pskin_;
 	sk_pose = pose_;
@@ -463,7 +463,7 @@ void BodySegmentation::run() {
 /**
  * Visualization.
  */
-void BodySegmentation::visualize(int index) {
+/*void BodySegmentation::visualize(int index) {
 
 	// Remove points from the body point cloud
 	for (size_t i = 0; i < bodycloud->points.size(); i++) {
@@ -522,7 +522,7 @@ void BodySegmentation::visualize(int index) {
 		boost::this_thread::sleep(boost::posix_time::microseconds(100000));
 	}
 
-}// End Visualize
+}// End Visualize */
 
 
 } // End namespace body

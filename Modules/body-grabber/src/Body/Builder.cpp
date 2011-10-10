@@ -10,6 +10,8 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
 #include <Body/Builder.h>
+#include <Body/BodySegmentation.h>
+#include <Body/Skin.h>
 
 namespace Body {
 
@@ -86,16 +88,32 @@ void Builder::run()
 			have_new_sample_ = false;
 			pending_sample_access_.unlock();
 
+			if(canonical_skeleton_pose_ == NULL)
+			{
+				canonical_skeleton_pose_ = skeleton_pose;
+				std::cout << "saved canonical skeleton pose"  << std::endl;
+			}
 
 			static int cloud_index = 0;
 			std::stringstream cloud_id;
 			cloud_id << "body_cloud_" << cloud_index++;
 
 
-			boost::this_thread::sleep(fake_work_time); // pretend to work for a while
+			// make bone/point weights
+			Skin skin;
+			BodySegmentation segmentation(&(*skeleton_pose), cloud, &skin);
+			segmentation.run();
+
+			//
+			//pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+			skin.bind(cloud, skeleton_pose);
+			pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud = skin.pose(canonical_skeleton_pose_);
+
+			std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
 
 			viewer_lock_->lock();
-				viewer_->addPointCloud(cloud, cloud_id.str());
+				//viewer_->addPointCloud(cloud, cloud_id.str());
+				viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
 			viewer_lock_->unlock();
 			std::cout << "added cloud to viewer" << std::endl;
 		}

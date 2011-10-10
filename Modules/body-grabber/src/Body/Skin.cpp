@@ -50,7 +50,7 @@ void transpose(float *src, float *dst) {
 	dst[6] = src[2]; dst[7] = src[5]; dst[8] = src[8];
 }
 
-void localize(float *pos, float *orientation, pcl::PointXYZRGB *input, pcl::PointXYZ *output) {
+void localize(float *pos, float *orientation, const pcl::PointXYZRGB *input, pcl::PointXYZ *output) {
 	output->x = input->x - pos[0];
 	output->y = input->y - pos[1];
 	output->z = input->z - pos[2];
@@ -69,8 +69,9 @@ void globalize(Body::Skeleton::Joint::Pose *bone, float weight, pcl::PointXYZ *l
 	output->z += weight*(position[2] + dot(&orientation[6], (float*)local));
 }
 
-void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::Ptr all_points, const Body::Skeleton::Pose::Ptr bind_pose) {
+void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Body::Skeleton::Pose::Ptr bind_pose) {
 	int num_points = all_points->size();
+	input_points = all_points;
 	// allocate space for localized points
 	for(int i = 0; i < MAX_BINDINGS; i++) {
 		bound_points[i] = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
@@ -100,12 +101,13 @@ void Skin::renderPosed(const Body::Skeleton::Pose::Ptr pose) {
 	// do some vertex shader setup here
 }
 
-ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose, ColorCloud::Ptr output) const {
+ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose/*, ColorCloud::Ptr& output*/) const {
 	int num_points = input_points->size();
+	ColorCloud::Ptr output(new ColorCloud());
 	
 	// allocate data (unless already allocated)
-	if(output == NULL) {
-		output = ColorCloud::Ptr(new ColorCloud());
+	//if(output == NULL) {
+		//output = ColorCloud::Ptr(new ColorCloud());
 		output->resize(num_points);
 		// set the colors just once
 		for(int i = 0; i < num_points; i++) {
@@ -113,8 +115,10 @@ ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose, ColorCloud::Ptr
 			output->at(i).g = input_points->at(i).g;
 			output->at(i).b = input_points->at(i).b;
 		}
-	}
+	//}
 	
+	//output->resize(num_points);
+
 	// put bones in array
 	Body::Skeleton::Joint::Pose bones[num_bones];
 	for(NameToIndex::const_iterator it = limb_map.begin(); it != limb_map.end(); ++it) {
