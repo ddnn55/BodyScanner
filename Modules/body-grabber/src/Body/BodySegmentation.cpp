@@ -22,26 +22,6 @@
 #define NB_JOINTS 15
 #define NB_BONES 14
 
-enum joints {
-	LH, LE, LS, LHI, LK, LF, N, H, T, RH, RE, RS, RHI, RK, RF
-};
-enum bones {
-	LH2E,
-	LE2S,
-	N2H,
-	RS2E,
-	RE2H,
-	LH2K,
-	RH2K,
-	LK2F,
-	TORSO,
-	TORSO1,
-	TORSO2,
-	TORSO3,
-	TORSO4,
-	RK2F
-};
-
 double dot(pcl::PointXYZ vector1, pcl::PointXYZ vector2) {
 	double sum = 0;
 

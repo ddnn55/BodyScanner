@@ -31,6 +31,26 @@ struct intPair {
 	int y;
 };
 
+enum joints {
+	LH, LE, LS, LHI, LK, LF, N, H, T, RH, RE, RS, RHI, RK, RF
+};
+enum bones {
+	LH2E,
+	LE2S,
+	N2H,
+	RS2E,
+	RE2H,
+	LH2K,
+	RH2K,
+	LK2F,
+	TORSO,
+	TORSO1,
+	TORSO2,
+	TORSO3,
+	TORSO4,
+	RK2F
+};
+
 class BodySegmentation {
 public:
 
