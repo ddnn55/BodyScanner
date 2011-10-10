@@ -110,6 +110,16 @@ namespace Body
 			Body::Skeleton::Joint::Pose operator[](std::string joint_key);
 
 			JointPoses getJointPoses();
+			
+			/**
+			 * Get the length of the bone in this pose.
+			 * IDs are as defined by BodySegmentation.h
+			 */
+			float getBoneLength(const std::string key);
+			float getBoneLength(const std::string key1, const std::string key2);
+			
+			typedef std::vector<Body::Skeleton::Pose::Ptr> List;
+			static Body::Skeleton::Pose::Ptr GetCanonical(List& poses);
 
 		private:
 			JointPoses joint_poses;
