@@ -168,9 +168,13 @@ void BodySegmentation::initBones() {
 		bones[m].y = joints[i2].y - joints[i1].y;
 		bones[m].z = joints[i2].z - joints[i1].z;
 
-		// Add some code related to skin
+		// Code relative to skin
+		pskin->addBone(getKeyFromBoneIndex(m));
 
 	}
+
+	// Skin Bindings initilization
+	pskin->setNumPoints(bodycloud->points.size());
 
 }
 
@@ -373,7 +377,7 @@ void BodySegmentation::run() {
 	double length;
 	double proj;
 	double d1, d2;
-	double temps;
+	double weight;
 	//input->points.resize(cloud->points.size());
 
 
@@ -415,8 +419,6 @@ void BodySegmentation::run() {
 		}
 
 		// Find 2 nearest bones
-
-
 		arg1 = argmin(distances);
 		arg2 = argmin2(distances, arg1);
 
@@ -428,16 +430,21 @@ void BodySegmentation::run() {
 		float th = 0.1; // Zero threshold
 		float smoothProp = 20; // Pourcentage of the limb affected by smooth skining.
 
-		temps = smoothFunction(sqrt(d2 * d2 - d1 * d1), l1, smoothProp, th);
+		weight = smoothFunction(sqrt(d2 * d2 - d1 * d1), l1, smoothProp, th);
 
 		//std::cout << c << d1 << "(" << arg1 << ")" << "/" << d2  <<  "(" << arg2 << ")" << ": " << temps << std::endl;
 
 
 		// Skin Code for nearest bone
 
+		pskin->addPointToBone(i, arg1, 1-weight);
+
 		// Add skin weight to second nearest bone if positive
-		if (temps > 0) {
-			// Skin Code for second nearest bone if near enough
+		if (weight > 0) {
+			
+		pskin->addPointToBone(i, arg2, weight);
+
+
 		}
 
 		// Vizualisation
@@ -445,8 +452,8 @@ void BodySegmentation::run() {
 		limbs_clouds[arg1]->points[i].y = c.y;
 		limbs_clouds[arg1]->points[i].z = c.z;
 
-		limbs_clouds[arg1]->points[i].g = 2 * 255 * temps;
-		limbs_clouds[arg1]->points[i].b = 0 * temps;
+		limbs_clouds[arg1]->points[i].g = 2 * 255 * weight;
+		limbs_clouds[arg1]->points[i].b = 0 * weight;
 		limbs_clouds[arg1]->points[i].r = 255;
 
 	}
