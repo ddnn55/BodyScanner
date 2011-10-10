@@ -22,7 +22,7 @@ namespace Body
 
 const int MAX_BINDINGS = 2;
 
-
+typedef pcl::PointCloud<pcl::PointXYZRGB> ColorCloud;
 
 struct SkinBinding {
 	int index[MAX_BINDINGS];
@@ -67,7 +67,7 @@ public:
 	 * Get the points, skinned with the current pose.
 	 * Runs on the CPU side.
 	 */
-	const pcl::PointCloud<pcl::PointXYZRGB>::Ptr pose(const Body::Skeleton::Pose::Ptr pose) const;
+	ColorCloud::Ptr pose(const Body::Skeleton::Pose::Ptr pose, ColorCloud::Ptr output) const;
 
 	Skin();
 
@@ -78,13 +78,13 @@ private:
 	 */
 	std::vector<SkinBinding> bindings;
 	
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_points;
+	ColorCloud::Ptr input_points;
 	
 	/*
 	 * Input points expressed in local coordinates of the bone.
-	 * This is empty until
+	 * This is empty until bind() is called.
 	 */
-	pcl::PointCloud<pcl::PointXYZ> bound_points[MAX_BINDINGS];
+	pcl::PointCloud<pcl::PointXYZ>::Ptr bound_points[MAX_BINDINGS];
 	
 	/**
 	 * Used during bind and pose to match joints with the correct indices.
