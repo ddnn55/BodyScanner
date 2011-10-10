@@ -71,21 +71,14 @@ void Builder::pushSample(Body::BodyPointCloud::ConstPtr cloud, Body::Skeleton::P
 void Builder::run()
 {
 	boost::posix_time::milliseconds sleep_time(30);
-	boost::posix_time::seconds fake_work_time(4);
+	boost::posix_time::seconds fake_work_time(1);
 
 
 	while(!end_)
 	{
 		boost::this_thread::sleep(sleep_time);
 
-		/*boost::unique_lock<boost::mutex> new_sample_lock(new_sample_mutex_);
-		new_sample_.wait(new_sample_lock);
-		while(!new_sample_flag_)
-			new_sample_.wait(new_sample_lock);*/
-
-		std::cout << "before pending_sample_access_.lock()" << std::endl;
 		pending_sample_access_.lock();
-		std::cout << "after pending_sample_access_.lock()" << std::endl;
 		if(have_new_sample_)
 		{
 			BodyPointCloud::ConstPtr cloud = pending_sample_cloud_;
@@ -94,12 +87,6 @@ void Builder::run()
 			pending_sample_access_.unlock();
 
 
-
-		//if(!ready_for_new_sample_)
-		//{
-			//BodyPointCloud::ConstPtr cloud = pending_sample_cloud_;
-			//Skeleton::Pose::Ptr skeleton_pose = pending_sample_skeleton_pose_;
-
 			static int cloud_index = 0;
 			std::stringstream cloud_id;
 			cloud_id << "body_cloud_" << cloud_index++;
@@ -107,7 +94,6 @@ void Builder::run()
 
 			boost::this_thread::sleep(fake_work_time); // pretend to work for a while
 
-			std::cout << "before viewer_lock_->lock()" << std::endl;
 			viewer_lock_->lock();
 				viewer_->addPointCloud(cloud, cloud_id.str());
 			viewer_lock_->unlock();
@@ -117,7 +103,7 @@ void Builder::run()
 		{
 			pending_sample_access_.unlock();
 		}
-		//}
+
 
 	}
 }
