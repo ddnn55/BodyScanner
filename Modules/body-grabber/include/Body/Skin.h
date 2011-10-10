@@ -67,7 +67,7 @@ public:
 	 * Get the points, skinned with the current pose.
 	 * Runs on the CPU side.
 	 */
-	ColorCloud::Ptr pose(const Body::Skeleton::Pose::Ptr pose/*, ColorCloud::Ptr output*/) const;
+	ColorCloud::Ptr pose(const Body::Skeleton::Pose::Ptr pose) const;
 
 	Skin();
 

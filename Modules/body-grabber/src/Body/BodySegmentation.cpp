@@ -146,9 +146,9 @@ void BodySegmentation::initJoints() {
 	for (Skeleton::Pose::JointPoses::const_iterator j = joint_poses.begin(); j
 			!= joint_poses.end(); j++) {
 		i = getIndexFromKey((*j).first);
+		joints[i].x = (*j).second.position.position.X;
 		joints[i].y = -(*j).second.position.position.Y;
 		joints[i].z = (*j).second.position.position.Z;
-		joints[i].x = (*j).second.position.position.X;
 	}
 
 }
