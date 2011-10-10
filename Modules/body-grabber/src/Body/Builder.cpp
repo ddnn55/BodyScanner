@@ -110,6 +110,10 @@ void Builder::run()
 			pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud = skin.pose(canonical_skeleton_pose_);
 
 			std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
+			for(int p = 0; p < 20; p++)
+			{
+				std::cout << "random point - " << (*canonical_pose_cloud)[random() % canonical_pose_cloud->size()] << std::endl;
+			}
 
 			viewer_lock_->lock();
 				//viewer_->addPointCloud(cloud, cloud_id.str());
