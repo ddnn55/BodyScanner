@@ -8,6 +8,7 @@
 #include <boost/thread/locks.hpp>
 
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/filters/filter.h>
 
 #include <Body/Builder.h>
 #include <Body/BodySegmentation.h>
@@ -83,7 +84,11 @@ void Builder::run()
 		pending_sample_access_.lock();
 		if(have_new_sample_)
 		{
-			BodyPointCloud::ConstPtr cloud = pending_sample_cloud_;
+			BodyPointCloud::Ptr cloud(new BodyPointCloud());
+			std::vector<int> reindexed; // can ignore this
+			// TODO: make this more (memory) efficient by passing pending_sample_cloud_ as output param too
+			pcl::removeNaNFromPointCloud(*pending_sample_cloud_, *cloud, reindexed);
+			
 			Skeleton::Pose::Ptr skeleton_pose = pending_sample_skeleton_pose_;
 			have_new_sample_ = false;
 			pending_sample_access_.unlock();

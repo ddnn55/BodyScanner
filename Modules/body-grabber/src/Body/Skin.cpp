@@ -101,23 +101,17 @@ void Skin::renderPosed(const Body::Skeleton::Pose::Ptr pose) {
 	// do some vertex shader setup here
 }
 
-ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose/*, ColorCloud::Ptr& output*/) const {
+ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose) const {
 	int num_points = input_points->size();
 	ColorCloud::Ptr output(new ColorCloud());
 	
-	// allocate data (unless already allocated)
-	//if(output == NULL) {
-		//output = ColorCloud::Ptr(new ColorCloud());
-		output->resize(num_points);
-		// set the colors just once
-		for(int i = 0; i < num_points; i++) {
-			output->at(i).r = input_points->at(i).r;
-			output->at(i).g = input_points->at(i).g;
-			output->at(i).b = input_points->at(i).b;
-		}
-	//}
-	
-	//output->resize(num_points);
+	output->resize(num_points);
+	// set the colors just once
+	for(int i = 0; i < num_points; i++) {
+		output->at(i).r = input_points->at(i).r;
+		output->at(i).g = input_points->at(i).g;
+		output->at(i).b = input_points->at(i).b;
+	}
 
 	// put bones in array
 	Body::Skeleton::Joint::Pose bones[num_bones];
