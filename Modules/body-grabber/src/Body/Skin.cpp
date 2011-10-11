@@ -7,6 +7,8 @@
 
 #include "Body/Skin.h"
 
+#include <set> // for debugging
+
 namespace Body
 {
 
@@ -96,15 +98,18 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 
 	std::cout << "num_points: " << num_points << std::endl;
 	// put all points in local coordinate frame
+	std::set<int> seen_bones;
 	for(int i = 0; i < num_points; i++) {
 		for(int j = 0; j < MAX_BINDINGS; j++) {
 			int bone_index = bindings[i].index[j];
 			if(bone_index >= 0)
 			{
-				localize(positions[Skeleton::GetBoneJoints((Bone)bone_index).parent],
-						 orientations[Skeleton::GetBoneJoints((Bone)bone_index).parent],
+				Joint parent = Skeleton::GetBoneJoints((Bone)bone_index).parent;
+				localize(positions[parent],
+						 orientations[parent],
 						 &all_points->at(i), &bound_points[j]->at(i));
 
+				seen_bones.insert(bone_index);
 				// add point to bone-only point cloud
 				if(newest_bone_clouds.find(bone_index) == newest_bone_clouds.end())
 				{
@@ -123,7 +128,11 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 		}
 	}
 
-
+	std::cout << "seen bones\n";
+	for(std::set<int>::iterator it = seen_bones.begin(); it != seen_bones.end(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << "\n";
 
 }
 
