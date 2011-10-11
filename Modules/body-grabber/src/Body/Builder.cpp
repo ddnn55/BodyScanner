@@ -9,6 +9,7 @@
 
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/filters/filter.h>
+#include <pcl/common/transforms.h>
 
 #include <Body/Builder.h>
 #include <Body/BodySegmentation.h>
@@ -88,6 +89,8 @@ void Builder::run()
 		//	boost::this_thread::sleep(sleep_time);
 		//sleep(1); // FIXME above sleep is often not returning at all what the hell
 
+		sleep(5);
+
 
 		//std::cout << "before pending_samepl_access_.lock()" << std::endl;
 		pending_sample_access_.lock();
@@ -136,14 +139,48 @@ void Builder::run()
 				std::cout << "random point - " << (*canonical_pose_cloud)[random() % cloud->size()] << std::endl;
 			}*/
 
+			static unsigned int uid = 0;
+
 			//std::cout << "trying to lock viewer to add " << cloud_id.str() << std::endl;
 			viewer_lock_->lock();
 				//viewer_->addPointCloud(cloud, cloud_id.str()+"orig");
 				viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
 				if(skin.newest_bone_clouds.find(N2H) != skin.newest_bone_clouds.end())
 				{
-					viewer_->addPointCloud(skin.newest_bone_clouds[N2H]);
-					std::cout << "showed N2H cloud!" << std::endl;
+
+					/*for(std::map<int, BodyPointCloud::Ptr>::iterator bone_cloud = skin.newest_bone_clouds.begin();
+						bone_cloud != skin.newest_bone_clouds.end();
+						bone_cloud++)
+					{
+						static unsigned int bone_cloud_uid = 0;
+						bone_cloud_uid++;
+						std::stringstream bone_cloud_id;
+						bone_cloud_id << "bone_cloud_" << bone_cloud_uid;
+						Eigen::Matrix4f m;
+						m << 1.f, 0.f, 0.f, 0.5 * (float) bone_cloud->first,
+							 0.f, 1.f, 0.f, 0.f,
+							 0.f, 0.f, 1.f, 0.f,
+							 0.f, 0.f, 0.f, 1.f;
+						pcl::transformPointCloud(*bone_cloud->second, *bone_cloud->second, m);
+						viewer_->addPointCloud(bone_cloud->second, bone_cloud_id.str());
+					}*/
+
+					/*for (int m = FirstBone; m <= LastBone; m++) {
+						std::stringstream s;
+						s << "bone_" << m << "_" << uid; uid++;
+
+						//if (m == index) {
+							viewer_->addLine(segmentation.joints[Skeleton::GetBoneJoints((Bone)m).parent],
+									         segmentation.joints[Skeleton::GetBoneJoints((Bone)m).child],
+									         255, 0, 0,	 s.str());
+						//} else {
+						//	view->addLine(joints[(int) (GetBoneJoints(m).y)], joints[(int) (GetBoneJoints(m).x)],
+						//			s.str(), 0);
+						//}
+					}*/
+
+
+					//std::cout << "showed N2H cloud!" << std::endl;
 				}
 				else
 				{
