@@ -17,7 +17,7 @@
 namespace Body {
 
 Builder::Builder(pcl::visualization::PCLVisualizer* viewer, boost::mutex *viewer_lock)
-	: builder_thread_(&Builder::run, this)
+	: builder_thread_(NULL)
 	, end_(false)
 	, have_new_sample_(false)
 	//, new_sample_flag_(false)
@@ -36,6 +36,9 @@ Builder::~Builder() {
 
 void Builder::pushSample(Body::BodyPointCloud::ConstPtr cloud, Body::Skeleton::Pose::Ptr skeleton_pose)
 {
+
+	if(builder_thread_ == NULL)
+		builder_thread_ = new boost::thread(&Builder::run, this);
 
 
 	if(!pending_sample_access_.try_lock())
@@ -79,11 +82,20 @@ void Builder::run()
 
 	while(!end_)
 	{
-		boost::this_thread::sleep(sleep_time);
+		//std::cout << "beginning of run() while()" << std::endl;
 
+		//if(!tracking_)
+		//	boost::this_thread::sleep(sleep_time);
+		//sleep(1); // FIXME above sleep is often not returning at all what the hell
+
+
+		//std::cout << "before pending_samepl_access_.lock()" << std::endl;
 		pending_sample_access_.lock();
 		if(have_new_sample_)
 		{
+
+
+
 			BodyPointCloud::Ptr cloud(new BodyPointCloud());
 			std::vector<int> reindexed; // can ignore this
 			// TODO: make this more (memory) efficient by passing pending_sample_cloud_ as output param too
@@ -124,10 +136,20 @@ void Builder::run()
 				std::cout << "random point - " << (*canonical_pose_cloud)[random() % cloud->size()] << std::endl;
 			}*/
 
-			std::cout << "trying to lock viewer to add " << cloud_id.str() << std::endl;
+			//std::cout << "trying to lock viewer to add " << cloud_id.str() << std::endl;
 			viewer_lock_->lock();
 				//viewer_->addPointCloud(cloud, cloud_id.str()+"orig");
 				viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
+				if(skin.newest_bone_clouds.find(N2H) != skin.newest_bone_clouds.end())
+				{
+					viewer_->addPointCloud(skin.newest_bone_clouds[N2H]);
+					std::cout << "showed N2H cloud!" << std::endl;
+				}
+				else
+				{
+					std::cout << "no N2H cloud! size of bone_clouds: " << skin.newest_bone_clouds.size() << std::endl;
+
+				}
 			viewer_lock_->unlock();
 			std::cout << "added cloud " << cloud_id.str() << " to viewer" << std::endl;
 		}
@@ -137,7 +159,11 @@ void Builder::run()
 		}
 
 
+		//std::cout << "end builder::run() loop" << std::endl;
+
 	}
+
+	//std::cout << "end builder::run() huh??????????????????" << std::endl;
 }
 
 void Builder::updateOutputVisualizer()

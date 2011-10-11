@@ -18,6 +18,7 @@
 #include "Body/Skeleton/SkeletonYaml.h"
 #include "Body/Skin.h"
 #include "time.h"
+#include <set> // debug
 
 #define NB_JOINTS 15
 #define NB_BONES 14
@@ -141,9 +142,9 @@ void BodySegmentation::initJoints() {
 	for (Skeleton::Pose::JointPoses::const_iterator j = joint_poses.begin(); j
 			!= joint_poses.end(); ++j) {
 		i = (*j).first;
-		joints[i].x = (*j).second.position.position.X;
-		joints[i].y = -(*j).second.position.position.Y;
-		joints[i].z = (*j).second.position.position.Z;
+		joints[i].x = (*j).second.position.position.X/1000;
+		joints[i].y = -(*j).second.position.position.Y/1000;
+		joints[i].z = (*j).second.position.position.Z/1000;
 	}
 
 }
@@ -307,7 +308,7 @@ void BodySegmentation::run() {
 	double weight;
 	//input->points.resize(cloud->points.size());
 
-
+	std::set<int> seen_bones;
 	for (size_t i = 0; i < bodycloud->points.size(); i++) {
 		std::vector<double> distances;
 		double temp = 0;
@@ -318,15 +319,19 @@ void BodySegmentation::run() {
 
 		for (int boneIndex = FirstBone; boneIndex <= LastBone; boneIndex++) {
 
+			if(i == 0)
+				std::cout << "(BodySegmentation) boneIndex - " << boneIndex << std::endl;
+
 			Bone j = (Bone) boneIndex;
+			Joint parent = Skeleton::GetBoneJoints(j).parent;
+			Joint child = Skeleton::GetBoneJoints(j).child;
+			ac.x = c.x - joints[parent].x;
+			ac.y = c.y - joints[parent].y;
+			ac.z = c.z - joints[parent].z;
 
-			ac.x = c.x - joints[Skeleton::GetBoneJoints(j).parent].x;
-			ac.y = c.y - joints[Skeleton::GetBoneJoints(j).parent].y;
-			ac.z = c.z - joints[Skeleton::GetBoneJoints(j).parent].z;
-
-			bc.x = c.x - joints[Skeleton::GetBoneJoints(j).child].x;
-			bc.y = c.y - joints[Skeleton::GetBoneJoints(j).child].y;
-			bc.z = c.z - joints[Skeleton::GetBoneJoints(j).child].z;
+			bc.x = c.x - joints[child].x;
+			bc.y = c.y - joints[child].y;
+			bc.z = c.z - joints[child].z;
 
 			length = sqrt(dot(bones[j], bones[j]));
 			proj = dot(bones[j], ac) / length;
@@ -350,6 +355,8 @@ void BodySegmentation::run() {
 		// Find 2 nearest bones
 		arg1 = argmin(distances);
 		arg2 = argmin2(distances, arg1);
+		seen_bones.insert(arg1);
+		seen_bones.insert(arg2);
 
 		d1 = distances[arg1];
 		d2 = distances[arg2];
@@ -387,6 +394,13 @@ void BodySegmentation::run() {
 			limbs_clouds[arg1]->points[i].r = 255;
 		}
 	}
+
+	std::cout << "seen bones (in segmentation)\n";
+	for(std::set<int>::iterator it = seen_bones.begin(); it != seen_bones.end(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << "\n";
+
 
 }
 
