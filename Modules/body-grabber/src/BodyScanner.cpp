@@ -12,9 +12,9 @@ using namespace std;
 
 
 
-class SimpleOpenNIViewer {
+class BodyScannerApp {
 public:
-	SimpleOpenNIViewer(int argc, char** argv)
+	BodyScannerApp(int argc, char** argv)
 		//: grab_viewer("Body Scanner > Input")
 		: viewer_("Body Scanner")
 		, showed_first_cloud_(false)
@@ -76,7 +76,12 @@ public:
 
 	static void keyboardCallback(const pcl::visualization::KeyboardEvent &keyboardEvent, void *data)
 	{
-		std::cout << "keyboard callback!" << std::endl;
+		BodyScannerApp* scanner = (BodyScannerApp*) data;
+		if(keyboardEvent.getKeyCode() == ' ' && keyboardEvent.keyUp())
+		{
+			std::stringstream obj_filename; obj_filename << scanner->basename << ".obj";
+			scanner->bodyBuilder.saveObj(obj_filename.str());
+		}
 	}
 
 	void run() {
@@ -86,7 +91,7 @@ public:
 				//const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&,
 				const Body::BodyPointCloud::ConstPtr,
 				const boost::shared_ptr<BodyScanner::OpenNIHumanGrabber::BodyPose>)> g =
-				boost::bind(&SimpleOpenNIViewer::body_cloud_cb_, this, _1, _2);
+				boost::bind(&BodyScannerApp::body_cloud_cb_, this, _1, _2);
 
 		interface->registerCallback(g);
 
@@ -119,7 +124,7 @@ public:
 };
 
 int main(int argc, char** argv) {
-	SimpleOpenNIViewer v(argc, argv);
+	BodyScannerApp v(argc, argv);
 	v.run();
 	return 0;
 }

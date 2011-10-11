@@ -33,7 +33,7 @@ public:
 
 	void pushSample(Body::BodyPointCloud::ConstPtr cloud, Body::Skeleton::Pose::Ptr /*FIXME use ConstPtr for more thread safety*/ skeleton_pose);
 
-	void saveObj(std::string outfile, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointColors);
+	void saveObj(std::string outfile/*, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointColors*/);
 
 private:
 	void run();
@@ -63,6 +63,9 @@ private:
 
 	BodyPointCloud::Ptr body_point_cloud_accumulation;
 	boost::mutex body_point_cloud_accumulation_mutex_;
+
+	boost::mutex mesh_mutex_;
+	pcl::PolygonMesh::Ptr mesh_;
 
 
 };
