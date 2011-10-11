@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
+#include <ofxAssimpModelLoader.h>
 
 // listen on port 12345
 #define PORT 7110
@@ -11,6 +12,9 @@
 
 class BodyPuppet : public ofBaseApp {
 	public:
+
+		BodyPuppet(int argc, char** argv);
+		ofMesh loadObj(string filename);
 
 		void setup();
 		void update();
@@ -28,7 +32,9 @@ class BodyPuppet : public ofBaseApp {
 
 		ofEasyCam cam; // add mouse controls for camera movement
 
-
+		std::string meshFilename;
+		//ofxAssimpModelLoader body;
+		ofMesh bodyMesh;
 
 		ofxOscReceiver	receiver;
 

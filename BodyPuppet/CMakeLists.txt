@@ -25,6 +25,8 @@ include_directories(#${PCL_INCLUDE_DIRS}
   ../Libraries/of_preRelease_v007_linux64/libs/kiss/include
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/libs/oscpack/include/osc
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/libs/oscpack/include/ip
+  ../Libraries/of_preRelease_v007_linux64/addons/ofxAssimpModelLoader/src
+  ../Libraries/of_preRelease_v007_linux64/addons/ofxAssimpModelLoader/libs/assimp/include
   /usr/include/gstreamer-0.10
   /usr/include/glib-2.0
   /usr/lib/x86_64-linux-gnu/glib-2.0/include
@@ -38,6 +40,7 @@ link_directories(#${PCL_LIBRARY_DIRS}
   ../Libraries/of_preRelease_v007_linux64/libs/kiss/lib/linux64
   ../Libraries/of_preRelease_v007_linux64/libs/poco/lib/linux64
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/libs/oscpack/lib/linux64
+  ../Libraries/of_preRelease_v007_linux64/addons/ofxAssimpModelLoader/libs/assimp/lib/linux64
 )
 
 add_definitions(#${PCL_DEFINITIONS}
@@ -51,10 +54,11 @@ add_executable (BodyPuppet
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/src/ofxOscReceiver.cpp
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/src/ofxOscSender.cpp
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/src/ofxOscBundle.cpp
+  ../Libraries/of_preRelease_v007_linux64/addons/ofxAssimpModelLoader/src/ofxAssimpModelLoader.cpp
 #  src/Body/Skeleton/Pose.cpp
 #  src/Body/Skin.cpp
 )
 
 target_link_libraries (BodyPuppet #${PCL_LIBRARIES}
-  openFrameworks openal mpg123 tess2 cairo GL kiss GLEW PocoNet PocoUtil PocoXML PocoFoundation sndfile freeimage glut GLU oscpack
+  openFrameworks openal mpg123 tess2 cairo GL kiss GLEW PocoNet PocoUtil PocoXML PocoFoundation sndfile freeimage glut GLU oscpack assimp
 )

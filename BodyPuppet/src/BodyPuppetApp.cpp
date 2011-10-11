@@ -1,5 +1,58 @@
 #include "BodyPuppetApp.h"
 
+BodyPuppet::BodyPuppet(int argc, char** argv)
+{
+	if(argc < 2)
+	{
+		std::cout << "Usage: BodyPuppet <body_mesh_file>" << std::endl;
+		std::exit(0);
+	}
+	meshFilename = argv[1];
+}
+
+ofMesh BodyPuppet::loadObj(string filename)
+{
+
+	std::vector<ofVec3f> vertices;
+	std::vector<ofFloatColor> colors;
+
+
+	ofMesh mesh;
+
+	FILE *f = fopen(filename.c_str(), "r");
+	char buffer[255];
+
+	unsigned int l = 0;
+	while(fgets(buffer, 255, f))
+	{
+		//cout << buffer << endl;
+		if(buffer[0] == 'v')
+		{
+			float x, y, z, r, g, b;
+			sscanf(buffer, "v %f %f %f %f %f %f\n", &x, &y, &z, &r, &g, &b);
+			//printf("vertex %f - %f  - %f - %f - %f - %f\n", x, y, z, r, g, b);
+			mesh.addVertex(ofVec3f(100. * x, 100. * y, 100. * z));
+			mesh.addColor(ofFloatColor(r, g, b));
+		}
+		else if(buffer[0] == 'f')
+		{
+			unsigned int i1, i2, i3;
+			sscanf(buffer, "f %u %u %u\n", &i1, &i2, &i3);
+			//printf("face %u - %u - %u\n", i1, i2, i3);
+			mesh.addTriangle(i1-1, i2-1, i3-1);
+		}
+
+//		if(l % 1000 == 0)
+//			std::cout << "read line " << l << std::endl;
+
+		l++;
+	}
+
+	fclose(f);
+
+	return mesh;
+}
+
 //--------------------------------------------------------------
 void BodyPuppet::setup(){
     receiver.setup( PORT );
@@ -12,6 +65,12 @@ void BodyPuppet::setup(){
 
 	// this sets the camera's distance from the object
 	cam.setDistance(100);
+
+	ofDisableDataPath();
+	//body.loadModel(meshFilename, false);
+	//body.enableColors();
+	//cout << "body.getMesh(0).hasColors(): " << body.getMesh(0).hasColors() << endl;
+	bodyMesh = loadObj(meshFilename);
 
 
 	//ofScale(1, 1, -1);
@@ -72,6 +131,8 @@ void BodyPuppet::draw(){
 		ofRotateX(ofRadToDeg(.5));
 		ofRotateY(ofRadToDeg(-.5));
 
+
+
 		ofBackground(0);
 
         ofCircle(100,100, 10);
@@ -103,6 +164,14 @@ void BodyPuppet::draw(){
 			ofSetColor(0);
 			ofBox(5);
 		ofPopMatrix();*/
+
+
+        //body.enableColors();
+        ofSetColor(200, 128, 128, 255);
+
+        //body.draw(OF_MESH_FILL);
+        bodyMesh.draw();
+
 	cam.end();
 
 	ofSetColor(255);
