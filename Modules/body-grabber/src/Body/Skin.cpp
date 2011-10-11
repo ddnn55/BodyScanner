@@ -65,6 +65,7 @@ void localize(float *pos, float *orientation, const pcl::PointXYZRGB *input, pcl
 void globalize(Body::Skeleton::JointPose *joint, float weight, pcl::PointXYZ *local, pcl::PointXYZRGB *output) {
 	float *position = (float*)&joint->position.position;
 	float *orientation = joint->orientation.orientation.elements;
+	//if(weight > 0.5) weight = 1; else weight = 0; // threshold weights, debug possibility
 	output->x += weight*( position[0]/1000. + dot(&orientation[0], (float*)local));
 	output->y += weight*(-position[1]/1000. + dot(&orientation[3], (float*)local));
 	output->z += weight*( position[2]/1000. + dot(&orientation[6], (float*)local));
@@ -78,10 +79,9 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 		bound_points[i] = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
 		bound_points[i]->resize(num_points);
 	}
-	// put bone data in arrays
+	// put joint data in arrays
 	float positions[SKELETON_NUMBER_OF_JOINTS][3];
 	float orientations[SKELETON_NUMBER_OF_JOINTS][9];
-	//for(NameToIndex::const_iterator it = limb_map.begin(); it != limb_map.end(); ++it) {
 	for(int j = FirstJoint; j <= LastJoint; j++) {
 
 		Body::Skeleton::JointPose config = (*bind_pose)[(Joint)j];
@@ -96,8 +96,9 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 			int bone_index = bindings[i].index[j];
 			if(bone_index >= 0)
 			{
-				localize(positions[Skeleton::GetBoneJoints((Bone)bone_index).parent],
-						 orientations[Skeleton::GetBoneJoints((Bone)bone_index).parent],
+				Joint joint = Skeleton::GetBoneJoints((Bone)bone_index).parent;
+				localize(positions[joint],
+						 orientations[joint],
 						 &all_points->at(i), &bound_points[j]->at(i));
 
 				// add point to bone-only point cloud
@@ -125,22 +126,6 @@ ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose) const {
 		output->at(i).b = input_points->at(i).b;
 	}
 
-	//
-	Body::Skeleton::JointPose joints[SKELETON_NUMBER_OF_JOINTS];
-	for(int i = 0; i < SKELETON_NUMBER_OF_JOINTS; i++) {
-		joints[i].position.position.X = joints[i].position.position.Y = joints[i].position.position.Z = 0;
-	}
-	//std::cout << "limb_map:";
-	//for(NameToIndex::const_iterator it = limb_map.begin(); it != limb_map.end(); ++it) {
-	for(int j = FirstJoint; j <= LastJoint; j++) {
-		//std::cout << j << " -> " << j
-		//		<< " (" << (*pose)[(Joint)j].position.position.X
-		//		<< " " << (*pose)[(Joint)j].position.position.Y
-		//		<< " " << (*pose)[(Joint)j].position.position.Z << ")\n";
-
-		joints[j] = (*pose)[(Joint)j];
-	}
-	
 	// put all points in global coordinate frame
 	for(int i = 0; i < num_points; i++) {
 		// clear values
@@ -151,7 +136,8 @@ ColorCloud::Ptr Skin::pose(const Body::Skeleton::Pose::Ptr pose) const {
 			if(index >= 0)
 			{
 				float weight = bindings[i].weight[j];
-				globalize(&joints[Skeleton::GetBoneJoints((Bone)index).parent], weight, &bound_points[j]->at(i), &p);
+				Joint joint = Skeleton::GetBoneJoints((Bone)index).parent;
+				globalize(&(*pose)[joint], weight, &bound_points[j]->at(i), &p);
 			}
 		}
 	}
