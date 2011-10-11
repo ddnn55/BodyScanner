@@ -4,7 +4,8 @@
 #include "ofxOsc.h"
 #include <ofxAssimpModelLoader.h>
 
-#include <Body/Skeleton/SkeletonYaml.h>
+
+#include <Body/Skeleton/Skeleton.h>
 
 // listen on port 12345
 #define PORT 7110
@@ -38,7 +39,8 @@ class BodyPuppet : public ofBaseApp {
 		std::string skeletonFilename;
 		//ofxAssimpModelLoader body;
 		ofMesh bodyMesh;
-		SkeletonYaml skeleton;
+		//SkeletonYaml skeleton;
+		Body::Skeleton::Pose rawMeshSkeletonPose;
 		std::map<std::string, ofVec3f> quickJoints;
 
 		ofShader skinRiggingShader;

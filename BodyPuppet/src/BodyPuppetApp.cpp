@@ -78,7 +78,7 @@ void BodyPuppet::setup(){
 	//body.enableColors();
 	//cout << "body.getMesh(0).hasColors(): " << body.getMesh(0).hasColors() << endl;
 	bodyMesh = loadObj(meshFilename);
-	skeleton = SkeletonYaml(skeletonFilename.c_str());
+	rawMeshSkeletonPose = Body::Skeleton::Pose(SkeletonYaml(skeletonFilename.c_str()));
 
 	std::cout << "loaded skeleton" << std::endl;
 
@@ -178,6 +178,8 @@ void BodyPuppet::draw(){
 
         //body.enableColors();
         ofSetColor(200, 128, 128, 255);
+
+        rawMeshSkeletonPose.draw();
 
         skinRiggingShader.begin();
 			//body.draw(OF_MESH_FILL);

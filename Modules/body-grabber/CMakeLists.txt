@@ -11,6 +11,7 @@ add_definitions(${PCL_DEFINITIONS})
 
 add_executable (BodyScanner
   src/BodyScanner.cpp
+  src/Body/Skeleton/Skeleton.cpp
   src/Body/Skeleton/Pose.cpp
   src/Body/Skin.cpp
   src/Body/BodySegmentation.cpp

@@ -71,8 +71,8 @@ void localize(float *pos, float *orientation, const pcl::PointXYZRGB *input, pcl
 }
 
 void globalize(Body::Skeleton::JointPose *joint, float weight, pcl::PointXYZ *local, pcl::PointXYZRGB *output) {
-	float *position = (float*)&joint->position.position;
-	float *orientation = joint->orientation.orientation.elements;
+	float *position = (float*)&joint->position;
+	float *orientation = joint->orientation;
 
 
 	// original
@@ -102,10 +102,12 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 	for(int j = FirstJoint; j <= LastJoint; j++) {
 
 		Body::Skeleton::JointPose config = (*bind_pose)[(Joint)j];
-		XnVector3D v = config.position.position;
-		positions[j][0] = v.X/1000.; positions[j][1] = -v.Y/1000.; positions[j][2] = v.Z/1000.;
+		//XnVector3D v = config.position;
+		positions[j][0] = config.position.x/1000.;
+		positions[j][1] = -config.position.y/1000.;
+		positions[j][2] = config.position.z/1000.;
 		// inverse
-		transpose((float*)config.orientation.orientation.elements, orientations[j]);
+		transpose((float*)config.orientation, orientations[j]);
 		//memcpy(orientations[j], config.orientation.orientation.elements, sizeof(config.orientation.orientation.elements));
 	}
 

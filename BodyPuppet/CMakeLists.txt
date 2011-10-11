@@ -59,6 +59,7 @@ add_executable (BodyPuppet
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/src/ofxOscSender.cpp
   ../Libraries/of_preRelease_v007_linux64/addons/ofxOsc/src/ofxOscBundle.cpp
   ../Libraries/of_preRelease_v007_linux64/addons/ofxAssimpModelLoader/src/ofxAssimpModelLoader.cpp
+  ../Modules/body-grabber/src/Body/Skeleton/Skeleton.cpp
   ../Modules/body-grabber/src/Body/Skeleton/Pose.cpp
   ../Modules/body-grabber/src/Body/Skin.cpp
 )

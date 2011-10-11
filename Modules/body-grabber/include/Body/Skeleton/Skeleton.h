@@ -14,9 +14,11 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <XnCppWrapper.h>
+
+//#include <XnCppWrapper.h>
 
 //#include <Body/Skeleton/Joint.h>
+#include <Body/Skeleton/SkeletonYaml.h>
 
 
 namespace Body
@@ -50,125 +52,58 @@ namespace Body
 	#define FirstBone LH2E
 	#define LastBone RK2F
 
-	struct JointPair {
+	typedef struct JointPair {
 		Joint parent;
 		Joint child;
-	};
+	} JointPair;
+
+	typedef struct Translation
+	{
+		float x;
+		float y;
+		float z;
+	} Translation;
+	typedef float Matrix3x3[9];
 
 	class Skeleton
 	{
-public:
-		typedef XnSkeletonJointTransformation JointPose;
-
 	public:
-		typedef std::vector< std::pair< Joint, XnSkeletonJoint > > JointList;
-
-		static JointList GetJointList()
+		class JointPose
 		{
-			JointList joint_list;
+		public:
+			Translation position;
+			float position_confidence;
+			Matrix3x3 orientation;
+			float orientation_confidence;
+		};
+		//typedef XnSkeletonJointTransformation JointPose; // TODO make our own JointPose class
+		//typedef std::vector< std::pair< Joint, XnSkeletonJoint > > JointList;
 
-			for(int j = 0; j < GetJointKeys().size(); j++)
-			{
-				joint_list.push_back(std::pair< Joint, XnSkeletonJoint >(GetJointKeys()[j], GetJointXnKeys()[j]));
-			}
 
-			return joint_list;
-		}
 
-		static std::string GetJointStringKeyByKey(Joint k)
-		{
-			std::map<Joint, std::string> joint_list;
-
-			joint_list[H] = "head";
-			joint_list[N] = "neck";
-			joint_list[T] = "torso";
-
-			joint_list[LS] = "left_shoulder";
-			joint_list[LE] = "left_elbow";
-			joint_list[LH] = "left_hand";
-
-			joint_list[RS] = "right_shoulder";
-			joint_list[RE] = "right_elbow";
-			joint_list[RH] = "right_hand";
-
-			joint_list[LHI] = "left_hip";
-			joint_list[LK] = "left_knee";
-			joint_list[LF] = "left_foot";
-
-			joint_list[RHI] = "right_hip";
-			joint_list[RK] = "right_knee";
-			joint_list[RF] = "right_foot";
-
-			return joint_list[k];
-		}
-
-		static std::vector<Joint> GetJointKeys()
-		{
-			std::vector<Joint> joint_list;
-
-			joint_list.push_back(H);
-			joint_list.push_back(N);
-			joint_list.push_back(T);
-
-			joint_list.push_back(LS);
-			joint_list.push_back(LE);
-			joint_list.push_back(LH);
-
-			joint_list.push_back(RS);
-			joint_list.push_back(RE);
-			joint_list.push_back(RH);
-
-			joint_list.push_back(LHI);
-			joint_list.push_back(LK);
-			joint_list.push_back(LF);
-
-			joint_list.push_back(RHI);
-			joint_list.push_back(RK);
-			joint_list.push_back(RF);
-
-			return joint_list;
-		}
-
-		static std::vector<XnSkeletonJoint> GetJointXnKeys()
-		{
-			std::vector<XnSkeletonJoint> joint_list;
-
-			joint_list.push_back(XN_SKEL_HEAD);
-			joint_list.push_back(XN_SKEL_NECK);
-			joint_list.push_back(XN_SKEL_TORSO);
-
-			joint_list.push_back(XN_SKEL_LEFT_SHOULDER);
-			joint_list.push_back(XN_SKEL_LEFT_ELBOW);
-			joint_list.push_back(XN_SKEL_LEFT_HAND);
-
-			joint_list.push_back(XN_SKEL_RIGHT_SHOULDER);
-			joint_list.push_back(XN_SKEL_RIGHT_ELBOW);
-			joint_list.push_back(XN_SKEL_RIGHT_HAND);
-
-			joint_list.push_back(XN_SKEL_LEFT_HIP);
-			joint_list.push_back(XN_SKEL_LEFT_KNEE);
-			joint_list.push_back(XN_SKEL_LEFT_FOOT);
-
-			joint_list.push_back(XN_SKEL_RIGHT_HIP);
-			joint_list.push_back(XN_SKEL_RIGHT_KNEE);
-			joint_list.push_back(XN_SKEL_RIGHT_FOOT);
-
-			return joint_list;
-		}
-
+		// TODO clean these up
+		//static JointList GetJointList();
+		static Joint JointNameToJointKey(std::string joint_name);
+		static std::string GetJointStringKeyByKey(Joint k);
+		static std::vector<Joint> GetJointKeys();
+		//static std::vector<XnSkeletonJoint> GetJointXnKeys();
 		static JointPair GetBoneJoints(const Bone bone);
 
-		class Pose {
+		class Pose { // TODO move to own file
 		public:
 			typedef boost::shared_ptr<Pose> Ptr;
 			typedef std::map<Joint, Body::Skeleton::JointPose> JointPoses;
 
 			Pose();
+			// TODO merge SkeletonYaml and Skeleton::Pose
+			Pose(SkeletonYaml skeletonYaml);
 			virtual ~Pose();
+
+			void draw();
 
 			const std::string toYaml() const;
 
-			void setTransformationForJointKey(Joint joint, XnSkeletonJointTransformation transformation);
+			void setTransformationForJointKey(Joint joint, JointPose transformation);
 			Body::Skeleton::JointPose& operator[](Joint joint_key);
 
 			JointPoses getJointPoses() const;
