@@ -28,12 +28,13 @@ public:
 		Skeleton::Pose::Ptr skeleton_pose;
 	};*/
 
-	Builder(pcl::visualization::PCLVisualizer* viewer = NULL, boost::mutex *viewer_lock = NULL);
+	Builder(pcl::visualization::PCLVisualizer* viewer = NULL, boost::mutex *viewer_lock = NULL, std::string build_id = "build");
 	virtual ~Builder();
 
 	void pushSample(Body::BodyPointCloud::ConstPtr cloud, Body::Skeleton::Pose::Ptr /*FIXME use ConstPtr for more thread safety*/ skeleton_pose);
 
-	void saveObj(std::string outfile/*, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointColors*/);
+	void saveObj(std::string outfile);
+	void saveSkeleton(std::string outfile);
 
 private:
 	void run();
@@ -58,14 +59,17 @@ private:
 	BodyPointCloud::ConstPtr pending_sample_cloud_;
 	Skeleton::Pose::Ptr pending_sample_skeleton_pose_;
 
+	boost::mutex canonical_skeleton_pose_mutex_;
 	Skeleton::Pose::Ptr canonical_skeleton_pose_;
 
 
-	BodyPointCloud::Ptr body_point_cloud_accumulation;
 	boost::mutex body_point_cloud_accumulation_mutex_;
+	BodyPointCloud::Ptr body_point_cloud_accumulation;
 
 	boost::mutex mesh_mutex_;
 	pcl::PolygonMesh::Ptr mesh_;
+
+	std::string build_id_;
 
 
 };

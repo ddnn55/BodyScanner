@@ -19,7 +19,7 @@ public:
 		: viewer_("Body Scanner")
 		, showed_first_cloud_(false)
 		//, output_viewer("Body Scanner > Output")
-		, bodyBuilder(&viewer_, &viewer_mutex_) {
+		, bodyBuilder(&viewer_, &viewer_mutex_, argv[1]) {
 		record = argc > 1;
 		if (record)
 			basename = argv[1];
@@ -79,8 +79,11 @@ public:
 		BodyScannerApp* scanner = (BodyScannerApp*) data;
 		if(keyboardEvent.getKeyCode() == ' ' && keyboardEvent.keyUp())
 		{
-			std::stringstream obj_filename; obj_filename << scanner->basename << ".obj";
-			scanner->bodyBuilder.saveObj(obj_filename.str());
+			std::stringstream obj_filename;      obj_filename      << scanner->basename << ".obj";
+			std::stringstream skeleton_filename; skeleton_filename << scanner->basename << "_skeleton.yaml";
+			//scanner->bodyBuilder.saveSkeleton(skeleton_filename.str());
+			scanner->bodyBuilder.saveObj(          obj_filename.str());
+
 		}
 	}
 

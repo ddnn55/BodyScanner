@@ -75,6 +75,33 @@ public:
 			return joint_list;
 		}
 
+		static std::string GetJointStringKeyByKey(Joint k)
+		{
+			std::map<Joint, std::string> joint_list;
+
+			joint_list[H] = "head";
+			joint_list[N] = "neck";
+			joint_list[T] = "torso";
+
+			joint_list[LS] = "left_shoulder";
+			joint_list[LE] = "left_elbow";
+			joint_list[LH] = "left_hand";
+
+			joint_list[RS] = "right_shoulder";
+			joint_list[RE] = "right_elbow";
+			joint_list[RH] = "right_hand";
+
+			joint_list[LHI] = "left_hip";
+			joint_list[LK] = "left_knee";
+			joint_list[LF] = "left_foot";
+
+			joint_list[RHI] = "right_hip";
+			joint_list[RK] = "right_knee";
+			joint_list[RF] = "right_foot";
+
+			return joint_list[k];
+		}
+
 		static std::vector<Joint> GetJointKeys()
 		{
 			std::vector<Joint> joint_list;
@@ -139,12 +166,12 @@ public:
 			Pose();
 			virtual ~Pose();
 
-			//const std::string toYaml() const;
+			const std::string toYaml() const;
 
 			void setTransformationForJointKey(Joint joint, XnSkeletonJointTransformation transformation);
 			Body::Skeleton::JointPose& operator[](Joint joint_key);
 
-			JointPoses getJointPoses();
+			JointPoses getJointPoses() const;
 			
 			/**
 			 * Get the length of the bone in this pose.

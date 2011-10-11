@@ -33,38 +33,41 @@ Skeleton::JointPose& Skeleton::Pose::operator[](Joint joint_key) {
 	return joint_poses[joint_key];
 }
 
-Skeleton::Pose::JointPoses Skeleton::Pose::getJointPoses() {
+Skeleton::Pose::JointPoses Skeleton::Pose::getJointPoses() const {
 
 	return joint_poses;
 }
 
-/*const std::string Skeleton::Pose::toYaml() const
+const std::string Skeleton::Pose::toYaml() const
  {
  std::stringstream yaml;
 
  // TODO abstract this..? protocol buffer?
 
- for(JointPoses::const_iterator j = joint_poses.begin(); j != joint_poses.end(); j++)
+ //for(JointPoses::const_iterator j = joint_poses.begin(); j != joint_poses.end(); j++)
+ for(int jointIndex = FirstJoint; jointIndex <= LastJoint; jointIndex++)
  {
- yaml << (*j).first << ":" << std::endl;
- yaml << "  position:" << std::endl;
- yaml << "    - confidence -- " << (*j).second.position.fConfidence << std::endl;
- yaml << "    translation:" << std::endl;
- yaml << "      - x -- " << (*j).second.position.position.X << std::endl;
- yaml << "      - y -- " << (*j).second.position.position.Y << std::endl;
- yaml << "      - z -- " << (*j).second.position.position.Z << std::endl;
- yaml << "  orientation:" << std::endl;
- yaml << "    - confidence -- " << (*j).second.orientation.fConfidence << std::endl;
- yaml << "    matrix3x3:" << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[0] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[1] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[2] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[3] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[4] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[5] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[6] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[7] << std::endl;
- yaml << "      - " << (*j).second.orientation.orientation.elements[8] << std::endl;
+	 Joint j = (Joint) jointIndex;
+
+	 yaml << GetJointStringKeyByKey(j) << ":" << std::endl;
+	 yaml << "  position:" << std::endl;
+	 yaml << "    - confidence -- " << getJointPoses()[j].position.fConfidence << std::endl;
+	 yaml << "    translation:" << std::endl;
+	 yaml << "      - x -- " << getJointPoses()[j].position.position.X << std::endl;
+	 yaml << "      - y -- " << getJointPoses()[j].position.position.Y << std::endl;
+	 yaml << "      - z -- " << getJointPoses()[j].position.position.Z << std::endl;
+	 yaml << "  orientation:" << std::endl;
+	 yaml << "    - confidence -- " << getJointPoses()[j].orientation.fConfidence << std::endl;
+	 yaml << "    matrix3x3:" << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[0] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[1] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[2] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[3] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[4] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[5] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[6] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[7] << std::endl;
+	 yaml << "      - " << getJointPoses()[j].orientation.orientation.elements[8] << std::endl;
  }
 
 
@@ -147,11 +150,11 @@ Skeleton::Pose::JointPoses Skeleton::Pose::getJointPoses() {
  yaml << "    - x -- " << right_foot.position.X << std::endl;
  yaml << "    - y -- " << right_foot.position.Y << std::endl;
  yaml << "    - z -- " << right_foot.position.Z << std::endl;
- yaml << std::endl;* /
+ yaml << std::endl;*/
 
  return yaml.str();
 
- }*/
+ }
 
 JointPair Skeleton::GetBoneJoints(const Bone bone) {
 

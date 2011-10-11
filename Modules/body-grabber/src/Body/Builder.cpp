@@ -21,9 +21,10 @@
 namespace Body {
 
 Builder::Builder(pcl::visualization::PCLVisualizer* viewer,
-		boost::mutex *viewer_lock) :
+		boost::mutex *viewer_lock, std::string build_id) :
 	builder_thread_(NULL), end_(false), have_new_sample_(false),
-			body_point_cloud_accumulation(new BodyPointCloud)
+			body_point_cloud_accumulation(new BodyPointCloud),
+			build_id_(build_id)
 //, new_sample_flag_(false)
 //, ready_for_new_sample_(true)
 {
@@ -89,7 +90,7 @@ void Builder::run() {
 		//	boost::this_thread::sleep(sleep_time);
 		//sleep(1); // FIXME above sleep is often not returning at all what the hell
 
-		//sleep(5);
+		sleep(1);
 
 
 		//std::cout << "before pending_samepl_access_.lock()" << std::endl;
@@ -106,10 +107,13 @@ void Builder::run() {
 			have_new_sample_ = false;
 			pending_sample_access_.unlock();
 
-			if (canonical_skeleton_pose_ == NULL) {
-				canonical_skeleton_pose_ = skeleton_pose;
-				std::cout << "saved canonical skeleton pose" << std::endl;
-			}
+			canonical_skeleton_pose_mutex_.lock();
+				if (canonical_skeleton_pose_ == NULL) {
+					canonical_skeleton_pose_ = skeleton_pose;
+					saveSkeleton(build_id_);
+					std::cout << "saved canonical skeleton pose" << std::endl;
+				}
+			canonical_skeleton_pose_mutex_.unlock();
 
 			// statistical removal code starts in here
 			BodyPointCloud::Ptr tmp_cloud(new BodyPointCloud());
@@ -135,8 +139,10 @@ void Builder::run() {
 
 			//pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 			skin.bind(cloud, skeleton_pose);
-			pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud =
-					skin.pose(canonical_skeleton_pose_);
+			canonical_skeleton_pose_mutex_.lock();
+				pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud =
+						skin.pose(canonical_skeleton_pose_);
+			canonical_skeleton_pose_mutex_.unlock();
 			//pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud = skin.pose(skeleton_pose); // testing: should return identical cloud as input
 
 			std::cout << "ran pose" << std::endl;
@@ -249,6 +255,21 @@ void Builder::saveObj(std::string outfile/*, pcl::PolygonMesh& mesh, pcl::PointC
 	mesh_mutex_.unlock();
 
 	fclose(f);
+}
+
+void Builder::saveSkeleton(std::string outfile)
+{
+	std::cout << "start save skeleton" << std::endl;
+
+	//canonical_skeleton_pose_mutex_.lock();
+		std::string yaml = canonical_skeleton_pose_->toYaml();
+	//canonical_skeleton_pose_mutex_.lock();
+
+	FILE *f = fopen(outfile.c_str(), "w");
+	fprintf(f, "%s\n", yaml.c_str());
+	fclose(f);
+
+	std::cout << "end save skeleton" << std::endl;
 }
 
 /*void Builder::updateOutputVisualizer()
