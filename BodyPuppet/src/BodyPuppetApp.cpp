@@ -1,4 +1,5 @@
 #include "BodyPuppetApp.h"
+#include <Body/Skeleton/SkeletonYaml.h>
 
 BodyPuppet::BodyPuppet(int argc, char** argv)
 {
@@ -55,6 +56,8 @@ ofMesh BodyPuppet::loadObj(string filename)
 
 //--------------------------------------------------------------
 void BodyPuppet::setup(){
+	ofDisableDataPath();
+
     receiver.setup( PORT );
 
 	ofSetVerticalSync(true);
@@ -66,7 +69,9 @@ void BodyPuppet::setup(){
 	// this sets the camera's distance from the object
 	cam.setDistance(100);
 
-	ofDisableDataPath();
+	skinRiggingShader.load("../src/Shaders/SkinRiggingShader.vert", "../src/Shaders/SkinRiggingShader.frag"); // TODO handle this better with a build copy
+
+
 	//body.loadModel(meshFilename, false);
 	//body.enableColors();
 	//cout << "body.getMesh(0).hasColors(): " << body.getMesh(0).hasColors() << endl;
@@ -169,8 +174,10 @@ void BodyPuppet::draw(){
         //body.enableColors();
         ofSetColor(200, 128, 128, 255);
 
-        //body.draw(OF_MESH_FILL);
-        bodyMesh.draw();
+        skinRiggingShader.begin();
+			//body.draw(OF_MESH_FILL);
+			bodyMesh.draw();
+		skinRiggingShader.end();
 
 	cam.end();
 

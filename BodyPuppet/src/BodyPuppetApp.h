@@ -35,6 +35,9 @@ class BodyPuppet : public ofBaseApp {
 		std::string meshFilename;
 		//ofxAssimpModelLoader body;
 		ofMesh bodyMesh;
+		std::map<std::string, ofVec3f> quickJoints;
+
+		ofShader skinRiggingShader;
 
 		ofxOscReceiver	receiver;
 
@@ -45,5 +48,5 @@ class BodyPuppet : public ofBaseApp {
 		int				mouseX, mouseY;
 		string			mouseButtonState;
 
-		std::map<std::string, ofVec3f> quickJoints;
+
 };

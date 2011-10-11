@@ -42,7 +42,6 @@ const std::string Skeleton::Pose::toYaml() const
  {
  std::stringstream yaml;
 
- // TODO abstract this..? protocol buffer?
 
  //for(JointPoses::const_iterator j = joint_poses.begin(); j != joint_poses.end(); j++)
  for(int jointIndex = FirstJoint; jointIndex <= LastJoint; jointIndex++)
