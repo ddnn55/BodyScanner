@@ -81,9 +81,14 @@ void Builder::run()
 	{
 		boost::this_thread::sleep(sleep_time);
 
+
+		std::cout << "before pending_samepl_access_.lock()" << std::endl;
 		pending_sample_access_.lock();
 		if(have_new_sample_)
 		{
+
+
+
 			BodyPointCloud::Ptr cloud(new BodyPointCloud());
 			std::vector<int> reindexed; // can ignore this
 			// TODO: make this more (memory) efficient by passing pending_sample_cloud_ as output param too
@@ -128,6 +133,16 @@ void Builder::run()
 			viewer_lock_->lock();
 				//viewer_->addPointCloud(cloud, cloud_id.str()+"orig");
 				viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
+				if(skin.newest_bone_clouds.find(N2H) != skin.newest_bone_clouds.end())
+				{
+					viewer_->addPointCloud(skin.newest_bone_clouds[N2H]);
+					std::cout << "showed N2H cloud!" << std::endl;
+				}
+				else
+				{
+					std::cout << "no N2H cloud! size of bone_clouds: " << skin.newest_bone_clouds.size() << std::endl;
+
+				}
 			viewer_lock_->unlock();
 			std::cout << "added cloud " << cloud_id.str() << " to viewer" << std::endl;
 		}
@@ -137,7 +152,11 @@ void Builder::run()
 		}
 
 
+		std::cout << "end builder::run() loop" << std::endl;
+
 	}
+
+	std::cout << "end builder::run() huh???" << std::endl;
 }
 
 void Builder::updateOutputVisualizer()

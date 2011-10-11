@@ -16,6 +16,7 @@
 #include <pcl/point_cloud.h>
 
 #include "Body/Skeleton/Skeleton.h"
+#include <Body/BodyPointCloud.h>
 
 namespace Body
 {
@@ -71,6 +72,8 @@ public:
 
 	Skin();
 
+	std::map<int, BodyPointCloud::Ptr> newest_bone_clouds;
+
 private:
 	/**
 	 * Association between skin points and bones, including weights.
@@ -93,7 +96,7 @@ private:
 	//BoneToJoint limb_map;
 	//int num_bones;
 
-	std::map<int, ColorCloud::Ptr> bone_clouds;
+
 };
 
 }
