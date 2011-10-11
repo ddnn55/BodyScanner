@@ -14,6 +14,7 @@ add_executable (BodyScanner
   src/Body/Skeleton/Pose.cpp
   src/Body/Skin.cpp
   src/Body/BodySegmentation.cpp
+  src/Body/Surface.cpp
   src/Body/Builder.cpp
   src/pcl_addons/io/openni_human_grabber.cpp
   src/pcl_addons/io/openni_camera/openni_driver_nite.cpp
