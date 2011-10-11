@@ -15,6 +15,7 @@
 #include <Body/BodySegmentation.h>
 #include <Body/Skin.h>
 #include <Body/Surface.h>
+#include <pcl/filters/statistical_outlier_removal.h>
 
 namespace Body {
 
@@ -118,7 +119,13 @@ void Builder::run()
 				canonical_skeleton_pose_ = skeleton_pose;
 				std::cout << "saved canonical skeleton pose"  << std::endl;
 			}
-
+                        // statistical removal code goes in here
+                        pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
+                        sor.setInputCloud (cloud);
+			sor.setMeanK (50);
+			sor.setStddevMulThresh (2.0);
+                        sor.filter (*cloud);
+                        // statistical removal code ends here
 			static int cloud_index = 0;
 			std::stringstream cloud_id;
 			cloud_id << "body_cloud_" << cloud_index++;
