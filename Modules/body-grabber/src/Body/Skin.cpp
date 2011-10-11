@@ -7,6 +7,8 @@
 
 #include "Body/Skin.h"
 
+#include <set> // for debugging
+
 namespace Body
 {
 
@@ -90,7 +92,13 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 		// inverse
 		transpose((float*)config.orientation.orientation.elements, orientations[j]);
 	}
+
+	newest_bone_clouds.clear();
+
+
+	std::cout << "num_points: " << num_points << std::endl;
 	// put all points in local coordinate frame
+	std::set<int> seen_bones;
 	for(int i = 0; i < num_points; i++) {
 		for(int j = 0; j < MAX_BINDINGS; j++) {
 			int bone_index = bindings[i].index[j];
@@ -101,13 +109,31 @@ void Skin::bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Bo
 						 orientations[joint],
 						 &all_points->at(i), &bound_points[j]->at(i));
 
+				seen_bones.insert(bone_index);
 				// add point to bone-only point cloud
-				if(bone_clouds.find(bone_index) == bone_clouds.end())
-					bone_clouds[bone_index] = BodyPointCloud::Ptr(new BodyPointCloud());
-				bone_clouds[bone_index]->push_back(bound_points[j]->at(i));
+				if(newest_bone_clouds.find(bone_index) == newest_bone_clouds.end())
+				{
+					std::cout << "ADDING BONE " << bone_index << " TO BONE_CLOUDS -----------------------------" << std::endl;
+					newest_bone_clouds[bone_index] = BodyPointCloud::Ptr(new BodyPointCloud());
+				}
+				pcl::PointXYZRGB point;
+				point.x = bound_points[j]->at(i).x;
+				point.y = bound_points[j]->at(i).y;
+				point.z = bound_points[j]->at(i).z;
+				point.r = input_points->at(i).r;
+				point.g = input_points->at(i).g;
+				point.b = input_points->at(i).b;
+				newest_bone_clouds[bone_index]->push_back(point);
 			}
 		}
 	}
+
+	std::cout << "seen bones\n";
+	for(std::set<int>::iterator it = seen_bones.begin(); it != seen_bones.end(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << "\n";
+
 }
 
 void Skin::renderPosed(const Body::Skeleton::Pose::Ptr pose) {
