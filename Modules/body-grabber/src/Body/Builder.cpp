@@ -110,13 +110,18 @@ void Builder::run() {
 				canonical_skeleton_pose_ = skeleton_pose;
 				std::cout << "saved canonical skeleton pose" << std::endl;
 			}
-                        // statistical removal code goes in here
-                        pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
-                        sor.setInputCloud (cloud);
-			sor.setMeanK (50);
-			sor.setStddevMulThresh (2.0);
-                        sor.filter (*cloud);
-                        // statistical removal code ends here
+
+			// statistical removal code starts in here
+			BodyPointCloud::Ptr tmp_cloud(new BodyPointCloud());
+			pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> sor;
+			sor.setInputCloud(cloud);
+			sor.setMeanK(50);
+			sor.setStddevMulThresh(2.0);
+			sor.filter(*tmp_cloud);
+			cloud = tmp_cloud;
+			// statistical removal code ends here
+
+
 			static int cloud_index = 0;
 			std::stringstream cloud_id;
 			cloud_id << "body_cloud_" << cloud_index++;
@@ -137,7 +142,7 @@ void Builder::run() {
 			std::cout << "ran pose" << std::endl;
 
 			body_point_cloud_accumulation_mutex_.lock();
-				*body_point_cloud_accumulation += *canonical_pose_cloud;
+			*body_point_cloud_accumulation += *canonical_pose_cloud;
 			body_point_cloud_accumulation_mutex_.unlock();
 
 			/*std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
@@ -147,7 +152,7 @@ void Builder::run() {
 			 }*/
 
 			mesh_mutex_.lock();
-				mesh_ = Body::buildSurface(body_point_cloud_accumulation);
+			mesh_ = Body::buildSurface(body_point_cloud_accumulation);
 			mesh_mutex_.unlock();
 
 			static unsigned int uid = 0;
@@ -203,7 +208,7 @@ void Builder::run() {
 			new_mesh_id << "mesh" << uid;
 			viewer_->removeShape(mesh_id.str());
 			mesh_mutex_.lock();
-				viewer_->addPolygonMesh(*mesh_, new_mesh_id.str());
+			viewer_->addPolygonMesh(*mesh_, new_mesh_id.str());
 			mesh_mutex_.unlock();
 
 			viewer_lock_->unlock();
@@ -223,23 +228,24 @@ void Builder::run() {
 
 void Builder::saveObj(std::string outfile/*, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointColors*/) {
 
-	pcl::PointCloud<pcl::PointXYZRGB>::Ptr mesh_points(new pcl::PointCloud<pcl::PointXYZRGB>);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr mesh_points(new pcl::PointCloud<
+			pcl::PointXYZRGB>);
 
 	FILE *f = fopen(outfile.c_str(), "w");
 
 	mesh_mutex_.lock();
-		pcl::fromROSMsg(mesh_->cloud, *mesh_points);
+	pcl::fromROSMsg(mesh_->cloud, *mesh_points);
 
-		for (int v = 0; v < mesh_points->size(); v++) {
-			pcl::PointXYZRGB p = (*mesh_points)[v];
-			fprintf(f, "v %f %f %f %f %f %f\n", p.x, p.y, p.z, p.r / 255., p.g
-					/ 255., p.b / 255.);
-		}
-		for (int t = 0; t < mesh_->polygons.size(); t++) {
-			pcl::Vertices triangle = mesh_->polygons[t];
-			fprintf(f, "f %i %i %i\n", triangle.vertices[0] + 1,
-					triangle.vertices[1] + 1, triangle.vertices[2] + 1);
-		}
+	for (int v = 0; v < mesh_points->size(); v++) {
+		pcl::PointXYZRGB p = (*mesh_points)[v];
+		fprintf(f, "v %f %f %f %f %f %f\n", p.x, p.y, p.z, p.r / 255., p.g
+				/ 255., p.b / 255.);
+	}
+	for (int t = 0; t < mesh_->polygons.size(); t++) {
+		pcl::Vertices triangle = mesh_->polygons[t];
+		fprintf(f, "f %i %i %i\n", triangle.vertices[0] + 1,
+				triangle.vertices[1] + 1, triangle.vertices[2] + 1);
+	}
 	mesh_mutex_.unlock();
 
 	fclose(f);
