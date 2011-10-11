@@ -5,15 +5,17 @@
  *      Author: stolrsky
  */
 
+
+
+#ifndef BUILDER_H_
+#define BUILDER_H_
+
 #include <boost/thread.hpp>
 #include <boost/interprocess/ipc/message_queue.hpp>
 
 #include <pcl/visualization/pcl_visualizer.h>
 
 #include <Body/BodyPointCloud.h>
-
-#ifndef BUILDER_H_
-#define BUILDER_H_
 
 
 namespace Body {

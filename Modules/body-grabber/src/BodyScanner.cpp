@@ -46,7 +46,7 @@ public:
 			}
 		viewer_mutex_.unlock();
 
-		if (record && body_pose->skeleton_pose != NULL) {
+		/*if (record && body_pose->skeleton_pose != NULL) {
 			static int frame = 0;
 
 			char pcd_filename[strlen(basename) + 11];
@@ -62,7 +62,7 @@ public:
 
 			printf("saved %s and %s\n", pcd_filename, skeleton_filename);
 			frame++;
-		}
+		}*/
 
 	}
 

@@ -26,30 +26,9 @@
 
 namespace Body {
 
-struct intPair {
-	int x;
-	int y;
-};
 
-enum joints {
-	LH, LE, LS, LHI, LK, LF, N, H, T, RH, RE, RS, RHI, RK, RF
-};
-enum bones {
-	LH2E,
-	LE2S,
-	N2H,
-	RS2E,
-	RE2H,
-	LH2K,
-	RH2K,
-	LK2F,
-	TORSO,
-	TORSO1,
-	TORSO2,
-	TORSO3,
-	TORSO4,
-	RK2F
-};
+
+
 
 class BodySegmentation {
 public:
@@ -76,6 +55,8 @@ public:
 	 */
 	void run();
 
+
+
 private:
 
 	/**
@@ -101,11 +82,11 @@ private:
 
 
 	// Mapping attributes and methods for keys
-	intPair map(int bone);
-	std::map<std::string, int> indexFromKey;
-	void initIndexMap();
-	int getIndexFromKey(std::string const key);
-	std::string getKeyFromBoneIndex(int bone);
+
+	//std::map<std::string, int> indexFromKey;
+	//void initIndexMap();
+	//int getIndexFromKey(std::string const key);
+	//std::string getKeyFromBoneIndex(int bone);
 
 	// Segmentation attributes
 	std::vector<pcl::PointXYZ> joints;

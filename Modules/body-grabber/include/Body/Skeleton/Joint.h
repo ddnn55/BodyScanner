@@ -16,12 +16,12 @@ namespace Body
 namespace Skeleton
 {
 
-namespace Joint
-{
+//namespace Joint
+//{
 
-	typedef XnSkeletonJointTransformation Pose;
 
-}
+
+//}
 
 }
 

@@ -39,7 +39,7 @@ public:
 	 * This defines the order of bones.
 	 * Call this once when creating a skin.
 	 */
-	void addBone(std::string joint_key);
+	//void addParentJoint(int joint_id);
 	
 	/**
 	 * Call this before adding points to bones, just once.
@@ -89,9 +89,11 @@ private:
 	/**
 	 * Used during bind and pose to match joints with the correct indices.
 	 */
-	typedef std::map<std::string, int> NameToIndex;
-	NameToIndex limb_map;
-	int num_bones;
+	typedef std::map<int, int> BoneToJoint;
+	//BoneToJoint limb_map;
+	//int num_bones;
+
+	std::map<int, ColorCloud::Ptr> bone_clouds;
 };
 
 }

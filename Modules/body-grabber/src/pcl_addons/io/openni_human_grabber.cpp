@@ -243,13 +243,13 @@ void OpenNIHumanGrabber::UserDataThreadFunction () throw (openni_wrapper::OpenNI
     	  for(int j = 0; j < Body::Skeleton::GetJointList().size(); j++)
     	  {
     		  XnSkeletonJoint xn_joint_key = Body::Skeleton::GetJointList()[j].second;
-    		  std::string joint_key = Body::Skeleton::GetJointList()[j].first;
+    		  Body::Joint joint_key = Body::Skeleton::GetJointList()[j].first;
 
         	  XnSkeletonJointTransformation joint_transformation;
     		  user_generator_.GetSkeletonCap().GetSkeletonJoint(user, xn_joint_key, joint_transformation);
 
 
-        	  //(*skeleton_pose)[joint_key] = joint_transformation; // FIXME doesn't seem to be working?
+
         	  skeleton_pose->setTransformationForJointKey(joint_key, joint_transformation);
 
 

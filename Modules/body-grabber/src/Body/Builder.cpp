@@ -109,22 +109,27 @@ void Builder::run()
 			BodySegmentation segmentation(&(*skeleton_pose), cloud, &skin);
 			segmentation.run();
 
-			//
+			std::cout << "ran segmentation" << std::endl;
+
 			//pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 			skin.bind(cloud, skeleton_pose);
 			pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud = skin.pose(canonical_skeleton_pose_);
+			//pcl::PointCloud<pcl::PointXYZRGB>::Ptr canonical_pose_cloud = skin.pose(skeleton_pose); // testing: should return identical cloud as input
 
-			std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
+			std::cout << "ran pose" << std::endl;
+
+			/*std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
 			for(int p = 0; p < 20; p++)
 			{
-				std::cout << "random point - " << (*canonical_pose_cloud)[random() % canonical_pose_cloud->size()] << std::endl;
-			}
+				std::cout << "random point - " << (*canonical_pose_cloud)[random() % cloud->size()] << std::endl;
+			}*/
 
+			std::cout << "trying to lock viewer to add " << cloud_id.str() << std::endl;
 			viewer_lock_->lock();
-				//viewer_->addPointCloud(cloud, cloud_id.str());
+				//viewer_->addPointCloud(cloud, cloud_id.str()+"orig");
 				viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
 			viewer_lock_->unlock();
-			std::cout << "added cloud to viewer" << std::endl;
+			std::cout << "added cloud " << cloud_id.str() << " to viewer" << std::endl;
 		}
 		else // no new sample
 		{
