@@ -10,6 +10,8 @@ using namespace std;
 
 #include <Body/Builder.h>
 
+
+
 class SimpleOpenNIViewer {
 public:
 	SimpleOpenNIViewer(int argc, char** argv)
@@ -23,6 +25,8 @@ public:
 			basename = argv[1];
 		viewer_.addCoordinateSystem(1.0);
 		viewer_.initCameraParameters();
+
+		viewer_.registerKeyboardCallback(keyboardCallback, this);
 	}
 
 	void body_cloud_cb_(
@@ -68,6 +72,11 @@ public:
 
 		//if (record && body)
 
+	}
+
+	static void keyboardCallback(const pcl::visualization::KeyboardEvent &keyboardEvent, void *data)
+	{
+		std::cout << "keyboard callback!" << std::endl;
 	}
 
 	void run() {

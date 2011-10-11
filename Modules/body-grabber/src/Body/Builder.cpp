@@ -22,6 +22,7 @@ Builder::Builder(pcl::visualization::PCLVisualizer* viewer, boost::mutex *viewer
 	: builder_thread_(NULL)
 	, end_(false)
 	, have_new_sample_(false)
+	, body_point_cloud_accumulation(new BodyPointCloud)
 	//, new_sample_flag_(false)
 	//, ready_for_new_sample_(true)
 {
@@ -85,7 +86,7 @@ void Builder::run()
 	while(!end_)
 	{
 
-		BodyPointCloud::Ptr body_point_cloud_accumulation(new BodyPointCloud);
+
 
 		//std::cout << "beginning of run() while()" << std::endl;
 
@@ -93,7 +94,7 @@ void Builder::run()
 		//	boost::this_thread::sleep(sleep_time);
 		//sleep(1); // FIXME above sleep is often not returning at all what the hell
 
-		sleep(5);
+		//sleep(5);
 
 
 		//std::cout << "before pending_samepl_access_.lock()" << std::endl;
@@ -137,7 +138,9 @@ void Builder::run()
 
 			std::cout << "ran pose" << std::endl;
 
-			*body_point_cloud_accumulation += *canonical_pose_cloud;
+			body_point_cloud_accumulation_mutex_.lock();
+				*body_point_cloud_accumulation += *canonical_pose_cloud;
+			body_point_cloud_accumulation_mutex_.unlock();
 
 			/*std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
 			for(int p = 0; p < 20; p++)
@@ -217,13 +220,27 @@ void Builder::run()
 	//std::cout << "end builder::run() huh??????????????????" << std::endl;
 }
 
-void Builder::updateOutputVisualizer()
+void Builder::saveObj(std::string outfile, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointColors) {
+  FILE *f = fopen(outfile.c_str(), "w");
+
+  for(int v = 0; v < pointColors->size(); v++) {
+    pcl::PointXYZRGB p = (*pointColors)[v];
+    fprintf(f, "v %f %f %f %f %f %f\n", p.x, p.y, p.z, p.r/255., p.g/255., p.b/255.);
+  }
+  for(int t = 0; t < mesh.polygons.size(); t++) {
+    pcl::Vertices triangle = mesh.polygons[t];
+    fprintf(f, "f %i %i %i\n", triangle.vertices[0]+1, triangle.vertices[1]+1, triangle.vertices[2]+1);
+  }
+  fclose(f);
+}
+
+/*void Builder::updateOutputVisualizer()
 {
 	// output model updated
 	if (viewer_ != NULL && !viewer_->wasStopped()) {
 		viewer_->removeShape("body");
 		viewer_->addPolygonMesh (pcl::PolygonMesh(), "body");
 	}
-}
+}*/
 
 }

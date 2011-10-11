@@ -33,9 +33,11 @@ public:
 
 	void pushSample(Body::BodyPointCloud::ConstPtr cloud, Body::Skeleton::Pose::Ptr /*FIXME use ConstPtr for more thread safety*/ skeleton_pose);
 
+	void saveObj(std::string outfile, pcl::PolygonMesh& mesh, pcl::PointCloud<pcl::PointXYZRGB>::Ptr pointColors);
+
 private:
 	void run();
-	void updateOutputVisualizer();
+	//void updateOutputVisualizer();
 
 	pcl::visualization::PCLVisualizer* viewer_;
 	boost::mutex* viewer_lock_;
@@ -56,8 +58,11 @@ private:
 	BodyPointCloud::ConstPtr pending_sample_cloud_;
 	Skeleton::Pose::Ptr pending_sample_skeleton_pose_;
 
-
 	Skeleton::Pose::Ptr canonical_skeleton_pose_;
+
+
+	BodyPointCloud::Ptr body_point_cloud_accumulation;
+	boost::mutex body_point_cloud_accumulation_mutex_;
 
 
 };
