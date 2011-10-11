@@ -66,6 +66,8 @@ public:
 			frame++;
 		}*/
 
+		//if (record && body)
+
 	}
 
 	void run() {

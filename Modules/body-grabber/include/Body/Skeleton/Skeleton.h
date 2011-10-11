@@ -142,7 +142,7 @@ public:
 			//const std::string toYaml() const;
 
 			void setTransformationForJointKey(Joint joint, XnSkeletonJointTransformation transformation);
-			Body::Skeleton::JointPose operator[](Joint joint_key);
+			Body::Skeleton::JointPose& operator[](Joint joint_key);
 
 			JointPoses getJointPoses();
 			

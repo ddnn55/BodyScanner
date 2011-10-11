@@ -14,6 +14,7 @@
 #include <Body/Builder.h>
 #include <Body/BodySegmentation.h>
 #include <Body/Skin.h>
+#include <Body/Surface.h>
 
 namespace Body {
 
@@ -83,6 +84,9 @@ void Builder::run()
 
 	while(!end_)
 	{
+
+		BodyPointCloud::Ptr body_point_cloud_accumulation(new BodyPointCloud);
+
 		//std::cout << "beginning of run() while()" << std::endl;
 
 		//if(!tracking_)
@@ -133,18 +137,22 @@ void Builder::run()
 
 			std::cout << "ran pose" << std::endl;
 
+			*body_point_cloud_accumulation += *canonical_pose_cloud;
+
 			/*std::cout << "canonical cloud size - " << canonical_pose_cloud->size() << std::endl;
 			for(int p = 0; p < 20; p++)
 			{
 				std::cout << "random point - " << (*canonical_pose_cloud)[random() % cloud->size()] << std::endl;
 			}*/
 
+			pcl::PolygonMesh::Ptr mesh = Body::buildSurface(body_point_cloud_accumulation);
+
 			static unsigned int uid = 0;
 
 			//std::cout << "trying to lock viewer to add " << cloud_id.str() << std::endl;
 			viewer_lock_->lock();
 				//viewer_->addPointCloud(cloud, cloud_id.str()+"orig");
-				viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
+				//viewer_->addPointCloud(canonical_pose_cloud, cloud_id.str());
 				if(skin.newest_bone_clouds.find(N2H) != skin.newest_bone_clouds.end())
 				{
 
@@ -187,6 +195,12 @@ void Builder::run()
 					std::cout << "no N2H cloud! size of bone_clouds: " << skin.newest_bone_clouds.size() << std::endl;
 
 				}
+
+				std::stringstream mesh_id;     mesh_id       << "mesh" << uid++;
+				std::stringstream new_mesh_id; new_mesh_id << "mesh" << uid;
+				viewer_->removeShape(mesh_id.str());
+				viewer_->addPolygonMesh(*mesh, new_mesh_id.str());
+
 			viewer_lock_->unlock();
 			std::cout << "added cloud " << cloud_id.str() << " to viewer" << std::endl;
 		}

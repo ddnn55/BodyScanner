@@ -29,7 +29,7 @@ void Skeleton::Pose::setTransformationForJointKey(Joint joint_key,
 	joint_poses[joint_key] = transformation;
 }
 
-Skeleton::JointPose Skeleton::Pose::operator[](Joint joint_key) {
+Skeleton::JointPose& Skeleton::Pose::operator[](Joint joint_key) {
 	return joint_poses[joint_key];
 }
 
