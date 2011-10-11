@@ -22,26 +22,6 @@
 #define NB_JOINTS 15
 #define NB_BONES 14
 
-enum joints {
-	LH, LE, LS, LHI, LK, LF, N, H, T, RH, RE, RS, RHI, RK, RF
-};
-enum bones {
-	LH2E,
-	LE2S,
-	N2H,
-	RS2E,
-	RE2H,
-	LH2K,
-	RH2K,
-	LK2F,
-	TORSO,
-	TORSO1,
-	TORSO2,
-	TORSO3,
-	TORSO4,
-	RK2F
-};
-
 double dot(pcl::PointXYZ vector1, pcl::PointXYZ vector2) {
 	double sum = 0;
 
@@ -77,13 +57,8 @@ int argmin(std::vector<double> vec) {
 int argmin2(std::vector<double> vec, int argmin) {
 
 	int res = 0;
-	int init = 0;
 
-	if (argmin == 0) {
-		init = 1;
-	}
-
-	for (int i = init; i < vec.size(); i++) {
+	for (int i = 0; i < vec.size(); i++) {
 
 		if (vec[i] < vec[res] && i != argmin) {
 			res = i;
@@ -138,7 +113,7 @@ BodySegmentation::BodySegmentation(std::string const skeletonfilename,
 }
 
 BodySegmentation::BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<
-		pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_) {
+		pcl::PointXYZRGB>::ConstPtr bodycloud_, Skin *pskin_) {
 
 	pskin = pskin_;
 	sk_pose = pose_;
@@ -154,6 +129,7 @@ BodySegmentation::BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<
 
 	// Initilizations
 
+	//initIndexMap();
 	initJoints();
 	initBones();
 
@@ -162,34 +138,36 @@ BodySegmentation::BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<
 void BodySegmentation::initJoints() {
 
 	int i = 0;
-
 	for (Skeleton::Pose::JointPoses::const_iterator j = joint_poses.begin(); j
-			!= joint_poses.end(); j++) {
-		i = getIndexFromKey((*j).first);
+			!= joint_poses.end(); ++j) {
+		i = (*j).first;
+		joints[i].x = (*j).second.position.position.X;
 		joints[i].y = -(*j).second.position.position.Y;
 		joints[i].z = (*j).second.position.position.Z;
-		joints[i].x = (*j).second.position.position.X;
 	}
 
 }
 
 void BodySegmentation::initBones() {
 
-	for (int m = LH2E; m <= RK2F; m++) {
+	for (int i = LH2E; i <= RK2F; i++) {
+
+		Bone m = (Bone) i;
 
 		limbs_clouds[m] = pcl::PointCloud<pcl::PointXYZRGB>::Ptr(
 				new pcl::PointCloud<pcl::PointXYZRGB>);
 		limbs_clouds[m]->resize(bodycloud->size());
 
-		int i1 = map(m).x;
-		int i2 = map(m).y;
+		int i1 = Skeleton::GetBoneJoints(m).parent;
+		int i2 = Skeleton::GetBoneJoints(m).child;
 
 		bones[m].x = joints[i2].x - joints[i1].x;
 		bones[m].y = joints[i2].y - joints[i1].y;
 		bones[m].z = joints[i2].z - joints[i1].z;
 
 		// Code relative to skin
-		pskin->addBone(getKeyFromBoneIndex(m));
+
+		//pskin->addParentJoint(Skeleton::GetBoneJoints(m).parent);
 
 	}
 
@@ -198,7 +176,7 @@ void BodySegmentation::initBones() {
 
 }
 
-void BodySegmentation::initIndexMap() {
+/*void BodySegmentation::initIndexMap() {
 
 	indexFromKey.insert(std::make_pair("head", H));
 	indexFromKey.insert(std::make_pair("neck", N));
@@ -220,95 +198,11 @@ void BodySegmentation::initIndexMap() {
 	indexFromKey.insert(std::make_pair("right_knee", RK));
 	indexFromKey.insert(std::make_pair("right_foot", RF));
 
-}
+}*/
 
-intPair BodySegmentation::map(int bone) {
 
-	intPair p;
 
-	switch (bone) {
-	case LH2E:
-		p.x = LH;
-		p.y = LE;
-		break;
-
-	case LE2S:
-		p.x = LE;
-		p.y = LS;
-		break;
-
-	case N2H:
-		p.x = N;
-		p.y = H;
-		break;
-
-	case RS2E:
-		p.x = RS;
-		p.y = RE;
-		break;
-
-	case RE2H:
-		p.x = RE;
-		p.y = RH;
-		break;
-
-	case LH2K:
-		p.x = LHI;
-		p.y = LK;
-		break;
-
-	case RH2K:
-		p.x = RHI;
-		p.y = RK;
-		break;
-
-	case LK2F:
-		p.x = LK;
-		p.y = LF;
-		break;
-
-	case RK2F:
-		p.x = RK;
-		p.y = RF;
-		break;
-
-	case TORSO:
-		p.x = N;
-		p.y = T;
-		break;
-
-	case TORSO1:
-		p.x = T;
-		p.y = RHI;
-		break;
-
-	case TORSO2:
-		p.x = T;
-		p.y = LHI;
-		break;
-
-	case TORSO3:
-		p.x = T;
-		p.y = LS;
-		break;
-
-	case TORSO4:
-		p.x = T;
-		p.y = RS;
-		break;
-
-	default:
-		p.x = 0;
-		p.y = 1;
-		break;
-
-	}
-
-	return p;
-
-}
-
-std::string BodySegmentation::getKeyFromBoneIndex(int bone) {
+/*std::string BodySegmentation::getKeyFromBoneIndex(int bone) {
 
 	std::string p;
 
@@ -377,11 +271,24 @@ std::string BodySegmentation::getKeyFromBoneIndex(int bone) {
 
 	return p;
 
-}
+}*/
 
-int BodySegmentation::getIndexFromKey(std::string const key) {
-	return indexFromKey[key];
-}
+/*int BodySegmentation::getIndexFromKey(std::string const key) {
+	std::map<std::string,int>::iterator entry = indexFromKey.find(key);
+	assert(entry != indexFromKey.end());
+	return entry->second;
+	/*
+	//if(entry == indexFromKey.end()) {
+		std::cout << "keys in indexFromKey:\n";
+		for(std::map<std::string,int>::iterator it = indexFromKey.begin(); it != indexFromKey.end(); ++it) {
+			std::cout << it->first << " ";
+		}
+		std::cout << "\n";
+		assert(false);
+	//}
+	return entry->second;
+
+}*/
 
 void BodySegmentation::run() {
 
@@ -409,15 +316,17 @@ void BodySegmentation::run() {
 
 		// Compute distances from point to bones
 
-		for (int j = LH2E; j <= RK2F; j++) {
+		for (int boneIndex = FirstBone; boneIndex <= LastBone; boneIndex++) {
 
-			ac.x = c.x - joints[map(j).x].x;
-			ac.y = c.y - joints[map(j).x].y;
-			ac.z = c.z - joints[map(j).x].z;
+			Bone j = (Bone) boneIndex;
 
-			bc.x = c.x - joints[map(j).y].x;
-			bc.y = c.y - joints[map(j).y].y;
-			bc.z = c.z - joints[map(j).y].z;
+			ac.x = c.x - joints[Skeleton::GetBoneJoints(j).parent].x;
+			ac.y = c.y - joints[Skeleton::GetBoneJoints(j).parent].y;
+			ac.z = c.z - joints[Skeleton::GetBoneJoints(j).parent].z;
+
+			bc.x = c.x - joints[Skeleton::GetBoneJoints(j).child].x;
+			bc.y = c.y - joints[Skeleton::GetBoneJoints(j).child].y;
+			bc.z = c.z - joints[Skeleton::GetBoneJoints(j).child].z;
 
 			length = sqrt(dot(bones[j], bones[j]));
 			proj = dot(bones[j], ac) / length;
@@ -467,15 +376,16 @@ void BodySegmentation::run() {
 
 		}
 
-		// Vizualisation
-		limbs_clouds[arg1]->points[i].x = c.x;
-		limbs_clouds[arg1]->points[i].y = c.y;
-		limbs_clouds[arg1]->points[i].z = c.z;
+		if(arg1 > 0) {
+			// Vizualisation
+			limbs_clouds[arg1]->points[i].x = c.x;
+			limbs_clouds[arg1]->points[i].y = c.y;
+			limbs_clouds[arg1]->points[i].z = c.z;
 
-		limbs_clouds[arg1]->points[i].g = 2 * 255 * weight;
-		limbs_clouds[arg1]->points[i].b = 0 * weight;
-		limbs_clouds[arg1]->points[i].r = 255;
-
+			limbs_clouds[arg1]->points[i].g = 2 * 255 * weight;
+			limbs_clouds[arg1]->points[i].b = 0 * weight;
+			limbs_clouds[arg1]->points[i].r = 255;
+		}
 	}
 
 }
@@ -483,7 +393,7 @@ void BodySegmentation::run() {
 /**
  * Visualization.
  */
-void BodySegmentation::visualize(int index) {
+/*void BodySegmentation::visualize(int index) {
 
 	// Remove points from the body point cloud
 	for (size_t i = 0; i < bodycloud->points.size(); i++) {
@@ -518,10 +428,10 @@ void BodySegmentation::visualize(int index) {
 		s << m << m << m;
 
 		if (m == index) {
-			view->addLine(joints[(int) (map(m).y)], joints[(int) (map(m).x)],
+			view->addLine(joints[(int) (GetBoneJoints(m).y)], joints[(int) (GetBoneJoints(m).x)],
 					255, 0, 0, s.str(), 0);
 		} else {
-			view->addLine(joints[(int) (map(m).y)], joints[(int) (map(m).x)],
+			view->addLine(joints[(int) (GetBoneJoints(m).y)], joints[(int) (GetBoneJoints(m).x)],
 					s.str(), 0);
 		}
 	}
@@ -542,7 +452,7 @@ void BodySegmentation::visualize(int index) {
 		boost::this_thread::sleep(boost::posix_time::microseconds(100000));
 	}
 
-}// End Visualize
+}// End Visualize */
 
 
 } // End namespace body

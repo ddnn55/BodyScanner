@@ -82,11 +82,11 @@ void BodyPuppet::draw(){
         {
             //std::cout << "drawing a circle..." << std::endl;
             ofPushMatrix();
-                ofTranslate( - joint->second.x, - joint->second.y, 0.0 /*joint->second.z*/);
+                ofTranslate( - joint->second.x, - joint->second.y, - joint->second.z);
                 //ofSetColor(255,0,0);
                 //ofFill();
-                //ofBox(30);
-                ofCircle(0, 0, 20);
+                ofBox(30);
+                //ofCircle(0, 0, 20);
                 //ofNoFill();
                 //ofSetColor(0);
                 //ofBox(30);

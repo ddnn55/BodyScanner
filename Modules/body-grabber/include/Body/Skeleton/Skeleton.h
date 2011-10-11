@@ -16,50 +16,88 @@
 
 #include <XnCppWrapper.h>
 
+//#include <Body/Skeleton/Joint.h>
+
 
 namespace Body
 {
 
+
+
+	enum Joint {
+		LH, LE, LS, LHI, LK, LF, N, H, T, RH, RE, RS, RHI, RK, RF
+	};
+	#define FirstJoint LH
+	#define LastJoint RF
+	#define SKELETON_NUMBER_OF_JOINTS ((int)Body::LastJoint + 1)
+
+	enum Bone {
+		LH2E,
+		LE2S,
+		N2H,
+		RS2E,
+		RE2H,
+		LH2K,
+		RH2K,
+		LK2F,
+		TORSO,
+		TORSO1,
+		TORSO2,
+		TORSO3,
+		TORSO4,
+		RK2F
+	};
+	#define FirstBone LH2E
+	#define LastBone RK2F
+
+	struct JointPair {
+		Joint parent;
+		Joint child;
+	};
+
 	class Skeleton
 	{
+public:
+		typedef XnSkeletonJointTransformation JointPose;
+
 	public:
-		typedef std::vector< std::pair< std::string, XnSkeletonJoint > > JointList;
+		typedef std::vector< std::pair< Joint, XnSkeletonJoint > > JointList;
 
 		static JointList GetJointList()
 		{
 			JointList joint_list;
 
-			for(int j = 0; j < GetJointStringKeys().size(); j++)
+			for(int j = 0; j < GetJointKeys().size(); j++)
 			{
-				joint_list.push_back(std::pair< std::string, XnSkeletonJoint >(GetJointStringKeys()[j], GetJointXnKeys()[j]));
+				joint_list.push_back(std::pair< Joint, XnSkeletonJoint >(GetJointKeys()[j], GetJointXnKeys()[j]));
 			}
 
 			return joint_list;
 		}
 
-		static std::vector<std::string> GetJointStringKeys()
+		static std::vector<Joint> GetJointKeys()
 		{
-			std::vector<std::string> joint_list;
+			std::vector<Joint> joint_list;
 
-			joint_list.push_back("head");
-			joint_list.push_back("neck");
-			joint_list.push_back("torso");
+			joint_list.push_back(H);
+			joint_list.push_back(N);
+			joint_list.push_back(T);
 
-			joint_list.push_back("left_shoulder");
-			joint_list.push_back("left_elbow");
-			joint_list.push_back("left_hand");
+			joint_list.push_back(LS);
+			joint_list.push_back(LE);
+			joint_list.push_back(LH);
 
-			joint_list.push_back("right_shoulder");
-			joint_list.push_back("right_elbow");
-			joint_list.push_back("right_hand");
+			joint_list.push_back(RS);
+			joint_list.push_back(RE);
+			joint_list.push_back(RH);
 
-			joint_list.push_back("left_hip");
-			joint_list.push_back("left_knee");
-			joint_list.push_back("left_foot");
+			joint_list.push_back(LHI);
+			joint_list.push_back(LK);
+			joint_list.push_back(LF);
 
-			joint_list.push_back("right_hip");
-			joint_list.push_back("right_knee");
-			joint_list.push_back("right_foot");
+			joint_list.push_back(RHI);
+			joint_list.push_back(RK);
+			joint_list.push_back(RF);
 
 			return joint_list;
 		}
@@ -91,25 +129,37 @@ namespace Body
 			return joint_list;
 		}
 
-		class Joint {
-		public:
-			typedef XnSkeletonJointTransformation Pose;
-		};
+		static JointPair GetBoneJoints(const Bone bone);
+
+		//class Joint {
+		//public:
+		//	typedef XnSkeletonJointTransformation Pose;
+		//};
 
 		class Pose {
 		public:
 			typedef boost::shared_ptr<Pose> Ptr;
-			typedef std::map<std::string, Body::Skeleton::Joint::Pose> JointPoses;
+			typedef std::map<Joint, Body::Skeleton::JointPose> JointPoses;
 
 			Pose();
 			virtual ~Pose();
 
-			const std::string toYaml() const;
+			//const std::string toYaml() const;
 
-			void setTransformationForJointKey(std::string, XnSkeletonJointTransformation transformation);
-			Body::Skeleton::Joint::Pose operator[](std::string joint_key);
+			void setTransformationForJointKey(Joint joint, XnSkeletonJointTransformation transformation);
+			Body::Skeleton::JointPose operator[](Joint joint_key);
 
 			JointPoses getJointPoses();
+			
+			/**
+			 * Get the length of the bone in this pose.
+			 * IDs are as defined by BodySegmentation.h
+			 */
+			float getBoneLength(const Bone bone);
+			float getJointDistance(const Joint joint1, const Joint joint2);
+			
+			typedef std::vector<Body::Skeleton::Pose::Ptr> List;
+			/*static Body::Skeleton::Pose::Ptr GetCanonical(List& poses);*/
 
 		private:
 			JointPoses joint_poses;

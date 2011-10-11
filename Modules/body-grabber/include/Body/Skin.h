@@ -16,6 +16,7 @@
 #include <pcl/point_cloud.h>
 
 #include "Body/Skeleton/Skeleton.h"
+#include <Body/BodyPointCloud.h>
 
 namespace Body
 {
@@ -39,7 +40,7 @@ public:
 	 * This defines the order of bones.
 	 * Call this once when creating a skin.
 	 */
-	void addBone(std::string joint_key);
+	//void addParentJoint(int joint_id);
 	
 	/**
 	 * Call this before adding points to bones, just once.
@@ -56,7 +57,7 @@ public:
 	 * Precompute the local coordinates of each point.
 	 * Pass in the canonical pose, only once to compute local coordinates for each limb.
 	 */
-	void bind(pcl::PointCloud<pcl::PointXYZRGB>::Ptr all_points, const Body::Skeleton::Pose::Ptr bind_pose);
+	void bind(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr all_points, const Body::Skeleton::Pose::Ptr bind_pose);
 	
 	/*
 	 * Renders mesh via OpenGL. Uses vertex shaders to compute posed poins on the GPU-side.
@@ -67,9 +68,11 @@ public:
 	 * Get the points, skinned with the current pose.
 	 * Runs on the CPU side.
 	 */
-	ColorCloud::Ptr pose(const Body::Skeleton::Pose::Ptr pose, ColorCloud::Ptr output) const;
+	ColorCloud::Ptr pose(const Body::Skeleton::Pose::Ptr pose) const;
 
 	Skin();
+
+	std::map<int, BodyPointCloud::Ptr> newest_bone_clouds;
 
 private:
 	/**
@@ -78,7 +81,7 @@ private:
 	 */
 	std::vector<SkinBinding> bindings;
 	
-	ColorCloud::Ptr input_points;
+	ColorCloud::ConstPtr input_points;
 	
 	/*
 	 * Input points expressed in local coordinates of the bone.
@@ -89,9 +92,11 @@ private:
 	/**
 	 * Used during bind and pose to match joints with the correct indices.
 	 */
-	typedef std::map<std::string, int> NameToIndex;
-	NameToIndex limb_map;
-	int num_bones;
+	typedef std::map<int, int> BoneToJoint;
+	//BoneToJoint limb_map;
+	//int num_bones;
+
+
 };
 
 }

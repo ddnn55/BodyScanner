@@ -13,12 +13,16 @@ using namespace std;
 class SimpleOpenNIViewer {
 public:
 	SimpleOpenNIViewer(int argc, char** argv)
-		: grab_viewer("Body Scanner > Input")
-		, output_viewer("Body Scanner > Output")
-		, bodyBuilder(&output_viewer) {
+		//: grab_viewer("Body Scanner > Input")
+		: viewer_("Body Scanner")
+		, showed_first_cloud_(false)
+		//, output_viewer("Body Scanner > Output")
+		, bodyBuilder(&viewer_, &viewer_mutex_) {
 		record = argc > 1;
 		if (record)
 			basename = argv[1];
+		viewer_.addCoordinateSystem(1.0);
+		viewer_.initCameraParameters();
 	}
 
 	void body_cloud_cb_(
@@ -26,13 +30,23 @@ public:
 			const Body::BodyPointCloud::ConstPtr cloud,
 			const boost::shared_ptr<BodyScanner::OpenNIHumanGrabber::BodyPose> body_pose) {
 
-		bodyBuilder.pushSample(cloud, body_pose->skeleton_pose);
+		if(body_pose->skeleton_pose != NULL)
+			bodyBuilder.pushSample(cloud, body_pose->skeleton_pose);
 
-		if (!grab_viewer.wasStopped()) {
-			grab_viewer.showCloud(cloud);
-		}
+		viewer_mutex_.lock();
+			if (!viewer_.wasStopped()) {
+				//viewer_.removeShape("live_cloud");
+				if(!showed_first_cloud_)
+				{
+					viewer_.addPointCloud(cloud, "live_cloud");
+					showed_first_cloud_ = true;
+				}
+				else
+					viewer_.updatePointCloud(cloud, "live_cloud");
+			}
+		viewer_mutex_.unlock();
 
-		if (record && body_pose->skeleton_pose != NULL) {
+		/*if (record && body_pose->skeleton_pose != NULL) {
 			static int frame = 0;
 
 			char pcd_filename[strlen(basename) + 11];
@@ -48,13 +62,12 @@ public:
 
 			printf("saved %s and %s\n", pcd_filename, skeleton_filename);
 			frame++;
-		}
+		}*/
 
 	}
 
 	void run() {
-		BodyScanner::OpenNIHumanGrabber* interface =
-				new BodyScanner::OpenNIHumanGrabber();
+		BodyScanner::OpenNIHumanGrabber* interface = new BodyScanner::OpenNIHumanGrabber();
 
 		boost::function<void(
 				//const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr&,
@@ -66,20 +79,30 @@ public:
 
 		interface->start();
 
-		while (!grab_viewer.wasStopped() && !output_viewer.wasStopped()) {
-			sleep(1);
+		bool viewer_was_stopped = false;
+		while (!viewer_was_stopped /*&& !output_viewer.wasStopped()*/) {
+			boost::this_thread::sleep(boost::posix_time::microseconds(10000));
+			viewer_mutex_.lock();
+
+				viewer_.spinOnce(100);
+
+				viewer_was_stopped = viewer_.wasStopped();
+			viewer_mutex_.unlock();
 		}
 
 		interface->stop();
 	}
 
-	pcl::visualization::CloudViewer grab_viewer;
-	pcl::visualization::PCLVisualizer output_viewer;
+	//pcl::visualization::CloudViewer grab_viewer;
+	pcl::visualization::PCLVisualizer viewer_;
+	boost::mutex viewer_mutex_;
 	Body::Builder bodyBuilder;
 	pcl::PCDWriter writer;
 	ofstream skeleton_writer;
 	bool record;
 	char* basename;
+
+	bool showed_first_cloud_;
 };
 
 int main(int argc, char** argv) {
