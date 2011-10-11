@@ -38,11 +38,13 @@ public:
 				//viewer_.removeShape("live_cloud");
 				if(!showed_first_cloud_)
 				{
-					viewer_.addPointCloud(cloud, "live_cloud");
+					//viewer_.addPointCloud(cloud, "live_cloud");
 					showed_first_cloud_ = true;
 				}
 				else
-					viewer_.updatePointCloud(cloud, "live_cloud");
+				{
+					//viewer_.updatePointCloud(cloud, "live_cloud");
+				}
 			}
 		viewer_mutex_.unlock();
 

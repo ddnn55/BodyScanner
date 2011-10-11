@@ -131,11 +131,6 @@ public:
 
 		static JointPair GetBoneJoints(const Bone bone);
 
-		//class Joint {
-		//public:
-		//	typedef XnSkeletonJointTransformation Pose;
-		//};
-
 		class Pose {
 		public:
 			typedef boost::shared_ptr<Pose> Ptr;

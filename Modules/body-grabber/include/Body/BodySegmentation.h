@@ -56,6 +56,9 @@ public:
 	void run();
 
 
+	std::vector<pcl::PointXYZ> joints;
+		std::vector<pcl::PointXYZ> bones;
+
 
 private:
 
@@ -89,8 +92,7 @@ private:
 	//std::string getKeyFromBoneIndex(int bone);
 
 	// Segmentation attributes
-	std::vector<pcl::PointXYZ> joints;
-	std::vector<pcl::PointXYZ> bones;
+
 	std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr> limbs_clouds;
 
 	// Skeleton
