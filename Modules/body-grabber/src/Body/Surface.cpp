@@ -15,7 +15,7 @@ void filterPoints(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_cloud,
 										
 		pcl::VoxelGrid<pcl::PointXYZRGB> sor;
 		sor.setInputCloud(input_cloud);
-		sor.setLeafSize(0.01f, 0.01f, 0.01f);
+		sor.setLeafSize(0.005f, 0.005f, 0.005f);
 		sor.filter(*filtered_cloud);
 }
 
@@ -39,7 +39,7 @@ void smoothPoints(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_points,
   mls.setInputCloud(input_points);
   mls.setPolynomialFit(true);
   mls.setSearchMethod(tree);
-  mls.setSearchRadius(0.03);
+  mls.setSearchRadius(0.1);
 
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr mls_points(new pcl::PointCloud<pcl::PointXYZRGB>());
   // Reconstruct
@@ -52,8 +52,11 @@ void smoothPoints(pcl::PointCloud<pcl::PointXYZRGB>::Ptr input_points,
 pcl::PolygonMesh::Ptr buildSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud) {
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr filtered_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
 	pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr smooth_cloud(new pcl::PointCloud<pcl::PointXYZRGBNormal>());
-	printf("filtering points\n");
-	filterPoints(cloud, filtered_cloud); // this will reduce the # of points
+
+	//printf("filtering points\n");
+	//filterPoints(cloud, filtered_cloud); // this will reduce the # of points
+	filtered_cloud = cloud;
+
 	printf("smoothing points\n");
 	// this will not reduce the # of points, indices will remain the same
 	// at the end we will copy colors from filtered_cloud onto result
@@ -73,10 +76,10 @@ pcl::PolygonMesh::Ptr buildSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
 
   // Set typical values for the parameters
   gp3.setMu(2.5);
-  gp3.setMaximumNearestNeighbors(50); // reducing this didn't fix flips
+  gp3.setMaximumNearestNeighbors(100); // reducing this didn't fix flips
   gp3.setMaximumSurfaceAngle(M_PI/4); // 45 degrees // requires pcl 1.2 (typo fix)
   gp3.setMinimumAngle(M_PI/18); // 10 degrees
-  gp3.setMaximumAngle(2*M_PI/3); // 120 degrees
+  gp3.setMaximumAngle(M_PI); // 180 degrees
   gp3.setNormalConsistency(true); // changing this didn't fix flips
 
   // Get result
