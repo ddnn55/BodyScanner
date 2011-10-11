@@ -1,14 +1,16 @@
 #include "BodyPuppetApp.h"
-#include <Body/Skeleton/SkeletonYaml.h>
+
+
 
 BodyPuppet::BodyPuppet(int argc, char** argv)
 {
-	if(argc < 2)
+	if(argc < 3)
 	{
-		std::cout << "Usage: BodyPuppet <body_mesh_file>" << std::endl;
+		std::cout << "Usage: BodyPuppet <body_mesh_file> <skeleton_filename.yaml>" << std::endl;
 		std::exit(0);
 	}
 	meshFilename = argv[1];
+	skeletonFilename = argv[2];
 }
 
 ofMesh BodyPuppet::loadObj(string filename)
@@ -76,6 +78,9 @@ void BodyPuppet::setup(){
 	//body.enableColors();
 	//cout << "body.getMesh(0).hasColors(): " << body.getMesh(0).hasColors() << endl;
 	bodyMesh = loadObj(meshFilename);
+	skeleton = SkeletonYaml(skeletonFilename.c_str());
+
+	std::cout << "loaded skeleton" << std::endl;
 
 
 	//ofScale(1, 1, -1);

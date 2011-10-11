@@ -4,6 +4,8 @@
 #include "ofxOsc.h"
 #include <ofxAssimpModelLoader.h>
 
+#include <Body/Skeleton/SkeletonYaml.h>
+
 // listen on port 12345
 #define PORT 7110
 #define NUM_MSG_STRINGS 20
@@ -33,8 +35,10 @@ class BodyPuppet : public ofBaseApp {
 		ofEasyCam cam; // add mouse controls for camera movement
 
 		std::string meshFilename;
+		std::string skeletonFilename;
 		//ofxAssimpModelLoader body;
 		ofMesh bodyMesh;
+		SkeletonYaml skeleton;
 		std::map<std::string, ofVec3f> quickJoints;
 
 		ofShader skinRiggingShader;

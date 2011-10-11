@@ -6,32 +6,56 @@
 #include <cstring>
 #include <cassert>
 
-float namedFloat(char *buffer) {
-    while(buffer[0] == ' ') buffer++; // eat space
-    assert(buffer[0] == '-'); buffer++; // eat dash
-    while(buffer[0] == ' ') buffer++; // eat space
-    while(isalpha(buffer[0])) buffer++; // eat identifier
-    while(buffer[0] == ' ') buffer++; // eat space
-    assert(buffer[0] == '-'); buffer++; // eat dash
-    assert(buffer[0] == '-'); buffer++; // eat dash
-    while(buffer[0] == ' ') buffer++; // eat space
-    float v = atof(buffer);
-    return v;
-}
-float unnamedFloat(char *buffer) {
-    while(buffer[0] == ' ') buffer++; // eat space
-    assert(buffer[0] == '-'); buffer++; // eat dash
-    while(buffer[0] == ' ') buffer++; // eat space
-    float v = atof(buffer);
-    return v;
-}
-const char *jointNames[] = {
-    "left_hand", "left_elbow", "left_shoulder", "left_hip", "left_knee", "left_foot",
-    "neck","head","torso",
-    "right_hand", "right_elbow", "right_shoulder", "right_hip", "right_knee", "right_foot"
-};
+#include <boost/shared_ptr.hpp>
 
-struct SkeletonYaml {
+
+
+
+class SkeletonYaml {
+public:
+	typedef boost::shared_ptr<SkeletonYaml> Ptr;
+
+	// FIXME get this list out of here (include from Skeleton.h)
+	static std::vector<std::string> jointNames() {
+		std::vector<std::string> jointNamesVar;
+		jointNamesVar.push_back("left_hand");
+		jointNamesVar.push_back("left_elbow");
+		jointNamesVar.push_back("left_shoulder");
+		jointNamesVar.push_back("left_hip");
+		jointNamesVar.push_back("left_knee");
+		jointNamesVar.push_back("left_foot");
+		jointNamesVar.push_back("neck");
+		jointNamesVar.push_back("head");
+		jointNamesVar.push_back("torso");
+		jointNamesVar.push_back("right_hand");
+		jointNamesVar.push_back("right_elbow");
+		jointNamesVar.push_back("right_shoulder");
+		jointNamesVar.push_back("right_hip");
+		jointNamesVar.push_back("right_knee");
+		jointNamesVar.push_back("right_foot");
+		return jointNamesVar;
+	}
+
+	static float namedFloat(char *buffer) {
+	    while(buffer[0] == ' ') buffer++; // eat space
+	    assert(buffer[0] == '-'); buffer++; // eat dash
+	    while(buffer[0] == ' ') buffer++; // eat space
+	    while(isalpha(buffer[0])) buffer++; // eat identifier
+	    while(buffer[0] == ' ') buffer++; // eat space
+	    assert(buffer[0] == '-'); buffer++; // eat dash
+	    assert(buffer[0] == '-'); buffer++; // eat dash
+	    while(buffer[0] == ' ') buffer++; // eat space
+	    float v = atof(buffer);
+	    return v;
+	};
+	static float unnamedFloat(char *buffer) {
+	    while(buffer[0] == ' ') buffer++; // eat space
+	    assert(buffer[0] == '-'); buffer++; // eat dash
+	    while(buffer[0] == ' ') buffer++; // eat space
+	    float v = atof(buffer);
+	    return v;
+	};
+
     //enum joints {LH,LE,LS,LHI,LK,LF,N,H,T,RH,RE,RS,RHI,RK,RF};
     static const int numJoints = 15;
     
@@ -39,6 +63,8 @@ struct SkeletonYaml {
     float translations[numJoints][3];
     float rotations[numJoints][9];
     
+    SkeletonYaml() { };
+
     SkeletonYaml(const char * fname) {
         FILE *f = fopen(fname, "r");
         assert(f != NULL);
@@ -49,7 +75,7 @@ struct SkeletonYaml {
         while(fgets(buffer, 255, f) != NULL) {
             if(buffer[0] != ' ') { // some new joint
                 for(int i = 0; i < numJoints; i++) {
-                    if(strstr(buffer, jointNames[i]) == buffer) {
+                    if(strstr(buffer, jointNames()[i].c_str()) == buffer) {
                         currentJoint = i;
                         // clear existing
                         for(int k = 0; k < 3; k++) translations[currentJoint][k] = 0;
