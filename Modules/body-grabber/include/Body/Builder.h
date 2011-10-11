@@ -40,7 +40,7 @@ private:
 	pcl::visualization::PCLVisualizer* viewer_;
 	boost::mutex* viewer_lock_;
 
-	boost::thread builder_thread_;
+	boost::thread* builder_thread_;
 	bool end_;
 
 	//bool ready_for_new_sample_;
