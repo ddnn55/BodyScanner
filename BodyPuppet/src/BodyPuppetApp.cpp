@@ -16,10 +16,6 @@ BodyPuppet::BodyPuppet(int argc, char** argv)
 ofMesh BodyPuppet::loadObj(string filename)
 {
 
-	std::vector<ofVec3f> vertices;
-	std::vector<ofFloatColor> colors;
-
-
 	ofMesh mesh;
 
 	FILE *f = fopen(filename.c_str(), "r");
@@ -34,7 +30,7 @@ ofMesh BodyPuppet::loadObj(string filename)
 			float x, y, z, r, g, b;
 			sscanf(buffer, "v %f %f %f %f %f %f\n", &x, &y, &z, &r, &g, &b);
 			//printf("vertex %f - %f  - %f - %f - %f - %f\n", x, y, z, r, g, b);
-			mesh.addVertex(ofVec3f(100. * x, 100. * y, 100. * z));
+			mesh.addVertex(ofVec3f(x, y, z));
 			mesh.addColor(ofFloatColor(r, g, b));
 		}
 		else if(buffer[0] == 'f')
@@ -78,6 +74,10 @@ void BodyPuppet::setup(){
 	//body.enableColors();
 	//cout << "body.getMesh(0).hasColors(): " << body.getMesh(0).hasColors() << endl;
 	bodyMesh = loadObj(meshFilename);
+	bodyMeshCentroid = bodyMesh.getCentroid();
+
+	cout << "centroid: " << bodyMeshCentroid << endl;
+
 	rawMeshSkeletonPose = Body::Skeleton::Pose(SkeletonYaml(skeletonFilename.c_str()));
 
 	std::cout << "loaded skeleton" << std::endl;
@@ -145,8 +145,7 @@ void BodyPuppet::draw(){
 
 		ofBackground(0);
 
-        ofCircle(100,100, 10);
-
+		// draw OSC joints hack
         for(std::map<std::string, ofVec3f>::iterator joint = quickJoints.begin();
             joint != quickJoints.end();
             joint++)
@@ -164,27 +163,35 @@ void BodyPuppet::draw(){
             ofPopMatrix();
         }
 
+        ofSetColor(255, 255, 255, 255);
 
-		/*ofPushMatrix();
-			ofTranslate(0,0,20);
-			ofSetColor(0,0,255);
-			ofFill();
-			ofBox(5);
-			ofNoFill();
-			ofSetColor(0);
-			ofBox(5);
-		ofPopMatrix();*/
+        ofDrawAxis(1.0);
+
+        ofPushMatrix();
+			ofScale(10, 10, 10);
+			ofTranslate(-bodyMeshCentroid.x, -bodyMeshCentroid.y, -bodyMeshCentroid.z);
+
+			// draw body skeleton
+			ofPushMatrix();
+				rawMeshSkeletonPose.draw();
+			ofPopMatrix();
+
+			// draw body mesh
+			ofPushMatrix();
+				ofScale(1, -1, 1); // FIXME skeleton and obj files should have same scale and stuff...
+								   // this might in fact be a rotation, not just flip??
+				skinRiggingShader.begin();
+					//body.draw(OF_MESH_FILL);
+					bodyMesh.draw();
+				skinRiggingShader.end();
+			ofPopMatrix();
+
+			// draw body mesh centroid
+//			ofSetColor(50, 250, 50, 255);
+//			ofSphere(bodyMeshCentroid.x, bodyMeshCentroid.y, bodyMeshCentroid.z, 0.04);
+		ofPopMatrix();
 
 
-        //body.enableColors();
-        ofSetColor(200, 128, 128, 255);
-
-        rawMeshSkeletonPose.draw();
-
-        skinRiggingShader.begin();
-			//body.draw(OF_MESH_FILL);
-			bodyMesh.draw();
-		skinRiggingShader.end();
 
 	cam.end();
 

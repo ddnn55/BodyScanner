@@ -38,7 +38,8 @@ class BodyPuppet : public ofBaseApp {
 		std::string meshFilename;
 		std::string skeletonFilename;
 		//ofxAssimpModelLoader body;
-		ofMesh bodyMesh;
+		ofMesh bodyMesh; // TODO use ofVboMesh?
+		ofVec3f bodyMeshCentroid;
 		//SkeletonYaml skeleton;
 		Body::Skeleton::Pose rawMeshSkeletonPose;
 		std::map<std::string, ofVec3f> quickJoints;

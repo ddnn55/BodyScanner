@@ -1,0 +1,286 @@
+head:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -399.354
+      - y -- 479.749
+      - z -- 2577.82
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.751334
+      - -0.182545
+      - 0.634173
+      - -0.139068
+      - 0.983197
+      - 0.11825
+      - -0.645103
+      - 0.000652237
+      - -0.764096
+left_elbow:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- 4.61047
+      - y -- 320.412
+      - z -- 2852.72
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.628254
+      - 0.507251
+      - 0.58991
+      - -0.0650313
+      - 0.721339
+      - -0.689522
+      - -0.775286
+      - -0.471558
+      - -0.420197
+left_foot:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -229.174
+      - y -- -807.528
+      - z -- 2622.47
+  orientation:
+    - confidence -- 0
+    matrix3x3:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+left_hand:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- 183.257
+      - y -- 338.904
+      - z -- 3073.18
+  orientation:
+    - confidence -- 0
+    matrix3x3:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+left_hip:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -276.918
+      - y -- -155.901
+      - z -- 2649.72
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.221186
+      - -0.0947572
+      - -0.970617
+      - 0.0232994
+      - 0.994471
+      - -0.102395
+      - 0.974953
+      - -0.0452632
+      - -0.217755
+left_knee:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -238.84
+      - y -- -555.525
+      - z -- 2667.91
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.218077
+      - -0.0377245
+      - -0.975202
+      - -0.181269
+      - 0.98343
+      - 0.00249303
+      - 0.958949
+      - 0.177318
+      - -0.221302
+left_shoulder:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -248.143
+      - y -- 253.963
+      - z -- 2669.23
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.791524
+      - 0.309817
+      - 0.526786
+      - -0.208092
+      - 0.673838
+      - -0.708971
+      - -0.57462
+      - -0.670787
+      - -0.468889
+neck:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -355.802
+      - y -- 245.175
+      - z -- 2577.67
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.751334
+      - -0.182545
+      - 0.634173
+      - -0.139068
+      - 0.983197
+      - 0.11825
+      - -0.645103
+      - 0.000652237
+      - -0.764096
+right_elbow:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -810.157
+      - y -- 314.593
+      - z -- 2365.34
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.990222
+      - 0.118178
+      - 0.0741245
+      - 0.0338228
+      - 0.718889
+      - -0.694301
+      - -0.135338
+      - -0.685005
+      - -0.715857
+right_foot:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -375.856
+      - y -- -820.17
+      - z -- 2511.08
+  orientation:
+    - confidence -- 0
+    matrix3x3:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+right_hand:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -1118.06
+      - y -- 325.11
+      - z -- 2323.26
+  orientation:
+    - confidence -- 0
+    matrix3x3:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+right_hip:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -412.171
+      - y -- -164.577
+      - z -- 2523.32
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.812675
+      - 0.0220763
+      - 0.582299
+      - 0.0222371
+      - 0.999729
+      - -0.00686717
+      - -0.582293
+      - 0.00736789
+      - -0.812946
+right_knee:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -421.043
+      - y -- -566.344
+      - z -- 2520.36
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.795789
+      - -0.175155
+      - 0.57969
+      - -0.119979
+      - 0.983884
+      - 0.132579
+      - -0.59357
+      - 0.0359543
+      - -0.803979
+right_shoulder:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -463.461
+      - y -- 236.386
+      - z -- 2486.1
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.923632
+      - 0.372564
+      - 0.0899996
+      - 0.20835
+      - 0.685136
+      - -0.697982
+      - -0.321705
+      - -0.625927
+      - -0.710437
+torso:
+  position:
+    - confidence -- 1
+    translation:
+      - x -- -346.384
+      - y -- 44.6047
+      - z -- 2585.85
+  orientation:
+    - confidence -- 1
+    matrix3x3:
+      - -0.760235
+      - -0.0465051
+      - 0.647981
+      - -0.0620704
+      - 0.998071
+      - -0.00119242
+      - -0.646676
+      - -0.041127
+      - -0.761656
+

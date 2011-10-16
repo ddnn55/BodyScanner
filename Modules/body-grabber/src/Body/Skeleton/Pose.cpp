@@ -56,7 +56,10 @@ void Skeleton::Pose::draw()
 	for(int j = FirstJoint; j <= LastJoint; j++)
 	{
 		Joint jointKey = (Joint)j;
-		ofSphere(joint_poses[jointKey].position.x, joint_poses[jointKey].position.y, joint_poses[jointKey].position.z);
+		ofSphere(joint_poses[jointKey].position.x / 1000.0,
+				 joint_poses[jointKey].position.y / 1000.0,
+				 joint_poses[jointKey].position.z / 1000.0,
+				 0.03);
 	}
 }
 

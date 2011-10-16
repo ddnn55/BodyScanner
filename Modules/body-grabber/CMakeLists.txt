@@ -23,5 +23,3 @@ add_executable (BodyScanner
 
 
 target_link_libraries (BodyScanner ${PCL_LIBRARIES})
-
-#
