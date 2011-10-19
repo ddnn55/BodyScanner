@@ -5,6 +5,7 @@
  *      Author: stolrsky
  */
 
+#include <Body/Body.h>
 #include <Body/Skeleton/Skeleton.h>
 
 #include <string>
@@ -12,6 +13,7 @@
 #include <cmath>
 #include <stack>
 #include <algorithm>
+#include <set>
 
 #include <ofMain.h>
 
@@ -129,6 +131,152 @@ float Skeleton::Pose::getJointDistance(const Joint joint1, const Joint joint2) {
 		  z = a.position.z - b.position.z;
 	return sqrt(x * x + y * y + z * z);
 }
+
+double dot(Vec3 vector1, Vec3 vector2) {
+	double sum = 0;
+
+	sum = (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z
+			* vector2.z);
+
+	return sum;
+
+}
+
+double crossNorm(Vec3 vector1, Vec3 vector2) {
+	return sqrt(pow(vector1.y * vector2.z - vector2.y * vector1.z, 2.0) + pow(
+			vector1.x * vector2.z - vector2.x * vector1.z, 2.0) + pow(vector1.x
+			* vector2.y - vector2.x * vector1.y, 2.0));
+}
+
+int argmin(std::vector<double> vec) {
+
+	int res = 0;
+
+	for (int i = 0; i < vec.size(); i++) {
+
+		if (vec[i] < vec[res]) {
+			res = i;
+		}
+
+	}
+
+	return res;
+
+}
+
+int argmin2(std::vector<double> vec, int argmin) {
+
+	int res = 0;
+
+	for (int i = 0; i < vec.size(); i++) {
+
+		if (vec[i] < vec[res] && i != argmin) {
+			res = i;
+		}
+
+	}
+
+	return res;
+
+}
+
+float smoothFunction(float x, float l, float p, float t) {
+	float b = -1.0 / (p / 100 * l) * log(2.0 * t);
+
+	float s = 1.0 / 2.0 * exp(-x * b);
+
+	if (s < t) {
+		s = 0;
+	}
+
+	return s;
+
+}
+
+Skeleton::Pose::PointRigging Skeleton::Pose::getRiggingForPoint(float x, float y, float z)
+{
+	Vec3 c;
+	c.x = x;
+	c.y = y;
+	c.z = z;
+
+
+
+	/**************** start single point weight calculation procedure *****************/
+	std::map<Bone, double> distances;
+
+
+	// Compute distances from point to bones
+	std::set<Bone> seen_bones;
+	for (int boneIndex = FirstBone; boneIndex <= LastBone; boneIndex++) {
+
+		Bone bone = (Bone) boneIndex;
+		Joint parent = Skeleton::GetBoneJoints(bone).parent;
+		Joint child = Skeleton::GetBoneJoints(bone).child;
+
+		Vec3 ac;
+		ac.x = c.x - joint_poses[parent].position.x;
+		ac.y = c.y - joint_poses[parent].position.y;
+		ac.z = c.z - joint_poses[parent].position.z;
+
+		Vec3 bc;
+		bc.x = c.x - joint_poses[child].position.x;
+		bc.y = c.y - joint_poses[child].position.y;
+		bc.z = c.z - joint_poses[child].position.z;
+
+		Vec3 boneVec = joint_poses[child].position - joint_poses[parent].position;
+		double length = sqrt(dot(boneVec, boneVec));
+		double proj = dot(boneVec, ac) / length;
+
+		double distance;
+		if (proj > length) {
+
+			distance = sqrt(dot(bc, bc));
+
+		} else if (proj < 0) {
+			distance = sqrt(dot(ac, ac));
+		} else {
+			distance = crossNorm(boneVec, ac) / length;
+		}
+
+		distances[bone] = distance;
+
+		//std::cout << length << std::endl;
+
+	}
+
+	// Find 2 nearest bones
+	Bone bone1 = argmin(distances);
+	Bone bone2 = argmin2(distances, arg1);
+	seen_bones.insert(arg1);
+	seen_bones.insert(arg2);
+
+	double d1 = distances[arg1];
+	double d2 = distances[arg2];
+
+	// Computes the weight
+	float l1 = sqrt(dot(bones[arg1], bones[arg1])); // Length nearest bone
+	float th = 0.1; // Zero threshold
+	float smoothProp = 20; // Pourcentage of the limb affected by smooth skining.
+
+	weight = smoothFunction(sqrt(d2 * d2 - d1 * d1), l1, smoothProp, th);
+
+
+
+	/************************* end single point weighting routine ****************************/
+	/* arg1, 1-weight
+	 * arg2, weight
+	 */
+}
+
+
+
+
+
+
+
+
+
 
 // TODO: check that these are right, how are the mesh/bone aligned?
 /*void offsetUp(JointPose& xform, float length) {

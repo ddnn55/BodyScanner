@@ -18,6 +18,7 @@
 //#include <XnCppWrapper.h>
 
 //#include <Body/Skeleton/Joint.h>
+#include <Body/Body.h>
 #include <Body/Skeleton/SkeletonYaml.h>
 
 
@@ -33,7 +34,7 @@ namespace Body
 	#define LastJoint RF
 	#define SKELETON_NUMBER_OF_JOINTS ((int)Body::LastJoint + 1)
 
-	enum Bone {
+	enum Bone { // TODO should be BoneName. Bone should be an actual bone with a length and a name and a related BonePose.
 		LH2E,
 		LE2S,
 		N2H,
@@ -57,12 +58,7 @@ namespace Body
 		Joint child;
 	} JointPair;
 
-	typedef struct Translation
-	{
-		float x;
-		float y;
-		float z;
-	} Translation;
+	typedef Vec3 Translation;
 	typedef float Matrix3x3[9];
 
 	class Skeleton
@@ -93,6 +89,13 @@ namespace Body
 		public:
 			typedef boost::shared_ptr<Pose> Ptr;
 			typedef std::map<Joint, Body::Skeleton::JointPose> JointPoses;
+			typedef struct PointRigging
+			{
+				Bone bone1;
+				Bone bone2;
+				float weight1;
+				float weight2;
+			} PointRigging;
 
 			Pose();
 			// TODO merge SkeletonYaml and Skeleton::Pose
@@ -115,6 +118,8 @@ namespace Body
 			float getBoneLength(const Bone bone);
 			float getJointDistance(const Joint joint1, const Joint joint2);
 			
+			PointRigging getRiggingForPoint(float x, float y, float z);
+
 			typedef std::vector<Body::Skeleton::Pose::Ptr> List;
 			/*static Body::Skeleton::Pose::Ptr GetCanonical(List& poses);*/
 

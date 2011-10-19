@@ -20,6 +20,7 @@
 #include "time.h"
 #include <set> // debug
 
+// TODO ask Skeleton for these numbers
 #define NB_JOINTS 15
 #define NB_BONES 14
 
@@ -86,11 +87,21 @@ float smoothFunction(float x, float l, float p, float t) {
 
 namespace Body {
 
+BodySegmentation::BodySegmentation(std::string const skeletonfilename) {
+	// Reserve space for the vectors
+	joints = std::vector<pcl::PointXYZ>(NB_JOINTS);
+	bones = std::vector<pcl::PointXYZ>(NB_BONES);
+	limbs_clouds
+			= std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr>(NB_BONES);
+
+	initJointsFromYaml(skeletonfilename);
+	initBones();
+}
+
 BodySegmentation::BodySegmentation(std::string const skeletonfilename,
 		pcl::PointCloud<pcl::PointXYZRGB>::Ptr bodycloud_, Skin *pskin_) {
 
 	pskin = pskin_;
-
 	bodycloud = bodycloud_;
 
 	// Reserve space for the vectors
@@ -99,17 +110,13 @@ BodySegmentation::BodySegmentation(std::string const skeletonfilename,
 	limbs_clouds
 			= std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr>(NB_BONES);
 
-	SkeletonYaml skel(skeletonfilename.c_str());
-	// create points to store the skeleton data
-	for (int i = 0; i < SkeletonYaml::numJoints; i++) {
-		joints[i]
-				= pcl::PointXYZ(skel.translations[i][0] / 1000,
-						-skel.translations[i][1] / 1000,
-						skel.translations[i][2] / 1000);
 
-	}
 
+	initJointsFromYaml(skeletonfilename);
 	initBones();
+
+	// Skin Bindings initilization
+	pskin->setNumPoints(bodycloud->points.size());
 
 }
 
@@ -117,9 +124,9 @@ BodySegmentation::BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<
 		pcl::PointXYZRGB>::ConstPtr bodycloud_, Skin *pskin_) {
 
 	pskin = pskin_;
-	sk_pose = pose_;
 	bodycloud = bodycloud_;
 
+	sk_pose = pose_;
 	joint_poses = sk_pose->getJointPoses();
 
 	// Reserve space for the vectors
@@ -133,6 +140,9 @@ BodySegmentation::BodySegmentation(Skeleton::Pose *pose_, pcl::PointCloud<
 	//initIndexMap();
 	initJoints();
 	initBones();
+
+	// Skin Bindings initilization
+	pskin->setNumPoints(bodycloud->points.size());
 
 }
 
@@ -149,6 +159,19 @@ void BodySegmentation::initJoints() {
 
 }
 
+void BodySegmentation::initJointsFromYaml(string skeleton_yaml_filename)
+{
+	SkeletonYaml skel(skeleton_yaml_filename.c_str());
+	// create points to store the skeleton data
+	for (int i = 0; i < SkeletonYaml::numJoints; i++) {
+		joints[i]
+				= pcl::PointXYZ(skel.translations[i][0] / 1000,
+						-skel.translations[i][1] / 1000,
+						skel.translations[i][2] / 1000);
+
+	}
+}
+
 void BodySegmentation::initBones() {
 
 	for (int i = LH2E; i <= RK2F; i++) {
@@ -159,12 +182,12 @@ void BodySegmentation::initBones() {
 				new pcl::PointCloud<pcl::PointXYZRGB>);
 		limbs_clouds[m]->resize(bodycloud->size());
 
-		int i1 = Skeleton::GetBoneJoints(m).parent;
-		int i2 = Skeleton::GetBoneJoints(m).child;
+		int parent = Skeleton::GetBoneJoints(m).parent;
+		int child = Skeleton::GetBoneJoints(m).child;
 
-		bones[m].x = joints[i2].x - joints[i1].x;
-		bones[m].y = joints[i2].y - joints[i1].y;
-		bones[m].z = joints[i2].z - joints[i1].z;
+		bones[m].x = joints[child].x - joints[parent].x;
+		bones[m].y = joints[child].y - joints[parent].y;
+		bones[m].z = joints[child].z - joints[parent].z;
 
 		// Code relative to skin
 
@@ -172,8 +195,7 @@ void BodySegmentation::initBones() {
 
 	}
 
-	// Skin Bindings initilization
-	pskin->setNumPoints(bodycloud->points.size());
+
 
 }
 
@@ -310,10 +332,14 @@ void BodySegmentation::run() {
 
 	std::set<int> seen_bones;
 	for (size_t i = 0; i < bodycloud->points.size(); i++) {
-		std::vector<double> distances;
-		double temp = 0;
+
 
 		c = bodycloud->points[i];
+
+		// TODO remove single point weight calculation procedure from here and use the one in Skeleton::Pose
+		/**************** start single point weight calculation procedure *****************/
+		std::vector<double> distances;
+		double temp = 0;
 
 		// Compute distances from point to bones
 
@@ -370,6 +396,11 @@ void BodySegmentation::run() {
 
 		//std::cout << c << d1 << "(" << arg1 << ")" << "/" << d2  <<  "(" << arg2 << ")" << ": " << temps << std::endl;
 
+
+		/************************* end single point weighting routine ****************************/
+		/* arg1, 1-weight
+		 * arg2, weight
+		 */
 
 		// Skin Code for nearest bone
 

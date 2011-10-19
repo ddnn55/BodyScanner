@@ -6,6 +6,7 @@
 
 
 #include <Body/Skeleton/Skeleton.h>
+//#include <Body/Skin.h>
 
 // listen on port 12345
 #define PORT 7110
@@ -33,20 +34,24 @@ class BodyPuppet : public ofBaseApp {
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		void drawOSCSkeleton();
+
 		ofEasyCam cam; // add mouse controls for camera movement
+		ofShader skinRiggingShader;
 
 		std::string meshFilename;
 		std::string skeletonFilename;
+
 		//ofxAssimpModelLoader body;
+
 		ofMesh bodyMesh; // TODO use ofVboMesh?
 		ofVec3f bodyMeshCentroid;
-		//SkeletonYaml skeleton;
 		Body::Skeleton::Pose rawMeshSkeletonPose;
-		std::map<std::string, ofVec3f> quickJoints;
+		//Body::Skin skin;
 
-		ofShader skinRiggingShader;
 
 		ofxOscReceiver	receiver;
+		std::map<std::string, ofVec3f> quickJoints;
 
 		int				current_msg_string;
 		string		msg_strings[NUM_MSG_STRINGS];

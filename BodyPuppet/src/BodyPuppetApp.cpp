@@ -82,6 +82,17 @@ void BodyPuppet::setup(){
 
 	std::cout << "loaded skeleton" << std::endl;
 
+	vector<ofVec3f> vertices = bodyMesh.getVertices();
+	for(int v = 0; v < vertices.size(); v++)
+	{
+		Body::Skeleton::Pose::PointRigging rigging = rawMeshSkeletonPose.getRiggingForPoint(vertices[v].x, vertices[v].y, vertices[v].z);
+		// TODO put weights in gl vertex user data
+	}
+	// TODO tell GL about user data
+	// TODO write poser into vertex shader
+
+	std::cout << "created BodySegmentation" << endl;
+
 
 	//ofScale(1, 1, -1);
 }
@@ -103,6 +114,7 @@ void BodyPuppet::update(){
             quickJoints[jointName] = ofVec3f(m.getArgAsFloat(2), m.getArgAsFloat(3), m.getArgAsFloat(4));
         }
 
+
         for ( int i=0; i<m.getNumArgs(); i++ )
         {
             // get the argument type
@@ -122,6 +134,7 @@ void BodyPuppet::update(){
 
         std::cout << std::endl;
 
+
         // add to the list of strings to display
         //msg_strings[current_msg_string] = msg_string;
         //timers[current_msg_string] = ofGetElapsedTimef() + 5.0f;
@@ -134,6 +147,27 @@ void BodyPuppet::update(){
 
 }
 
+void BodyPuppet::drawOSCSkeleton()
+{
+    ofPushMatrix();
+		ofScale(1.0/1000.0, -1.0/1000.0, 1.0/1000.0);
+
+		for(std::map<std::string, ofVec3f>::iterator joint = quickJoints.begin();
+			joint != quickJoints.end();
+			joint++)
+		{
+				//ofSetColor(255,0,0);
+				//ofFill();
+				ofSphere(-joint->second.x, -joint->second.y, -joint->second.z, 10);
+				//ofCircle(0, 0, 20);
+				//ofNoFill();
+				//ofSetColor(0);
+				//ofBox(30);
+		}
+
+	ofPopMatrix();
+}
+
 //--------------------------------------------------------------
 void BodyPuppet::draw(){
 
@@ -141,34 +175,21 @@ void BodyPuppet::draw(){
 		ofRotateX(ofRadToDeg(.5));
 		ofRotateY(ofRadToDeg(-.5));
 
-
-
 		ofBackground(0);
-
-		// draw OSC joints hack
-        for(std::map<std::string, ofVec3f>::iterator joint = quickJoints.begin();
-            joint != quickJoints.end();
-            joint++)
-        {
-            //std::cout << "drawing a circle..." << std::endl;
-            ofPushMatrix();
-                ofTranslate( - joint->second.x, - joint->second.y, - joint->second.z);
-                //ofSetColor(255,0,0);
-                //ofFill();
-                ofBox(30);
-                //ofCircle(0, 0, 20);
-                //ofNoFill();
-                //ofSetColor(0);
-                //ofBox(30);
-            ofPopMatrix();
-        }
-
         ofSetColor(255, 255, 255, 255);
 
         ofDrawAxis(1.0);
 
+		ofScale(10, 10, 10);
+
+
+		// draw OSC skeleton
+		ofPushStyle();
+			ofSetColor(50, 250, 50);
+			drawOSCSkeleton();
+		ofPopStyle();
+
         ofPushMatrix();
-			ofScale(10, 10, 10);
 			ofTranslate(-bodyMeshCentroid.x, -bodyMeshCentroid.y, -bodyMeshCentroid.z);
 
 			// draw body skeleton
@@ -185,10 +206,6 @@ void BodyPuppet::draw(){
 					bodyMesh.draw();
 				skinRiggingShader.end();
 			ofPopMatrix();
-
-			// draw body mesh centroid
-//			ofSetColor(50, 250, 50, 255);
-//			ofSphere(bodyMeshCentroid.x, bodyMeshCentroid.y, bodyMeshCentroid.z, 0.04);
 		ofPopMatrix();
 
 
@@ -199,24 +216,6 @@ void BodyPuppet::draw(){
 	string msg = string("Using mouse inputs to navigate ('m' to toggle): ") + (cam.getMouseInputEnabled() ? "YES" : "NO");
 	msg += "\nfps: " + ofToString(ofGetFrameRate(), 2);
 	ofDrawBitmapString(msg, 10, 20);
-
-
-
-
-	// osc receive dump
-    string buf;
-	buf = "listening for osc messages on port" + ofToString( PORT );
-	ofDrawBitmapString( buf, 10, 20 );
-
-	// draw mouse state
-	buf = "mouse: " + ofToString( mouseX, 4) +  " " + ofToString( mouseY, 4 );
-	ofDrawBitmapString( buf, 430, 20 );
-	ofDrawBitmapString( mouseButtonState, 580, 20 );
-
-	for ( int i=0; i<NUM_MSG_STRINGS; i++ )
-	{
-		ofDrawBitmapString( msg_strings[i], 10, 40+15*i );
-	}
 
 
 }

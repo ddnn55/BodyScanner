@@ -34,6 +34,13 @@ class BodySegmentation {
 public:
 
 	/**
+	 * Constructor to build the segmentator from a just a Yaml skeleton file.
+	 * Really this would be a "Weightor" not a segmentator
+	 * (call weight() on each point you want weights for).
+	 */
+	BodySegmentation(std::string const skeletonfilename);
+
+	/**
 	 * Constructor to build the segmentator from a Yaml skeleton file.
 	 */
 	BodySegmentation(std::string const skeletonfilename, pcl::PointCloud<
@@ -56,8 +63,9 @@ public:
 	void run();
 
 
+	// TODO don't store these, store a Skeleton::Pose instead
 	std::vector<pcl::PointXYZ> joints;
-		std::vector<pcl::PointXYZ> bones;
+	std::vector<pcl::PointXYZ> bones;
 
 
 private:
@@ -79,6 +87,8 @@ private:
 
 	// Initializations methods
 	void initJoints();
+	void initJointsFromYaml(string skeleton_yaml_filename);
+
 	void initBones();
 
 	// Skin attributes
